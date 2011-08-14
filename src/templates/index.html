@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title></title>
+		<title>mf2</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		
 		<link href="/static/css/reset.css" type="text/css" rel="stylesheet" />
@@ -17,10 +17,28 @@
 		<script src="/static/js/app.js" type="text/javascript"></script>
 	</head>
 	<body>
-		{{ text }}
+		<div id="form-wrap">
+			<!-- Here will appear edit forms -->
+		</div>
 		
-		<ul id="payments">
-			
+		<ul id="payments-list">
+			<!-- Here will be payments -->
 		</ul>
+		
+		<button id="add-payment">+ добавить</button>
+		
+		<!-- templates -->
+		<script type="text/html" id="payment-in-list-tmpl">
+			<span class="name"><%= name %></span>
+			<span class="value"><%= value %></span>
+			<div class="icon edit" title="править"></div>
+			<div class="icon delete" title="удалить"></div>
+		</script>
+		
+		<script type="text/html" id="payment-form-tmpl">
+			<label>Имя: <input type="text" class="name" value="<%= name %>"/></label>
+			<label>Сумма: <input type="text" class="value" value="<%= value %>"/></label>
+			<input type="submit" value="Сохранить" /> или <span class="clickable cancel">отмена</span>
+		</script>
 	</body>
 </html>

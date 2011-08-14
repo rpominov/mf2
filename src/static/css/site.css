@@ -1,0 +1,10 @@
+.icon {
+	width: 16px;
+	height: 16px;
+	background-position: center center;
+	display: inline-block;
+	cursor: pointer;
+}
+
+.icon.edit   { background-image: url('/static/images/icons/edit.png') }
+.icon.delete { background-image: url('/static/images/icons/delete.png') }

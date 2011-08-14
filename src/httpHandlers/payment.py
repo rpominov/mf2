@@ -4,25 +4,6 @@ from google.appengine.ext.webapp.util import run_wsgi_app
 
 from django.utils import simplejson
 
-
-#class TodoList(db.Model):
-#    timestamp = db.DateTimeProperty(auto_now_add=True)
-#
-#class Todos(db.Model):
-#    todolist = db.ReferenceProperty(TodoList)
-#    order = db.IntegerProperty()
-#    content = db.StringProperty()
-#    done = db.BooleanProperty()
-#
-#    def toDict(self):
-#        todo = {
-#            'id': self.key().id(), 
-#            'order': self.order,
-#            'content': self.content,
-#            'done': self.done
-#            }
-#        return todo
-
     
 class Payment(db.Model):
     name = db.StringProperty()
@@ -49,7 +30,7 @@ class PaymentRESTfulHandler(webapp.RequestHandler):
         payment = simplejson.loads(self.request.body)
         payment = Payment(
             name  = payment['name'],
-            value = payment['value']
+            value = int(payment['value'])
         )
         payment.put()
         payment = simplejson.dumps(payment.toDict())
@@ -59,7 +40,7 @@ class PaymentRESTfulHandler(webapp.RequestHandler):
         payment = Payment.get_by_id(int(id))
         tmp = simplejson.loads(self.request.body)
         payment.name  = tmp['name']
-        payment.value = tmp['value']
+        payment.value = int(tmp['value'])
         payment.put()
         payment = simplejson.dumps(payment.toDict())
         self.response.out.write(payment)
