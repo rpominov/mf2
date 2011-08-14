@@ -3,9 +3,15 @@ version: 1
 runtime: python
 api_version: 1
 
+builtins:
+- datastore_admin: on
+
 handlers:
 - url: /static
   static_dir: static
   
+- url: /payment/?[0-9]*
+  script: httpHandlers/payment.py  
+  
 - url: /.*
-  script: helloworld.py
+  script: httpHandlers/index.py

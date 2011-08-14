@@ -1,9 +1,10 @@
 var Payment = Backbone.Model.extend({
-	
+    url: '/payment',
 });
 
 var PaymentsCollection = Backbone.Collection.extend({
-    model : Payment
+    model : Payment,
+    url: '/payment',
 });
 
 var PaymentView = Backbone.View.extend({
