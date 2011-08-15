@@ -22,83 +22,53 @@
 
 /* ----------------- Layout */
 
-body {
-	min-width: 1010px;
-	background: #eee;
-}
-
-.wrap {
-	width: 100%;
+html, body {
+	min-width: 900px;
+	height: 100%;
 	position: relative;
-	padding-bottom: 20px;
-	background: white;
-}
-
-.center {
-	width: 710px;
-	margin-left: 300px;
-	overflow: hidden;
 }
 
 .padding {
-	padding: 15px;
+	padding: 10px;
 }
 
-.sidebar {
-	box-shadow: 0 0 5px #888;
-	-moz-box-shadow: 0 0 5px #888;
-	-webkit-box-shadow: 0 0 5px #888;
-	/*border: 2px solid gray;*/
-	border-top: none;
+.top {
+	height: 30px;
+	overflow: hidden;
+	background: #fef;
+}
+
+.middle {
 	position: absolute;
-	top: 0;
-	bottom: 0;
-	z-index: 7;
-	background: white;
-}
-
-.sidebar.right {
-	-webkit-border-bottom-left-radius: 10px;
-	-moz-border-radius-bottomleft: 10px;
-	border-bottom-left-radius: 10px;
-	border-right: none;
-	right: 0;
-	left: 1010px;
-	display: none;
-}
-
-.sidebar.left {
-	-webkit-border-bottom-right-radius: 10px;
-	-moz-border-radius-bottomright: 10px;
-	border-bottom-right-radius: 10px;
-	border-left: none;
-	width: 300px;
-	left: 0;
-}
-
-.real_sidebar.left {
-	float: left;
-	width: 300px;
-	position: relative;
-	z-index: 10;
-}
-
-.footer {
-	position: absolute;
+	top: 30px;
+	bottom: 30px;
 	right: 0;
 	left: 0;
-	bottom: -80px;
-	background: red;
-	z-index: 5;
-	height: 100px;
-	text-align: right;
-	font-size: 12px;
-	background: #eee;
 }
-	.footer .padding {
-		padding: 15px 15px 0 0;
-		width: 995px;
+	.sidebar,
+	.center {
+		height: 100%;
+		overflow: auto;
 	}
+	
+	.sidebar {
+		float: left;
+		width: 300px;
+		background: #eff;
+	}
+	
+	.center {
+		background: #ffe;
+	}
+
+.bottom {
+	position: absolute;
+	height: 30px;
+	width: 100%;
+	bottom: 0;
+	overflow: hidden;
+	background: #fef;
+}
 
 /* ----------------- Private */
 
@@ -124,7 +94,6 @@ body {
 			text-align: right;
 		}
 #add-payment {
-	float: right;
 }
 
 #form-wrap {
