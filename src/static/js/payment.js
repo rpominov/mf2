@@ -25,7 +25,7 @@ $(function(){
 		
 		tagName: "form",
 		className: "payment",
-		tmpl: _.template($('#payment-form-tmpl').html()),
+		tmpl: T('payment.form'),
 		
 		initialize: function (args) {
 			_.bindAll(this, 'changeName', 'changeValue');
@@ -83,7 +83,7 @@ $(function(){
 		
 		tagName: "li",
 		className: "payment",
-		tmpl: _.template($('#payment-in-list-tmpl').html()),
+		tmpl: T('payment.in_list'),
 		
 		initialize: function (args) {
 			_.bindAll(this, 'changeName', 'changeValue');

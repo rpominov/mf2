@@ -1,3 +1,7 @@
+.clear {
+	clear: both;
+}
+
 .icon {
 	width: 16px;
 	height: 16px;
@@ -8,3 +12,52 @@
 
 .icon.edit   { background-image: url('/static/images/icons/edit.png') }
 .icon.delete { background-image: url('/static/images/icons/delete.png') }
+
+.clickable {
+	border-bottom: 1px dashed;
+	cursor: pointer;
+}
+
+/* ----------------- */
+
+.wrap {
+	width: 600px;
+	margin: 0 auto;
+	box-shadow: 0 0 10px #888;
+	padding: 10px;
+}
+	#payments-list {
+		padding: 10px 0;
+		margin-bottom: 10px;
+	}
+		li.payment {
+			padding: 7px 0 3px 0;
+			line-height: 16px;
+			border-bottom: 1px solid #eee; 
+		}
+			li.payment .icon { 
+				display: none; 
+				float: right;
+				margin: 0 5px;
+			}
+			li.payment:hover .icon { display: inline-block }
+			li.payment .value {
+				float: right;
+				width: 50px;
+				text-align: right;
+			}
+	#add-payment {
+		float: right;
+	}
+
+#form-wrap {
+	position: fixed;
+	right: 20px;
+	top: 0;
+}
+	form.payment {
+		box-shadow: 0 0 10px #888;
+		padding: 10px;
+		background: white;
+		margin-top: 20px;
+	}

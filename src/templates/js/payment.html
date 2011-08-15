@@ -1,0 +1,17 @@
+<script type="text/html" class="template" data-bind="payment.value_part">
+	<span class="value">{{! it.value }}</span>
+</script>
+		
+<script type="text/html" class="template" data-bind="payment.in_list">
+	<span class="name">{{! it.name }}</span>
+	{{#def['payment.value_part']}}
+	<div class="icon edit" title="править"></div>
+	<div class="icon delete" title="удалить"></div>
+	<div class="clear"></div>
+</script>
+
+<script type="text/html" class="template" data-bind="payment.form">
+	<label>Имя: <input type="text" class="name" value="{{! it.name }}"/></label><br/>
+	<label>Сумма: <input type="text" class="value" value="{{! it.value }}"/></label><br/>
+	<input type="submit" value="Сохранить" /> или <span class="clickable cancel">отмена</span>
+</script>
