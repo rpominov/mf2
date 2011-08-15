@@ -7,7 +7,7 @@
  * License: http://sam.zoy.org/wtfpl/COPYING
  * 
  * Depends on
- * 	 jQuery or Zepto
+ *   jQuery or Zepto
  *   and
  *   doT.js or doU.js (https://github.com/olado/doT)
  * 
@@ -33,7 +33,7 @@
  */
 "use strict";
 
-window.T = function($, doT){
+window.T = function(win, $, doT){
 	
 	var T = function(name, model) {
 		var t = T._compiled[name]
@@ -45,7 +45,7 @@ window.T = function($, doT){
 	
 	T._grabAll = function() {
 		
-		console && console.time && console.time('templates grabbing');
+		win.console && console.time && console.time('templates grabbing');
 		
 		$('script.template').each(function(){
 			var el = $(this)
@@ -57,11 +57,11 @@ window.T = function($, doT){
 			T._compiled[name] = doT.template(T._source[name], null, T._source)
 		}
 		
-		console && console.timeEnd && console.timeEnd('templates grabbing');
+		win.console && console.timeEnd && console.timeEnd('templates grabbing');
 	}
 	
 	$(T._grabAll)
 	
 	return T
 	
-}(window.jQuery || window.Zepto, window.doT || window.doU)
+}(window, window.jQuery || window.Zepto, window.doT || window.doU)

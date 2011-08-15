@@ -1,3 +1,5 @@
+/* ----------------- Common */
+
 .clear {
 	clear: both;
 }
@@ -18,37 +20,112 @@
 	cursor: pointer;
 }
 
-/* ----------------- */
+/* ----------------- Layout */
+
+body {
+	min-width: 1010px;
+	background: #eee;
+}
 
 .wrap {
-	width: 600px;
-	margin: 0 auto;
-	box-shadow: 0 0 10px #888;
-	padding: 10px;
+	width: 100%;
+	position: relative;
+	padding-bottom: 20px;
+	background: white;
 }
-	#payments-list {
-		padding: 10px 0;
-		margin-bottom: 10px;
+
+.center {
+	width: 710px;
+	margin-left: 300px;
+	overflow: hidden;
+}
+
+.padding {
+	padding: 15px;
+}
+
+.sidebar {
+	box-shadow: 0 0 5px #888;
+	-moz-box-shadow: 0 0 5px #888;
+	-webkit-box-shadow: 0 0 5px #888;
+	/*border: 2px solid gray;*/
+	border-top: none;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	z-index: 7;
+	background: white;
+}
+
+.sidebar.right {
+	-webkit-border-bottom-left-radius: 10px;
+	-moz-border-radius-bottomleft: 10px;
+	border-bottom-left-radius: 10px;
+	border-right: none;
+	right: 0;
+	left: 1010px;
+	display: none;
+}
+
+.sidebar.left {
+	-webkit-border-bottom-right-radius: 10px;
+	-moz-border-radius-bottomright: 10px;
+	border-bottom-right-radius: 10px;
+	border-left: none;
+	width: 300px;
+	left: 0;
+}
+
+.real_sidebar.left {
+	float: left;
+	width: 300px;
+	position: relative;
+	z-index: 10;
+}
+
+.footer {
+	position: absolute;
+	right: 0;
+	left: 0;
+	bottom: -80px;
+	background: red;
+	z-index: 5;
+	height: 100px;
+	text-align: right;
+	font-size: 12px;
+	background: #eee;
+}
+	.footer .padding {
+		padding: 15px 15px 0 0;
+		width: 995px;
 	}
-		li.payment {
-			padding: 7px 0 3px 0;
-			line-height: 16px;
-			border-bottom: 1px solid #eee; 
+
+/* ----------------- Private */
+
+
+#payments-list {
+	padding: 10px 0;
+	margin-bottom: 10px;
+}
+	li.payment {
+		padding: 7px 0 3px 0;
+		line-height: 16px;
+		border-bottom: 1px solid #eee; 
+	}
+		li.payment .icon { 
+			display: none; 
+			float: right;
+			margin: 0 5px;
 		}
-			li.payment .icon { 
-				display: none; 
-				float: right;
-				margin: 0 5px;
-			}
-			li.payment:hover .icon { display: inline-block }
-			li.payment .value {
-				float: right;
-				width: 50px;
-				text-align: right;
-			}
-	#add-payment {
-		float: right;
-	}
+		li.payment:hover .icon { display: inline-block }
+		li.payment .value {
+			float: right;
+			width: 50px;
+			text-align: right;
+		}
+#add-payment {
+	float: right;
+}
 
 #form-wrap {
 	position: fixed;
@@ -56,7 +133,7 @@
 	top: 0;
 }
 	form.payment {
-		box-shadow: 0 0 10px #888;
+		/*box-shadow: 0 0 10px #888;*/
 		padding: 10px;
 		background: white;
 		margin-top: 20px;
