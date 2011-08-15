@@ -15,4 +15,3 @@ handlers:
   
 - url: /.*
   script: httpHandlers/index.py
-  
