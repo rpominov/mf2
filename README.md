@@ -1,3 +1,3 @@
-* Money managment system for home use *
+**Financial managment system for home use**
 
-first vertion of it - https://bitbucket.org/Pozadi/myfin
+The first vertion of it locates [here](https://bitbucket.org/Pozadi/myfin)
