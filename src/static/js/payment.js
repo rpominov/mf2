@@ -1,4 +1,5 @@
 $(function(){
+	"use strict";
 
 	window.Payment = Backbone.Model.extend({
 		

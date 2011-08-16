@@ -26,56 +26,70 @@
 		</div>
 		
 		
-		
-		<div class="top"><div class="padding">
-			<button id="add-payment">+ добавить</button>
-			полный баланс pozadi (выйти) *
-		</div></div>
+		<div class="top"><div class="padding"><div class="padding">
+			<div id="add-payment" class="icon add" title="Добавить платеж"></div>
+			<div id="sys-settings" class="icon settings" title="Настройки"></div>
+			<div class="user-info">
+				<span class="balance plus">2356 $</span> 
+				<span class="user-name">pozadi</span> 
+				(<span class="clickable">выйти</span>)
+			</div>
+		</div></div></div><!-- / .top -->
 		
 		<div class="middle">
+			
 			<div class="sidebar"><div class="padding">
-					<ul class="">
-						<h3>Фильтры</h3>
+				<div class="logo"></div>
+				
+				<div class="block filters">
+					<h3>Фильтры</h3>
+					<ul>
 						<li>Фильтр 1</li>
-						<li>Фильтр 1</li>
-						<li>Фильтр 1</li>
-						<li>Фильтр 1</li>
-						<li>Фильтр 1</li>
-						<li>Фильтр 1</li>
+						<li>Фильтр 2</li>
+						<li>Фильтр 3</li>
 					</ul>
-					<ul class="">
-						<h3>Фильтры</h3>
-						<li>Фильтр 1</li>
-						<li>Фильтр 1</li>
-						<li>Фильтр 1</li>
-						<li>Фильтр 1</li>
-						<li>Фильтр 1</li>
-						<li>Фильтр 1</li>
+				</div>
+				
+				<div class="block">
+					<h3>Счета</h3>
+					<ul>
+						<li>Счет 1</li>
+						<li>Счет 2</li>
+						<li>Счет 3</li>
 					</ul>
-					<ul class="">
-						<h3>Фильтры</h3>
-						<li>Фильтр 1</li>
-						<li>Фильтр 1</li>
-						<li>Фильтр 1</li>
-						<li>Фильтр 1</li>
-						<li>Фильтр 1</li>
-						<li>Фильтр 1</li>
+				</div>
+				
+				<div class="block tags">
+					<h3>Теги</h3>
+					<ul>
+						<li>Тег 1</li>
+						<li>Тег 2</li>
+						<li>Тег 3</li>
 					</ul>
-			</div></div>
+				</div>
+			</div></div><!-- / .sidebar -->
 			
 			<div class="center"><div class="padding">
+				
 				<ul id="payments-list">
 					<!-- Here will be payments -->
 				</ul>
-				<div class="clear"></div>
-			</div></div>
-		</div>
+				
+				<div class="total"><div class="padding">
+					<span class="title">Итого:</span> <span class="plus">1245</span> - <span class="minus">227</span> = 965
+				</div></div>
+				
+				<div class="footer">
+					Powered by <a href="https://github.com/pozadi/mf2">mf2</a>
+				</div>
+				
+			</div></div><!-- / .center -->
+			
+			<div class="clear"></div>
+			
+		</div><!-- / .middle -->
 		
-		<div class="bottom"><div class="padding">
-			&copy; stuff
-		</div></div>		
-		
-		<!---------------- templates -->
+		<!-- templates -->
 {{ js_templates }}
 		
 	</body>

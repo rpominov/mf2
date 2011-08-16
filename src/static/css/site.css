@@ -8,16 +8,28 @@
 	width: 16px;
 	height: 16px;
 	background-position: center center;
+	background-repeat: no-repeat;
 	display: inline-block;
 	cursor: pointer;
 }
 
-.icon.edit   { background-image: url('/static/images/icons/edit.png') }
-.icon.delete { background-image: url('/static/images/icons/delete.png') }
+.icon.edit     { background-image: url('/static/images/icons/edit.png')     }
+.icon.delete   { background-image: url('/static/images/icons/delete.png')   }
+.icon.settings { background-image: url('/static/images/icons/settings.png') }
+.icon.add      { background-image: url('/static/images/icons/plus.png')    }
+.icon.home     { background-image: url('/static/images/icons/home.png')     }
 
 .clickable {
 	border-bottom: 1px dashed;
 	cursor: pointer;
+}
+
+.plus {
+	color: green;
+}
+
+.minus {
+	color: red;
 }
 
 /* ----------------- Layout */
@@ -25,74 +37,163 @@
 html, body {
 	min-width: 900px;
 	height: 100%;
-	position: relative;
+	background-color: white;
+	font-family: arial, sans-serif;
+	font-size: 13px;
+	line-height: 1.4;
 }
 
 .padding {
-	padding: 10px;
+	padding: 0;
 }
 
 .top {
-	height: 30px;
-	overflow: hidden;
-	background: #fef;
-}
-
-.middle {
-	position: absolute;
-	top: 30px;
-	bottom: 30px;
+	position: fixed;
+	height: 29px;
+	top: 0;
 	right: 0;
 	left: 0;
-}
-	.sidebar,
-	.center {
-		height: 100%;
-		overflow: auto;
-	}
-	
-	.sidebar {
-		float: left;
-		width: 300px;
-		background: #eff;
-	}
-	
-	.center {
-		background: #ffe;
-	}
-
-.bottom {
-	position: absolute;
-	height: 30px;
-	width: 100%;
-	bottom: 0;
 	overflow: hidden;
-	background: #fef;
+	background: #f1f1f1;
+	border-bottom: 1px solid #d2d2d2;
+	z-index: 10;
 }
+	.top > .padding {
+		width: 900px;
+		margin: 0 auto;
+	}
+		.top > .padding > .padding {
+			margin-left: 210px;
+			margin-right: 10px;
+		}
+		
+.middle {
+	margin: 0 auto;
+	width: 900px;
+	position: relative;
+	z-index: 5;
+	height: 100%;
+}
+	.sidebar {
+		width: 200px;
+		float: left;
+	}
+		.sidebar > .padding {
+			padding: 10px;
+			margin-top: 30px; /* depends on .top(height) */
+		}
+			.logo {
+				background: url('/static/images/logo.png');
+				width: 100px;
+				height: 100px;
+				margin: 0 auto;
+			}
+	
+	.center {
+		width: 700px;
+		height: 100%;
+		float: right;
+	}
+		.center > .padding {
+			padding: 15px 30px 50px 15px;
+			margin: 10px;
+			margin-top: 40px; /* depends on .top(height) */
+			margin-bottom: 30px; /* depends on .footer(height) */
+			border: 1px solid #EBEBEB;
+			min-height: 80%;
+			position: relative;
+		}
+			.footer {
+				height: 20px;
+				padding-top: 10px;
+				position: absolute;
+				left: 0;
+				right: 0;
+				bottom: -30px;
+				color: #666;
+				font-size: 11px;
+				text-align: center;
+			}
 
 /* ----------------- Private */
 
+/* --- Head */
+
+.top .icon {
+	width: 18px;
+	height: 18px;
+	border: 1px solid #d9d9d9;
+	border-radius: 2px;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+	float: left;
+	margin-top: 4px;
+	margin-right: 4px;
+}
+.top .icon:hover {
+	border-color: #bbb;
+}
+.top .icon:active {
+	background-color: #fff;
+}
+
+.user-info {
+	float: right;
+	padding-top: 5px; 
+}
+	.user-name {
+		padding-left: 18px;
+		background: url('/static/images/icons/user.png') no-repeat;
+	}
+	
+/* --- Sidebar */
+
+
+
+/* --- Payments list */
 
 #payments-list {
-	padding: 10px 0;
-	margin-bottom: 10px;
 }
 	li.payment {
-		padding: 7px 0 3px 0;
+		padding: 8px 0 2px 0;
 		line-height: 16px;
-		border-bottom: 1px solid #eee; 
+		border-bottom: 1px solid #eee;
+		position: relative;
 	}
-		li.payment .icon { 
-			display: none; 
-			float: right;
-			margin: 0 5px;
+	li.payment:first-child { padding-top: 0; }
+		li.payment .settings { 
+			display: none;
+			position: absolute;
+			bottom: 1px;
+			right: -23px;
 		}
-		li.payment:hover .icon { display: inline-block }
+		li.payment:hover .settings { display: block }
+		li.payment .tooltip {
+			display: none;
+		}
 		li.payment .value {
 			float: right;
 			width: 50px;
 			text-align: right;
 		}
+		
+.total {
+	text-align: right;
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	height: 35px;
+}
+	.total > .padding {
+		/*border-top: 1px solid red;*/
+		margin: 0 30px 0 15px;
+		padding: 5px 0;
+	}
+		.total .title {
+			float: left;
+		}
+
 #add-payment {
 }
 
@@ -100,9 +201,9 @@ html, body {
 	position: fixed;
 	right: 20px;
 	top: 0;
+	z-index: 20;
 }
 	form.payment {
-		/*box-shadow: 0 0 10px #888;*/
 		padding: 10px;
 		background: white;
 		margin-top: 20px;

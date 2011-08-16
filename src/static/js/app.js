@@ -1,4 +1,6 @@
 $(function(){
+	"use strict";
+	
 	window.AppView = Backbone.View.extend({
 	
 		el: $('body'),
