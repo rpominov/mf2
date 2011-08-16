@@ -95,7 +95,7 @@ html, body {
 		float: right;
 	}
 		.center > .padding {
-			padding: 15px 30px 50px 15px;
+			padding: 15px 15px 50px 15px;
 			margin: 10px;
 			margin-top: 40px; /* depends on .top(height) */
 			margin-bottom: 30px; /* depends on .footer(height) */
@@ -146,36 +146,70 @@ html, body {
 		background: url('/static/images/icons/user.png') no-repeat;
 	}
 	
+#add-payment {
+}
+
+	
 /* --- Sidebar */
 
-
+.sidebar .block {
+	margin: 20px 0 0 35px;
+}
+	.sidebar h3 {
+		font-size: 15px;
+		background: no-repeat 0 4px;
+		padding-left: 18px;
+	}
+	.sidebar .filters  h3 { background-image: url('/static/images/icons/filter.png')      }
+	.sidebar .storages h3 { background-image: url('/static/images/icons/credit_card.png') }
+	.sidebar .tags     h3 { background-image: url('/static/images/icons/tag.png')         }
+	.sidebar ul {
+		margin-left: 30px;
+	}
 
 /* --- Payments list */
 
 #payments-list {
 }
 	li.payment {
-		padding: 8px 0 2px 0;
-		line-height: 16px;
-		border-bottom: 1px solid #eee;
-		position: relative;
 	}
-	li.payment:first-child { padding-top: 0; }
+	li.payment:first-child {}
 		li.payment .settings { 
-			display: none;
-			position: absolute;
-			bottom: 1px;
-			right: -23px;
-		}
-		li.payment:hover .settings { display: block }
-		li.payment .tooltip {
-			display: none;
-		}
-		li.payment .value {
 			float: right;
-			width: 50px;
-			text-align: right;
+			visibility: hidden;
+			margin-top: 8px;
 		}
+		li.payment:hover .settings { visibility: visible }
+		li.payment .text {
+			display: block;
+			padding: 8px 0 2px 0;
+			line-height: 16px;
+			border-bottom: 1px solid #eee;
+			margin-right: 24px;
+		}
+			li.payment .value {
+				float: right;
+				text-align: right;
+			}
+			li.payment .name {
+				margin-right: .5em;
+			}
+			li.payment .tag-list {
+				display: inline-block;
+				font-size: 11px;
+				color: #888;
+				position: relative;
+				bottom: 1px;
+			}
+				li.payment li {
+					display: inline;
+					margin-right: 7px;
+					background: no-repeat 0 2px;
+					padding-left: 12px; 
+				}
+				li.payment li.filter  { background-image: url('/static/images/icons/filter_s.png')      }
+				li.payment li.tag     { background-image: url('/static/images/icons/tag_s.png')         }
+				li.payment li.storage { background-image: url('/static/images/icons/credit_card_s.png') }
 		
 .total {
 	text-align: right;
@@ -186,7 +220,6 @@ html, body {
 	height: 35px;
 }
 	.total > .padding {
-		/*border-top: 1px solid red;*/
 		margin: 0 30px 0 15px;
 		padding: 5px 0;
 	}
@@ -194,8 +227,8 @@ html, body {
 			float: left;
 		}
 
-#add-payment {
-}
+
+/* --- Temp */
 
 #form-wrap {
 	position: fixed;
