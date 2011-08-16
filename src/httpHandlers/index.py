@@ -10,7 +10,8 @@ def p(path):
 
 def name2content(fname):
     fname = p(t_dir + '/js/' + fname)
-    with file(fname) as f: s = f.read()
+    f = file(fname)
+    s = f.read()
     return s
 
 class MainPage(webapp.RequestHandler):
