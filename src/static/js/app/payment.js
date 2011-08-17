@@ -8,14 +8,6 @@ $(function(){
 		defaults: {
            name: '',
            value: 0
-		},
-		
-		clear: function() {
-			this.destroy();
-			this.view_in_list.remove();
-			if (this.view_form) {
-				this.view_form.remove();
-			}
 		}
 	});
 	
@@ -32,16 +24,13 @@ $(function(){
 		className: "payment",
 		tmpl: _t('payment.form'),
 		
-		initialize: function (args) {
-			_.bindAll(this, 'changeName', 'changeValue');
-			this.model.bind('change:name', this.changeName);
-			this.model.bind('change:value', this.changeValue);
-			this.model.view_form = this; // todo убрать связность, события
-		},
-		
 		events: {
 			'submit'       : 'onSubmit',
 			'click .cancel': 'onClickCancel'
+		},
+		
+		initialize: function (args) {
+			this.model.bind('destroy', _.bind(function(){ $(this.el).remove(); }, this));
 		},
 		
 		onSubmit: function() {
@@ -60,27 +49,16 @@ $(function(){
 		
 		onClickCancel: function() {
 			if(this.model.isNew()) {
-				this.model.clear();
+				this.model.destroy();
 			}
-			this.remove();
-		},
-		
-		changeName: function() {
-			$('.name', this.el).val(this.model.get('name'));
-		},
-		
-		changeValue: function() {
-			$('.value', this.el).val(this.model.get('value'));
+			$(this.el).remove();
 		},
 		
 		render: function() {
-			$(this.el).html(this.tmpl(this.model.toJSON()));
+			var data = this.model.toJSON();
+			data.cid = this.model.cid; // need cid for labels in form
+			$(this.el).html(this.tmpl(data));
 			return this;
-		},
-		
-		remove: function() {
-			$(this.el).remove();
-			this.model.view_form = null;
 		}
 	});
 	
@@ -90,16 +68,16 @@ $(function(){
 		className: "payment",
 		tmpl: _t('payment.in_list'),
 		
+		events: {
+			'click .edit': 'onClickEdit',
+			'click .delete': 'onClickDelete'
+		},
+		
 		initialize: function (args) {
 			_.bindAll(this, 'changeName', 'changeValue');
 			this.model.bind('change:name', this.changeName);
 			this.model.bind('change:value', this.changeValue);
-			this.model.view_in_list = this; // todo убрать связность, события
-		},
-		
-		events: {
-			'click .edit': 'onClickEdit',
-			'click .delete': 'onClickDelete'
+			this.model.bind('destroy', _.bind(function(){ $(this.el).remove(); }, this));
 		},
 		
 		onClickEdit: function() {
@@ -107,25 +85,20 @@ $(function(){
 		},
 		
 		onClickDelete: function() {
-			this.model.clear();
+			this.model.destroy();
 		},
 		
 		changeName: function() {
-			$('.name', this.el).text(this.model.get('name'));
+			this.$('.name').text(this.model.get('name'));
 		},
 		
 		changeValue: function() {
-			$('.value', this.el).text(this.model.get('value'));
+			this.$('.value').text(this.model.get('value'));
 		},
 		
 		render: function() {
 			$(this.el).html(this.tmpl(this.model.toJSON()));
 			return this;
-		},
-		
-		remove: function() {
-			$(this.el).remove();
-			this.model.view_in_list = null;
 		}
 	});
 });
