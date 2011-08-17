@@ -1,3 +1,5 @@
+/*global window $ Backbone _ _t Payment Payments*/
+
 $(function(){
 	"use strict";
 	
@@ -12,6 +14,8 @@ $(function(){
 		initialize: function() {
 			_.bindAll(this, 'addOne', 'addAll', 'edit');
 			
+			window.Payments = new Payment.Collection();
+			
 			Payments.bind('add',   this.addOne);
 			Payments.bind('reset', this.addAll);
 			
@@ -19,7 +23,7 @@ $(function(){
 		},
 		
 		addOne: function(payment) {
-			var view = new PaymentInListView({model: payment});
+			var view = new Payment.views.InList({model: payment});
 			this.$("#payments-list").append(view.render().el);
 			
 			view.bind('edit_clicked', this.edit);
@@ -35,7 +39,7 @@ $(function(){
 		
 		edit: function(payment) {
 			if(!payment.view_form) {
-				var view = new PaymentFormView({model: payment});
+				var view = new Payment.views.Form({model: payment});
 				this.$("#form-wrap").append(view.render().el);
 			}
 		},
@@ -43,7 +47,7 @@ $(function(){
 		onClickAdd: function(e) {
 			Payments.add({});
 		}
-	})
+	});
 	
-	window.App = new AppView;
-})
+	window.App = new AppView();
+});

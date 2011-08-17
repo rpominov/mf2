@@ -1,3 +1,5 @@
+/*global window Payment PaymentsCollection _t $ Backbone _*/
+
 $(function(){
 	"use strict";
 
@@ -11,22 +13,24 @@ $(function(){
 		clear: function() {
 			this.destroy();
 			this.view_in_list.remove();
-			this.view_form && this.view_form.remove();
+			if (this.view_form) {
+				this.view_form.remove();
+			}
 		}
 	});
 	
-	window.PaymentsCollection = Backbone.Collection.extend({
-	    model : Payment,
+	Payment.Collection = Backbone.Collection.extend({
+	    model: Payment,
 	    url: '/payment'
 	});
 	
-	window.Payments = new PaymentsCollection;
+	Payment.views = {};
 	
-	window.PaymentFormView = Backbone.View.extend({
+	Payment.views.Form = Backbone.View.extend({
 		
 		tagName: "form",
 		className: "payment",
-		tmpl: T('payment.form'),
+		tmpl: _t('payment.form'),
 		
 		initialize: function (args) {
 			_.bindAll(this, 'changeName', 'changeValue');
@@ -80,11 +84,11 @@ $(function(){
 		}
 	});
 	
-	window.PaymentInListView = Backbone.View.extend({
+	Payment.views.InList = Backbone.View.extend({
 		
 		tagName: "li",
 		className: "payment",
-		tmpl: T('payment.in_list'),
+		tmpl: _t('payment.in_list'),
 		
 		initialize: function (args) {
 			_.bindAll(this, 'changeName', 'changeValue');
@@ -99,7 +103,7 @@ $(function(){
 		},
 		
 		onClickEdit: function() {
-			this.trigger('edit_clicked', this.model)
+			this.trigger('edit_clicked', this.model);
 		},
 		
 		onClickDelete: function() {
@@ -124,4 +128,4 @@ $(function(){
 			this.model.view_in_list = null;
 		}
 	});
-})
+});

@@ -40,12 +40,13 @@
 		position: relative;
 		top: 0;
 		right: -16px; /* depends on .icon(width) */
-		visibility: hidden;
-	}
-	.tooltip-contener:hover > .tooltip {
-		visibility: visible;
 		cursor: default;
 	}
+	.tooltip,
+	.tooltip-contener.on-click:hover > .tooltip { visibility: hidden }
+	.tooltip-contener:hover > .tooltip,
+	.tooltip-contener.on-click.hover > .tooltip,
+	.tooltip-contener.on-click > .tooltip:hover { visibility: visible }
 		.tooltip .content {
 			position: absolute;
 			border: 1px solid #b2b2b2;
@@ -181,9 +182,23 @@ html, body {
 		background: url('/static/images/icons/user.png') no-repeat;
 	}
 	
-#add-payment {
+.top .tooltip {
+	right: -19px;
 }
-
+	.top .tooltip .content {
+		padding: 0;
+		width: 100px;
+	}
+		.top .tooltip li {
+			padding: 1px 5px;
+		}
+		.top .tooltip li:hover { background: #eee; }
+		.top .tooltip .clickable { 
+			white-space: nowrap;
+			border-style: none;
+			cursor: default;
+		}
+		
 	
 /* --- Sidebar */
 

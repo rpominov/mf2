@@ -10,15 +10,19 @@
 		<link href="/static/css/site.css" type="text/css" rel="stylesheet" />
 		
 		<!-- libraries -->
+		<script src="/static/js/lib/json2.js" type="text/javascript"></script>
 		<script src="/static/js/lib/underscore.js" type="text/javascript"></script>
 		<script src="/static/js/lib/jquery-1.6.2.min.js" type="text/javascript"></script>
 		<script src="/static/js/lib/backbone.js" type="text/javascript"></script>
 		<script src="/static/js/lib/doT.js" type="text/javascript"></script>
 		<script src="/static/js/lib/templatesCollector.js" type="text/javascript"></script>
 		
+		<!-- some tricks -->
+		<script src="/static/js/tricks.js" type="text/javascript"></script>
+		
 		<!-- application -->
-		<script src="/static/js/payment.js" type="text/javascript"></script>
-		<script src="/static/js/app.js" type="text/javascript"></script>
+		<script src="/static/js/app/payment.js" type="text/javascript"></script>
+		<script src="/static/js/app/app.js" type="text/javascript"></script>
 	</head>
 	<body>
 		<div id="form-wrap">
@@ -28,17 +32,7 @@
 		
 		<div class="top"><div class="padding"><div class="padding">
 			<div id="add-payment" class="icon add" title="Добавить платеж"></div>
-			<div id="sys-settings" class="icon settings tooltip-contener" title="Настройки">
-				<div class="tooltip">
-					<div class="arrow"></div>
-					<ul class="content">
-						<li><span class="clickable">импорт</span></li>
-						<li><span class="clickable">экспорт</span></li>
-						<li><span class="clickable">валюты</span></li>
-						<li><span class="clickable">вид</span></li>
-					</ul>
-				</div>
-			</div>
+			<div id="sys-settings" class="icon settings"></div>
 			<div class="user-info">
 				<span class="balance plus">2356 $</span> 
 				<span class="user-name">pozadi</span> 
