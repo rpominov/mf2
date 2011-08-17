@@ -7,9 +7,7 @@
  * License: http://sam.zoy.org/wtfpl/COPYING
  * 
  * Depends on
- *   jQuery or Zepto
- *   and
- *   doT.js or doU.js (https://github.com/olado/doT)
+ *   jQuery (or Zepto) and doT.js (https://github.com/olado/doT)
  * 
  * Usage:
  *   in js:
@@ -21,12 +19,12 @@
  * 
  *   in html:
  *    <script type="text/html" class="template" data-bind="user.name_part">
- *       <span class="name">{{! it.name }}</span>
+ *       <span class="name"><%! it.name %></span>
  *    </script>
  * 
  *    <script type="text/html" class="template" data-bind="user">
- *       {{#def['user.name_part']}}
- *       <span class="age">{{! it.age }}</span>
+ *       <%#def['user.name_part']%>
+ *       <span class="age"><%! it.age %></span>
  *    </script>
  * 
  *   ... all doT fetures include includes works
@@ -43,6 +41,17 @@ window.T = function(win, $, doT){
 	T._compiled = {}
 	T._source = {}
 	
+	T._settings = {
+		evaluate:    /\<\%([\s\S]+?)\%\>/g,
+		interpolate: /\<\%=([\s\S]+?)\%\>/g,
+		encode:      /\<\%!([\s\S]+?)\%\>/g,
+		use:         /\<\%#([\s\S]+?)\%\>/g, //compile time evaluation
+		define:      /\<\%##\s*([\w\.$]+)\s*(\:|=)([\s\S]+?)#\%\>/g, //compile time defs
+		varname: 'it',
+		strip : true,
+		append: true
+	}
+	
 	T._grabAll = function() {
 		
 		win.console && win.console.time && win.console.time('templates grabbing');
@@ -54,7 +63,7 @@ window.T = function(win, $, doT){
 		})
 		
 		for (var name in T._source) {
-			T._compiled[name] = doT.template(T._source[name], null, T._source)
+			T._compiled[name] = doT.template(T._source[name], T._settings, T._source)
 		}
 		
 		win.console && win.console.timeEnd && win.console.timeEnd('templates grabbing');

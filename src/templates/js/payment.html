@@ -1,8 +1,16 @@
 <script type="text/html" class="template" data-bind="payment.in_list">
-	<div class="icon settings"></div>
+	<div class="icon settings tooltip-contener">
+		<div class="tooltip">
+			<div class="arrow"></div>
+			<div class="content">
+				<div class="icon edit" title="править"></div>
+				<div class="icon delete" title="удалить"></div>
+			</div>
+		</div>
+	</div>
 	<span class="text">
-		<span class="value">{{! it.value }}</span>
-		<span class="name">{{! it.name }}</span>
+		<span class="value"><%! it.value %></span>
+		<span class="name"><%! it.name %></span>
 		<ul class="tag-list">
 			<li class="tag">тег</li>
 			<li class="filter">фильтр</li>
@@ -13,15 +21,8 @@
 	<div class="clear"></div>
 </script>
 
-<script type="text/html" class="template" data-bind="payment.in_list.tooltip">
-	<div class="tooltip">
-		<div class="icon edit" title="править"></div>
-		<div class="icon delete" title="удалить"></div>
-	</div>
-</script>
-
 <script type="text/html" class="template" data-bind="payment.form">
-	<label>Имя: <input type="text" class="name" value="{{! it.name }}"/></label><br/>
-	<label>Сумма: <input type="text" class="value" value="{{! it.value }}"/></label><br/>
+	<label>Имя: <input type="text" class="name" value="<%! it.name %>"/></label><br/>
+	<label>Сумма: <input type="text" class="value" value="<%! it.value %>"/></label><br/>
 	<input type="submit" value="Сохранить" /> или <span class="clickable cancel">отмена</span>
 </script>

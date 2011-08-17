@@ -28,7 +28,17 @@
 		
 		<div class="top"><div class="padding"><div class="padding">
 			<div id="add-payment" class="icon add" title="Добавить платеж"></div>
-			<div id="sys-settings" class="icon settings" title="Настройки"></div>
+			<div id="sys-settings" class="icon settings tooltip-contener" title="Настройки">
+				<div class="tooltip">
+					<div class="arrow"></div>
+					<ul class="content">
+						<li><span class="clickable">импорт</span></li>
+						<li><span class="clickable">экспорт</span></li>
+						<li><span class="clickable">валюты</span></li>
+						<li><span class="clickable">вид</span></li>
+					</ul>
+				</div>
+			</div>
 			<div class="user-info">
 				<span class="balance plus">2356 $</span> 
 				<span class="user-name">pozadi</span> 
@@ -90,7 +100,9 @@
 		</div><!-- / .middle -->
 		
 		<!-- templates -->
-{{ js_templates }}
+		{% for t in js_templates %}
+		    {% include t %}
+		{% endfor %}
 		
 	</body>
 </html>

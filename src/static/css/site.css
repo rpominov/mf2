@@ -16,7 +16,7 @@
 .icon.edit     { background-image: url('/static/images/icons/edit.png')     }
 .icon.delete   { background-image: url('/static/images/icons/delete.png')   }
 .icon.settings { background-image: url('/static/images/icons/settings.png') }
-.icon.add      { background-image: url('/static/images/icons/plus.png')    }
+.icon.add      { background-image: url('/static/images/icons/plus.png')     }
 .icon.home     { background-image: url('/static/images/icons/home.png')     }
 
 .clickable {
@@ -31,6 +31,40 @@
 .minus {
 	color: red;
 }
+
+.tooltip-contener {
+	position: relative;	
+}
+	.tooltip {
+		display: block;
+		position: relative;
+		top: 0;
+		right: -16px; /* depends on .icon(width) */
+		visibility: hidden;
+	}
+	.tooltip-contener:hover > .tooltip {
+		visibility: visible;
+		cursor: default;
+	}
+		.tooltip .content {
+			position: absolute;
+			border: 1px solid #b2b2b2;
+			background: white;
+			padding: 5px;
+			left: 6px;
+			top: -3px;
+			z-index: 5;
+		}
+		.tooltip .arrow {
+			width: 7px;
+			height: 13px;
+			top: 2px;
+			left: 0;
+			position: absolute;
+			z-index: 10;
+			background: url('/static/images/tooltip-left.png');
+		}
+	
 
 /* ----------------- Layout */
 
@@ -53,7 +87,7 @@ html, body {
 	top: 0;
 	right: 0;
 	left: 0;
-	overflow: hidden;
+	overflow: visible;
 	background: #f1f1f1;
 	border-bottom: 1px solid #d2d2d2;
 	z-index: 10;
@@ -126,15 +160,16 @@ html, body {
 	border-radius: 2px;
 	-moz-border-radius: 2px;
 	-webkit-border-radius: 2px;
+	background-color: #f7f7f7;
 	float: left;
-	margin-top: 4px;
+	margin-top: 5px;
 	margin-right: 4px;
 }
 .top .icon:hover {
-	border-color: #bbb;
+	border-color: #b2b2b2;
 }
 .top .icon:active {
-	background-color: #fff;
+	background-color: #e8e8e8;
 }
 
 .user-info {
@@ -171,13 +206,21 @@ html, body {
 
 #payments-list {
 }
-	li.payment {
-	}
+	li.payment {}
 	li.payment:first-child {}
+		li.payment .tooltip .content {
+			white-space: nowrap;
+			height: 16px; /* no idea why it 20 by default*/
+			top: -5px;
+		}
+			li.payment .tooltip .icon:first-child {
+				margin-right: 5px;
+			}
 		li.payment .settings { 
 			float: right;
 			visibility: hidden;
 			margin-top: 8px;
+			cursor: default;
 		}
 		li.payment:hover .settings { visibility: visible }
 		li.payment .text {
@@ -232,7 +275,7 @@ html, body {
 
 #form-wrap {
 	position: fixed;
-	right: 20px;
+	left: 50%;
 	top: 0;
 	z-index: 20;
 }
@@ -240,4 +283,5 @@ html, body {
 		padding: 10px;
 		background: white;
 		margin-top: 20px;
+		border: 1px solid black;
 	}

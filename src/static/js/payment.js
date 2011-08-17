@@ -5,7 +5,7 @@ $(function(){
 		
 		defaults: {
            name: '',
-           value: 0,
+           value: 0
 		},
 		
 		clear: function() {
@@ -95,7 +95,7 @@ $(function(){
 		
 		events: {
 			'click .edit': 'onClickEdit',
-			'click .delete': 'onClickDelete',
+			'click .delete': 'onClickDelete'
 		},
 		
 		onClickEdit: function() {

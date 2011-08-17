@@ -8,22 +8,19 @@ t_dir = '../templates/'
 def p(path):
     return os.path.join(os.path.dirname(__file__), path)
 
-def name2content(fname):
-    fname = p(t_dir + '/js/' + fname)
-    f = file(fname)
-    s = f.read()
-    return s
+def add_js(n):
+    return 'js/' + n;
 
 class MainPage(webapp.RequestHandler):
     def get(self):
         
         js_templates = os.listdir(p(t_dir + '/js'))
-        js_templates = map(name2content, js_templates)
+        js_templates = map(add_js, js_templates)
         
         self.response.out.write(
             template.render(
                 p(t_dir + 'index.html'), 
-                {'js_templates': ''.join(js_templates)}
+                {'js_templates': js_templates}
             )
         )
 
