@@ -1,0 +1,22 @@
+<script type="text/html" class="template" data-bind="tooltip">
+	<div class="<%= it.classes %> tooltip-contener">
+		<div class="tooltip">
+			<div class="arrow"></div>
+			<div class="content">
+				<%= it.content %>
+			</div>
+		</div>
+	</div>
+</script>
+
+<script type="text/html" class="template" data-bind="tooltip.standart-settings">
+	<%= _t('tooltip', {
+			classes: 'icon settings', 
+			content: '<%#def['tooltip.standart-settings.content']%>'
+		}) %>
+</script>
+
+<script type="text/html" class="template" data-bind="tooltip.standart-settings.content">
+	<div class="icon edit" title="править"></div>
+	<div class="icon delete" title="удалить"></div>
+</script>

@@ -1,13 +1,5 @@
 <script type="text/html" class="template" data-bind="payment.in_list">
-	<div class="icon settings tooltip-contener">
-		<div class="tooltip">
-			<div class="arrow"></div>
-			<div class="content">
-				<div class="icon edit" title="править"></div>
-				<div class="icon delete" title="удалить"></div>
-			</div>
-		</div>
-	</div>
+	<%#def['tooltip.standart-settings']%>
 	<span class="text">
 		<span class="value"><%! it.value %></span>
 		<span class="name"><%! it.name %></span>
@@ -23,7 +15,8 @@
 
 <script type="text/html" class="template" data-bind="payment.form">
 	<h2>Платеж</h2>	
-	<table>
+	
+	<table class="form-table">
 		
 		{% comment %} todo: replace 'name' with 'description' {% endcomment %}
 		<tr>
@@ -33,7 +26,12 @@
 		
 		<tr>
 			<td><label for="value_<%! it.cid %>">Сумма:</label></td>
-			<td><input type="text" id="value_<%! it.cid %>" class="value" value="<%! it.value %>"/></td>
+			<td class="value-wrap">
+				<label><input type="radio" name="type" checked> -</label>
+				<label><input type="radio" name="type"> +</label>
+				<label><input type="radio" name="type"> ⇋</label>
+				<input type="text" id="value_<%! it.cid %>" class="value" value="<%! it.value %>"/>
+			</td>
 		</tr>
 		
 		<tr>
@@ -43,7 +41,17 @@
 		
 		<tr>
 			<td><label for="storage_<%! it.cid %>">Хранилище:</label></td>
-			<td><input type="text" id="storage_<%! it.cid %>" class="storage" value=""/></td>
+			<td>
+				<select id="storage_<%! it.cid %>" class="storage">
+					<option>Наличные</option>
+					<option>Втб 24</option>
+				</select>
+				&nbsp;→&nbsp;
+				<select id="storage1_<%! it.cid %>" class="storage1">
+					<option>Наличные</option>
+					<option selected>Втб 24</option>
+				</select>
+			</td>
 		</tr>
 		
 		<tr>
@@ -52,5 +60,5 @@
 		</tr>
 		
 	</table>
-	<input type="submit" value="Сохранить" /> или <span class="clickable cancel">отмена</span>
+	<input type="submit" value="Сохранить" /> <span class="clickable cancel">отмена</span>
 </script>

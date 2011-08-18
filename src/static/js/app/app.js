@@ -1,4 +1,4 @@
-/*global window $ Backbone _ _t Payment Payments AppView*/
+/*global window $ Backbone _ _t Tag Tags Payment Payments*/
 
 $(function(){
 	"use strict";
@@ -20,6 +20,10 @@ $(function(){
 			Payments.bind('reset', this.addAll);
 			
 			Payments.fetch();
+			
+			window.Tags = new Tag.Collection();
+			
+			Tags.fetch();
 		},
 		
 		addOne: function(payment) {

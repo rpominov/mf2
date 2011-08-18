@@ -102,6 +102,7 @@
 	}
 
 /* --- Forms */
+
 form {
 	text-align: right; /* for submit elements */
 }
@@ -112,13 +113,14 @@ form {
 		text-align: left;
 		margin-bottom: 10px;
 	}
-	form > table {
-		
+	.form-table {
+		width: 100%;
 	}
-		form > table td {
+		.form-table td {
 			height: 30px;
+			text-align: left;
 		}
-		form > table td:first-child { /* label */
+		.form-table td:first-child { /* label */
 			width: 100px;
 			text-align: right;
 			padding-right: 5px;
@@ -132,6 +134,11 @@ textarea {
 input[type="text"]:focus,
 textarea:focus {
 	background-color: #FFFFE0;
+}
+
+input[type="radio"] {
+	vertical-align: middle;
+	margin: 0 0 3px 0;
 }
 
 /* ----------------- Layout */
@@ -378,6 +385,22 @@ html, body {
 			float: left;
 		}
 
+/* ----------------- Forms */
 
-/* --- Temp */
+/* --- Payment */
 
+form.payment .tags {
+	width: 385px;
+}
+
+form.payment .name {
+	width: 385px;
+}
+
+form.payment .value {
+	width: 50px;
+}
+
+.value-wrap label {
+	margin-right: 10px;
+}
