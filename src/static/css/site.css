@@ -1,8 +1,16 @@
 /* ----------------- Common */
 
-.clear {
-	clear: both;
+.clear { clear: both }
+
+.plus { color: green }
+.minus { color: red }
+
+.clickable {
+	border-bottom: 1px dashed;
+	cursor: pointer;
 }
+
+/* --- Icons */
 
 .icon {
 	width: 16px;
@@ -19,21 +27,14 @@
 .icon.add      { background-image: url('/static/images/icons/plus.png')     }
 .icon.home     { background-image: url('/static/images/icons/home.png')     }
 
-.clickable {
-	border-bottom: 1px dashed;
-	cursor: pointer;
-}
-
-.plus {
-	color: green;
-}
-
-.minus {
-	color: red;
-}
+/* --- Tooltip */
 
 .tooltip-contener {
-	position: relative;	
+	position: relative;
+	cursor: default;	
+}
+.tooltip-contener.on-click {
+	cursor: pointer;
 }
 	.tooltip {
 		display: block;
@@ -66,6 +67,72 @@
 			background: url('/static/images/tooltip-left.png');
 		}
 	
+.settings .tooltip .content {
+	white-space: nowrap;
+	height: 16px; /* no idea why it 20 by default*/
+	top: -5px;
+}
+	.settings .tooltip .icon:first-child {
+		margin-right: 5px;
+	}
+
+/* --- Dialog */
+
+#modal-dialog {
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background-color: rgba(221, 221, 221, 0.6);
+	display: none;
+	z-index: 100;
+}
+	#modal-dialog > * {
+		width: 500px;
+		padding: 10px;
+		margin: 100px auto 0 auto;
+		background-color: white;
+		border: 1px solid #ccc;
+		padding: 10px;
+		-moz-box-shadow: 0 1px 5px #ccc;
+		-ms-filter: "progid: DXImageTransform.Microsoft.Shadow(Strength=3, Direction=180, Color='#ccc')";
+		-o-box-shadow: 0 1px 5px #ccc;
+		-webkit-box-shadow: 0 1px 5px #ccc;
+	}
+
+/* --- Forms */
+form {
+	text-align: right; /* for submit elements */
+}
+	h2 {
+		font-weight: bold;
+		font-size: 17px;
+		border-bottom: 1px solid #eee;
+		text-align: left;
+		margin-bottom: 10px;
+	}
+	form > table {
+		
+	}
+		form > table td {
+			height: 30px;
+		}
+		form > table td:first-child { /* label */
+			width: 100px;
+			text-align: right;
+			padding-right: 5px;
+		}
+		
+input[type="text"],
+textarea {
+	padding: 4px;
+	border: 1px solid #ccc;
+}
+input[type="text"]:focus,
+textarea:focus {
+	background-color: #FFFFE0;
+}
 
 /* ----------------- Layout */
 
@@ -98,8 +165,7 @@ html, body {
 		margin: 0 auto;
 	}
 		.top > .padding > .padding {
-			margin-left: 210px;
-			margin-right: 10px;
+			margin-left: 200px;
 		}
 		
 .middle {
@@ -116,6 +182,7 @@ html, body {
 		.sidebar > .padding {
 			padding: 10px;
 			margin-top: 30px; /* depends on .top(height) */
+			padding-right: 0;
 		}
 			.logo {
 				background: url('/static/images/logo.png');
@@ -131,7 +198,7 @@ html, body {
 	}
 		.center > .padding {
 			padding: 15px 15px 50px 15px;
-			margin: 10px;
+			margin-right: 0;
 			margin-top: 40px; /* depends on .top(height) */
 			margin-bottom: 30px; /* depends on .footer(height) */
 			border: 1px solid #EBEBEB;
@@ -203,19 +270,54 @@ html, body {
 /* --- Sidebar */
 
 .sidebar .block {
-	margin: 20px 0 0 35px;
+	margin: 20px 0 0 25px;
 }
-	.sidebar h3 {
-		font-size: 15px;
-		background: no-repeat 0 4px;
-		padding-left: 18px;
-	}
-	.sidebar .filters  h3 { background-image: url('/static/images/icons/filter.png')      }
-	.sidebar .storages h3 { background-image: url('/static/images/icons/credit_card.png') }
-	.sidebar .tags     h3 { background-image: url('/static/images/icons/tag.png')         }
 	.sidebar ul {
-		margin-left: 30px;
+		margin-left: 25px;
 	}
+		.sidebar h3 {
+			font-size: 15px;
+			background: no-repeat 0 4px;
+			padding-left: 18px;
+			position: relative;
+		}
+		.sidebar .filters  h3 { background-image: url('/static/images/icons/filter.png')      }
+		.sidebar .storages h3 { background-image: url('/static/images/icons/credit_card.png') }
+		.sidebar .tags     h3 { background-image: url('/static/images/icons/tag.png')         }
+			.sidebar h3 .text {
+				cursor: pointer;
+			}
+				.sidebar h3 .expand {
+					display: inline-block;
+					width: 10px;
+					height: 10px;
+					background: url('/static/images/icons/expanded1.png') no-repeat center center;
+					margin-left: 5px;
+					position: relative;
+					top: 1px;
+				}
+				.sidebar .folded h3 .expand { background-image: url('/static/images/icons/folded1.png') }
+			.sidebar h3 .add {
+				visibility: hidden;
+				position: absolute;
+				right: 3px;
+				top: 3px;
+			}
+			.sidebar h3:hover .add { visibility: visible; }
+		.sidebar li {
+			padding: 0 0 0 5px;
+		}
+		.sidebar li:hover { background: #eee; }
+		.sidebar li.current { background: #e0e0e0; }
+			.sidebar li .text {
+				cursor: pointer;
+			}
+			.sidebar li .settings {
+				margin-right: 3px;
+				float: right;
+				visibility: hidden;
+			}
+			.sidebar li:hover .settings { visibility: visible; }
 
 /* --- Payments list */
 
@@ -223,19 +325,10 @@ html, body {
 }
 	li.payment {}
 	li.payment:first-child {}
-		li.payment .tooltip .content {
-			white-space: nowrap;
-			height: 16px; /* no idea why it 20 by default*/
-			top: -5px;
-		}
-			li.payment .tooltip .icon:first-child {
-				margin-right: 5px;
-			}
 		li.payment .settings { 
 			float: right;
 			visibility: hidden;
 			margin-top: 8px;
-			cursor: default;
 		}
 		li.payment:hover .settings { visibility: visible }
 		li.payment .text {
@@ -288,15 +381,3 @@ html, body {
 
 /* --- Temp */
 
-#form-wrap {
-	position: fixed;
-	left: 50%;
-	top: 0;
-	z-index: 20;
-}
-	form.payment {
-		padding: 10px;
-		background: white;
-		margin-top: 20px;
-		border: 1px solid black;
-	}

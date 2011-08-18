@@ -22,12 +22,8 @@
 </script>
 
 <script type="text/html" class="template" data-bind="payment.form">
+	<h2>Платеж</h2>	
 	<table>
-		
-		<tr>
-			<td><label for="storage_<%! it.cid %>">Хранилище:</label></td>
-			<td><input type="text" id="storage_<%! it.cid %>" class="storage" value=""/></td>
-		</tr>
 		
 		{% comment %} todo: replace 'name' with 'description' {% endcomment %}
 		<tr>
@@ -43,6 +39,11 @@
 		<tr>
 			<td><label for="time_<%! it.cid %>">Время:</label></td>
 			<td><input type="text" id="time_<%! it.cid %>" class="time" value=""/></td>
+		</tr>
+		
+		<tr>
+			<td><label for="storage_<%! it.cid %>">Хранилище:</label></td>
+			<td><input type="text" id="storage_<%! it.cid %>" class="storage" value=""/></td>
 		</tr>
 		
 		<tr>

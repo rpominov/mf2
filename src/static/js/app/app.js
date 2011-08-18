@@ -1,4 +1,4 @@
-/*global window $ Backbone _ _t Payment Payments*/
+/*global window $ Backbone _ _t Payment Payments AppView*/
 
 $(function(){
 	"use strict";
@@ -12,7 +12,7 @@ $(function(){
 		},
 		
 		initialize: function() {
-			_.bindAll(this, 'addOne', 'addAll', 'edit');
+			_.bindAll(this, 'addOne', 'addAll', 'edit', 'hideDialog');
 			
 			window.Payments = new Payment.Collection();
 			
@@ -24,7 +24,7 @@ $(function(){
 		
 		addOne: function(payment) {
 			var view = new Payment.views.InList({model: payment});
-			this.$("#payments-list").append(view.render().el);
+			this.$("#payments-list").prepend(view.render().el);
 			
 			view.bind('edit_clicked', this.edit);
 			
@@ -40,12 +40,24 @@ $(function(){
 		edit: function(payment) {
 			if(!payment.view_form) {
 				var view = new Payment.views.Form({model: payment});
-				this.$("#form-wrap").append(view.render().el);
+				view.render();
+				
+				view.bind('close', this.hideDialog);
+				
+				this.showDialog(view.el);
 			}
 		},
 		
-		onClickAdd: function(e) {
+		onClickAdd: function() {
 			Payments.add({});
+		},
+		
+		showDialog: function(content) {
+			this.$("#modal-dialog").empty().append(content).show();
+		},
+		
+		hideDialog: function() {
+			this.$("#modal-dialog").hide();
 		}
 	});
 	

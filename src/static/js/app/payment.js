@@ -1,4 +1,4 @@
-/*global window Payment PaymentsCollection _t $ Backbone _*/
+/*global window $ Backbone _ _t Payment Payments*/
 
 $(function(){
 	"use strict";
@@ -30,7 +30,9 @@ $(function(){
 		},
 		
 		initialize: function (args) {
-			this.model.bind('destroy', _.bind(function(){ $(this.el).remove(); }, this));
+			var remove = _.bind(function(){ $(this.el).remove(); }, this);
+			this.model.bind('destroy', remove);
+			this.bind('close', remove)
 		},
 		
 		onSubmit: function() {
@@ -42,7 +44,7 @@ $(function(){
 			
 			this.model.save();
 			
-			this.remove();
+			this.trigger('close');
 			
 			return false; // prevent submit
 		},
@@ -51,7 +53,7 @@ $(function(){
 			if(this.model.isNew()) {
 				this.model.destroy();
 			}
-			$(this.el).remove();
+			this.trigger('close');
 		},
 		
 		render: function() {
