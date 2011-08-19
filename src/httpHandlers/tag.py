@@ -7,13 +7,11 @@ from django.utils import simplejson
     
 class Tag(db.Model):
     name = db.StringProperty()
-    payments_ids = db.ListProperty(int)
     
     def toDict(self):
         return {
             'id':    self.key().id(),
-            'name':  self.name,
-            'payments_ids': self.payments_ids
+            'name':  self.name
         }
 
 class TagRESTfulHandler(webapp.RequestHandler):
@@ -28,7 +26,7 @@ class TagRESTfulHandler(webapp.RequestHandler):
     
     def post(self, id):
         tag = simplejson.loads(self.request.body)
-        tag = Tag(name = tag['name'], payments_ids = tag['payments_ids'])
+        tag = Tag(name = tag['name'])
         tag.put()
         tag = simplejson.dumps(tag.toDict())
         self.response.out.write(tag)
@@ -36,8 +34,7 @@ class TagRESTfulHandler(webapp.RequestHandler):
     def put(self, id):
         tag = Tag.get_by_id(int(id))
         tmp = simplejson.loads(self.request.body)
-        tag.name  = tmp['name']
-        tag.payments_ids = tmp['payments_ids']
+        tag.name = tmp['name']
         tag.put()
         tag = simplejson.dumps(tag.toDict())
         self.response.out.write(tag)

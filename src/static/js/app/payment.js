@@ -1,19 +1,71 @@
-/*global window $ Backbone _ _t Payment Payments*/
+/*global window $ Backbone _ _t Payment Payments Tags*/
 
 $(function(){
 	"use strict";
+
+	function expand_tags(model) {
+		model.tags = _(model.tags).map(function(tag) { return Tags.get(tag); });
+		model.tags = new Backbone.Collection(model.tags);
+	}
 
 	window.Payment = Backbone.Model.extend({
 		
 		defaults: {
            name: '',
-           value: 0
+           value: 0,
+           tags: new Backbone.Collection()
+		},
+		
+		initialize: function() {
+			
+		},
+		
+		validate: function(attrs) {
+		    /*if (attrs.end < attrs.start) {
+		      return "can't end before it starts";
+		    }*/
+		},
+		
+		sync: function(method, model, options) {
+			
+			var tags = null;
+			if(_(['create', 'update']).contains(method)) {
+				tags = model.get('tags');
+				model.set({tags: tags.pluck('id')});
+			}
+			
+			var result = Backbone.sync(method, model, options);
+			
+			if (tags !== null) {
+				model.set({tags: tags});
+			}
+			
+			return result;
+		},
+		
+		parse: function (resp, xhr) {
+			console.log('model.parce');
+			
+			var result = Backbone.Model.prototype.parse(resp, xhr);
+			
+			expand_tags(result);
+			return result;
 		}
 	});
 	
 	Payment.Collection = Backbone.Collection.extend({
 	    model: Payment,
-	    url: '/payment'
+	    url: '/payment',
+	    
+	    parse: function (resp, xhr) {
+	    	console.log('collection.parce');
+
+			var result = Backbone.Collection.prototype.parse(resp, xhr);
+			
+			_(result).map(expand_tags);
+			
+			return result;
+		}
 	});
 	
 	Payment.views = {};

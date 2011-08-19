@@ -355,15 +355,21 @@ html, body {
 			li.payment .tag-list {
 				display: inline-block;
 				font-size: 11px;
-				color: #888;
+				color: #555;
 				position: relative;
 				bottom: 1px;
 			}
 				li.payment li {
 					display: inline;
-					margin-right: 7px;
-					background: no-repeat 0 2px;
-					padding-left: 12px; 
+					margin-right: 3px;
+					background: no-repeat 2px 2px #e7e7e7;
+					padding: 0 3px 1px 15px;
+					/*padding-left: 12px;*/
+
+					-webkit-border-radius: 2px;
+					-moz-border-radius: 2px;
+					border-radius: 2px;
+					text-shadow: 1px 1px 0 rgba(255,255,255,0.5);
 				}
 				li.payment li.filter  { background-image: url('/static/images/icons/filter_s.png')      }
 				li.payment li.tag     { background-image: url('/static/images/icons/tag_s.png')         }

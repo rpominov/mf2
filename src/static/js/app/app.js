@@ -15,15 +15,13 @@ $(function(){
 			_.bindAll(this, 'addOne', 'addAll', 'edit', 'hideDialog');
 			
 			window.Payments = new Payment.Collection();
-			
 			Payments.bind('add',   this.addOne);
 			Payments.bind('reset', this.addAll);
 			
-			Payments.fetch();
-			
 			window.Tags = new Tag.Collection();
-			
-			Tags.fetch();
+			Tags.fetch({success: function() {
+				Payments.fetch();
+			}});
 		},
 		
 		addOne: function(payment) {

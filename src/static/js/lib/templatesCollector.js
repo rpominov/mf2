@@ -1,10 +1,11 @@
 /**
- * templates collector grabs all templates from dom,
+ * Templates collector grabs all templates from dom,
  * removes dom elemets
  * and compiles templates for later use.
+ * Also replaces {{}} with <%%> for Django templates compatibility.
  * 
  * Author: https://github.com/pozadi
- * License: http://sam.zoy.org/wtfpl/COPYING
+ * License: Public Domain
  * 
  * Depends on
  *   jQuery (or Zepto) and doT.js (https://github.com/olado/doT)
@@ -18,12 +19,12 @@
  *    user_html = t('user')(user_model)
  * 
  *   in html:
- *    <script type="text/html" class="template" data-bind="user.name_part">
+ *    <script type="text/html" class="template" data-bind="user.name-part">
  *       <span class="name"><%! it.name %></span>
  *    </script>
  * 
  *    <script type="text/html" class="template" data-bind="user">
- *       <%#def['user.name_part']%>
+ *       <%#def['user.name-part']%>
  *       <span class="age"><%! it.age %></span>
  *    </script>
  * 

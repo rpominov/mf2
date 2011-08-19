@@ -8,12 +8,14 @@ from django.utils import simplejson
 class Payment(db.Model):
     name = db.StringProperty()
     value = db.IntegerProperty()
+    tags = db.ListProperty(int)
     
     def toDict(self):
         return {
             'id':    self.key().id(),
             'name':  self.name,
-            'value': self.value
+            'value': self.value,
+            'tags':  self.tags
         }
 
 class PaymentRESTfulHandler(webapp.RequestHandler):
@@ -30,7 +32,8 @@ class PaymentRESTfulHandler(webapp.RequestHandler):
         payment = simplejson.loads(self.request.body)
         payment = Payment(
             name  = payment['name'],
-            value = int(payment['value'])
+            value = int(payment['value']),
+            tags = map(int, payment['tags'])
         )
         payment.put()
         payment = simplejson.dumps(payment.toDict())
@@ -41,6 +44,7 @@ class PaymentRESTfulHandler(webapp.RequestHandler):
         tmp = simplejson.loads(self.request.body)
         payment.name  = tmp['name']
         payment.value = int(tmp['value'])
+        payment.tags = map(int, tmp['tags'])
         payment.put()
         payment = simplejson.dumps(payment.toDict())
         self.response.out.write(payment)

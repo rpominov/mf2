@@ -6,24 +6,19 @@ $(function(){
 	window.Tag = Backbone.Model.extend({
 		
 		defaults: {
-			name: '',
-			payments_ids: []
+			name: ''
+		},
+		
+		validate: function(attrs) {
+		    if (typeof attrs.name !== 'undefined' && !_.isString(attrs.name)) {
+				return "'name' must be an String";
+			}
 		}
 	});
 	
 	Tag.Collection = Backbone.Collection.extend({
 		model: Tag,
-		url: '/tag',
-		
-		getForPayment: function(payment_id) {
-			
-		},
-		
-		setForPayment: function(payment_id, tags_strings) {
-			this.trigger('teg_changed:' + payment_id);
-			
-			// todo
-		}
+		url: '/tag'
 	});
 	
 	Tag.views = {};
