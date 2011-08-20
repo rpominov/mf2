@@ -1,4 +1,4 @@
-/*global window $ Backbone _ _t Tag Tags Payment Payments*/
+/*global window $ Backbone _ _t Tag Tags Payment Payments AppView*/
 
 $(function(){
 	"use strict";
@@ -12,34 +12,53 @@ $(function(){
 		},
 		
 		initialize: function() {
-			_.bindAll(this, 'addOne', 'addAll', 'edit', 'hideDialog');
+			_.bindAll(this
+				, 'addOnePayment'
+				, 'addAllPayment'
+				, 'editPayment'
+				, 'hideDialog'
+				, 'addOneTag'
+				, 'addAllTag'
+			);
 			
 			window.Payments = new Payment.Collection();
-			Payments.bind('add',   this.addOne);
-			Payments.bind('reset', this.addAll);
+			Payments.bind('add',   this.addOnePayment);
+			Payments.bind('reset', this.addAllPayment);
 			
 			window.Tags = new Tag.Collection();
+			Tags.bind('add',   this.addOneTag);
+			Tags.bind('reset', this.addAllTag);
+			
 			Tags.fetch({success: function() {
 				Payments.fetch();
 			}});
 		},
 		
-		addOne: function(payment) {
+		addOneTag: function(tag) {
+			var view = new Tag.views.InList({model: tag});
+			this.$("#main-tags-list").prepend(view.render().el);
+		},
+		
+		addAllTag: function() {
+			Tags.each(this.addOneTag);
+		},
+		
+		addOnePayment: function(payment) {
 			var view = new Payment.views.InList({model: payment});
 			this.$("#payments-list").prepend(view.render().el);
 			
-			view.bind('edit_clicked', this.edit);
+			view.bind('edit_clicked', this.editPayment);
 			
 			if(payment.isNew()){
-				this.edit(payment);
+				this.editPayment(payment);
 			}
 		},
 		
-		addAll: function() {
-			Payments.each(this.addOne);
+		addAllPayment: function() {
+			Payments.each(this.addOnePayment);
 		},
 		
-		edit: function(payment) {
+		editPayment: function(payment) {
 			if(!payment.view_form) {
 				var view = new Payment.views.Form({model: payment});
 				view.render();

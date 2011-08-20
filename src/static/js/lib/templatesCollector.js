@@ -55,7 +55,7 @@ window._t = function(win, $, doT){
 	
 	_t._grabAll = function() {
 		
-		win.console && win.console.time && win.console.time('templates grabbing');
+		//win.console && win.console.time && win.console.time('templates grabbing');
 		
 		$('script.template').each(function(){
 			var el = $(this)
@@ -67,7 +67,7 @@ window._t = function(win, $, doT){
 			_t._compiled[name] = doT.template(_t._source[name], _t._settings, _t._source)
 		}
 		
-		win.console && win.console.timeEnd && win.console.timeEnd('templates grabbing');
+		//win.console && win.console.timeEnd && win.console.timeEnd('templates grabbing');
 	}
 	
 	$(_t._grabAll)

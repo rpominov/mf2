@@ -4,7 +4,10 @@ $(function(){
 	"use strict";
 
 	function expand_tags(model) {
-		model.tags = _(model.tags).map(function(tag) { return Tags.get(tag); });
+		model.tags = _(model.tags).chain()
+						.map(function(tag) { return Tags.get(tag); })
+						.filter(function(tag) { return !!tag; })
+						.value();
 		model.tags = new Backbone.Collection(model.tags);
 	}
 
@@ -13,15 +16,13 @@ $(function(){
 		defaults: {
            name: '',
            value: 0,
-           tags: null
+           tags: null // Backbone.Collection
 		},
 		
 		initialize: function() {
-			/*// todo: test it
-			var trigger = _(this.trigger).bind(this, 'change:tags');
-			this.get('tags').bind('add',    trigger)
-							.bind('remove', trigger)
-							.bind('reset',  trigger);*/
+			if (this.get('tags') === null) {
+				this.set({tags: new Backbone.Collection()});
+			}
 		},
 		
 		validate: function(attrs) {
@@ -30,17 +31,16 @@ $(function(){
 		    }*/
 		},
 		
+		// redefine toJSON for correct save collection of tags
 		toJSON: function(pluck_names) {
-			console.log('toJSON');
 			var result = Backbone.Model.prototype.toJSON.call(this);
 			
 			result.tags = result.tags.pluck(pluck_names ? 'name' : 'id');
-			
 			return result;
 		},
 		
+		// redefine parse for correct restore collection of tags
 		parse: function (resp, xhr) {
-			console.log('model.parse');
 			var result = Backbone.Model.prototype.parse(resp, xhr);
 			
 			expand_tags(result);
@@ -52,8 +52,8 @@ $(function(){
 		model: Payment,
 		url: '/payment',
 		
+		// redefine parse for correct restore collection of tags
 		parse: function (resp, xhr) {
-			console.log('collection.parse');
 			var result = Backbone.Collection.prototype.parse(resp, xhr);
 			
 			_(result).map(expand_tags);
@@ -75,7 +75,7 @@ $(function(){
 		},
 		
 		initialize: function (args) {
-			var remove = _($.fn.remove).bind($(this.el));
+			var remove = _.bind(function(){ $(this.el).remove(); }, this);
 			this.model.bind('destroy', remove);
 			this.bind('close', remove);
 		},

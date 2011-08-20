@@ -7,13 +7,28 @@ $(function(){
 		
 		defaults: {
 			name: '',
-			payments: null
+			payments: null // Backbone.Collection
 		},
 		
 		initialize: function() {
-			this.set({payments: new Backbone.Collection()});
+			
+			if (this.get('payments') === null) {
+				this.set({payments: new Backbone.Collection()});
+			}
+			
 			this.get('payments')
-				.bind('all', _(this.trigger).bind(this, 'change:payments'));
+				.bind('all', _(function(){
+					this.trigger('change:payments', this, this.get('payments'));
+				}).bind(this));
+				
+			this.bind('destroy', function(tag) {
+				tag.get('payments').each(function(payment){
+					payment.get('tags').remove(tag);
+					payment.save();
+				});
+			});
+				
+			
 		},
 		
 		validate: function(attrs) {
@@ -22,6 +37,7 @@ $(function(){
 			}
 		},
 		
+		// redefine toJSON to don't send to server collection of payments
 		toJSON: function(count_payments) {
 			var result = Backbone.Model.prototype.toJSON.call(this);
 			
@@ -40,7 +56,6 @@ $(function(){
 		url: '/tag',
 		
 		initialize: function() {
-			// don't shure it works
 			
 			function add(model, tag) {
 				tag.get('payments').add(model);
@@ -73,10 +88,22 @@ $(function(){
 				_(added).each(_(add).bind(null, model));
 				_(removed).each(_(remove).bind(null, model));
 			});
+			
+			// lazy removing not used tags
+			window.setInterval(function(){
+				var not_used = Tags.getNotUsed();
+				if (not_used.length > 0) {
+					not_used[0].destroy();
+				}
+			}, 5000);
 		},
 		
 		getUsed: function() {
-			// todo
+			return this.filter(function(tag) { return tag.get('payments').length > 0; });
+		},
+		
+		getNotUsed: function() {
+			return this.filter(function(tag) { return tag.get('payments').length === 0; });
 		},
 		
 		/**
@@ -105,28 +132,56 @@ $(function(){
 	
 	Tag.views = {};
 	
-	Tag.views.bigList = Backbone.View.extend({
+	Tag.views.InList = Backbone.View.extend({
 		
 		tagName: "li",
 		className: "tag",
 		tmpl: _t('tag.big-list'),
 		
 		events: {
-			'click .text': 'onClickText'
+			'click .text': 'onClickText',
+			'click .edit': 'onClickEdit',
+			'click .delete': 'onClickDelete'
 		},
 		
 		initialize: function (args) {
-			/*var remove = _.bind(function(){ $(this.el).remove(); }, this);
-			this.model.bind('destroy', remove);
-			this.bind('close', remove)*/
+			_.bindAll(this, 'changeName', 'changePayments');
+			
+			this.model.bind('destroy', _.bind(function(){ $(this.el).remove(); }, this));
+			this.model.bind('change:name', this.changeName);
+			this.model.bind('change:payments', this.changePayments);
+		},
+		
+		onClickEdit: function() {
+			this.trigger('edit_clicked', this.model);
+		},
+		
+		onClickDelete: function() {
+			this.model.destroy();
 		},
 		
 		onClickText: function() {
 			// todo
 		},
 		
+		changeName: function() {
+			this.$('.name').text(this.model.get('name'));
+		},
+		
+		changePayments: function() {
+			var data = this.model.toJSON(true);
+			
+			$(this.el)[ data.payments === 0 ? 'hide' : 'show' ]();
+			 
+			this.$('.payments').text(data.payments);
+		},
+		
 		render: function() {
-			$(this.el).html(this.tmpl(this.model.toJSON()));
+			var data = this.model.toJSON(true);
+			$(this.el).html(this.tmpl(data));
+			if (data.payments === 0) {
+				$(this.el).hide();
+			}
 			return this;
 		}
 	});
