@@ -13,11 +13,15 @@ $(function(){
 		defaults: {
            name: '',
            value: 0,
-           tags: new Backbone.Collection()
+           tags: null
 		},
 		
 		initialize: function() {
-			
+			/*// todo: test it
+			var trigger = _(this.trigger).bind(this, 'change:tags');
+			this.get('tags').bind('add',    trigger)
+							.bind('remove', trigger)
+							.bind('reset',  trigger);*/
 		},
 		
 		validate: function(attrs) {
@@ -26,26 +30,17 @@ $(function(){
 		    }*/
 		},
 		
-		sync: function(method, model, options) {
+		toJSON: function(pluck_names) {
+			console.log('toJSON');
+			var result = Backbone.Model.prototype.toJSON.call(this);
 			
-			var tags = null;
-			if(_(['create', 'update']).contains(method)) {
-				tags = model.get('tags');
-				model.set({tags: tags.pluck('id')});
-			}
-			
-			var result = Backbone.sync(method, model, options);
-			
-			if (tags !== null) {
-				model.set({tags: tags});
-			}
+			result.tags = result.tags.pluck(pluck_names ? 'name' : 'id');
 			
 			return result;
 		},
 		
 		parse: function (resp, xhr) {
-			console.log('model.parce');
-			
+			console.log('model.parse');
 			var result = Backbone.Model.prototype.parse(resp, xhr);
 			
 			expand_tags(result);
@@ -54,16 +49,14 @@ $(function(){
 	});
 	
 	Payment.Collection = Backbone.Collection.extend({
-	    model: Payment,
-	    url: '/payment',
-	    
-	    parse: function (resp, xhr) {
-	    	console.log('collection.parce');
-
+		model: Payment,
+		url: '/payment',
+		
+		parse: function (resp, xhr) {
+			console.log('collection.parse');
 			var result = Backbone.Collection.prototype.parse(resp, xhr);
 			
 			_(result).map(expand_tags);
-			
 			return result;
 		}
 	});
@@ -82,9 +75,9 @@ $(function(){
 		},
 		
 		initialize: function (args) {
-			var remove = _.bind(function(){ $(this.el).remove(); }, this);
+			var remove = _($.fn.remove).bind($(this.el));
 			this.model.bind('destroy', remove);
-			this.bind('close', remove)
+			this.bind('close', remove);
 		},
 		
 		onSubmit: function() {
@@ -94,7 +87,16 @@ $(function(){
 				'value': this.$('.value').val()
 			});
 			
-			this.model.save();
+			var tags = this.$('.tags').val().split(',');
+				tags = _(tags).chain()
+							.map(function(tag) { return _(tag).trim(); })
+							.filter(function(tag) { return tag.length > 0; })
+							.value();
+			
+			Tags.getByNames(tags, _(function(tags) {
+				this.model.set({'tags': new Backbone.Collection(tags)});
+				this.model.save();
+			}).bind(this));
 			
 			this.trigger('close');
 			
@@ -109,8 +111,9 @@ $(function(){
 		},
 		
 		render: function() {
-			var data = this.model.toJSON();
+			var data = this.model.toJSON(true);
 			data.cid = this.model.cid; // need cid for labels in form
+			data.tags = data.tags.join(', ');
 			$(this.el).html(this.tmpl(data));
 			return this;
 		}
@@ -128,9 +131,10 @@ $(function(){
 		},
 		
 		initialize: function (args) {
-			_.bindAll(this, 'changeName', 'changeValue');
+			_.bindAll(this, 'changeName', 'changeValue', 'changeTags');
 			this.model.bind('change:name', this.changeName);
 			this.model.bind('change:value', this.changeValue);
+			this.model.bind('change:tags', this.changeTags);
 			this.model.bind('destroy', _.bind(function(){ $(this.el).remove(); }, this));
 		},
 		
@@ -150,8 +154,22 @@ $(function(){
 			this.$('.value').text(this.model.get('value'));
 		},
 		
+		changeTags: function() {
+			this.$('.tag').remove();
+			
+			var html = '', 
+				tags = this.model.get('tags').pluck('name');
+			
+			_(tags).each(function(name) {
+				html += _t('tag.small-list', {'class': 'tag', name: name});
+			});
+			
+			this.$('.tag-list').append(html);
+		},
+		
 		render: function() {
-			$(this.el).html(this.tmpl(this.model.toJSON()));
+			var data = this.model.toJSON(true);
+			$(this.el).html(this.tmpl(data));
 			return this;
 		}
 	});
