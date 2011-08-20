@@ -185,4 +185,32 @@ $(function(){
 			return this;
 		}
 	});
+	
+	
+	Tag.views.InSmallList = Backbone.View.extend({
+		
+		tagName: "li",
+		className: "tag",
+		tmpl: _t('tag.small-list'),
+		
+		events: {
+		},
+		
+		initialize: function (args) {
+			_.bindAll(this, 'changeName');
+			
+			this.model.bind('destroy', _.bind(function(){ $(this.el).remove(); }, this));
+			this.model.bind('change:name', this.changeName);
+		},
+		
+		changeName: function() {
+			$(this.el).text(this.model.get('name'));
+		},
+		
+		render: function() {
+			var data = this.model.toJSON();
+			$(this.el).html(this.tmpl(data));
+			return this;
+		}
+	});
 });

@@ -1,4 +1,4 @@
-/*global window $ Backbone _ _t Payment Payments Tags*/
+/*global window $ Backbone _ _t Payment Payments Tags Tag*/
 
 $(function(){
 	"use strict";
@@ -157,19 +157,18 @@ $(function(){
 		changeTags: function() {
 			this.$('.tag').remove();
 			
-			var html = '', 
-				tags = this.model.get('tags').pluck('name');
+			var tags = this.model.get('tags');
 			
-			_(tags).each(function(name) {
-				html += _t('tag.small-list', {'class': 'tag', name: name});
-			});
-			
-			this.$('.tag-list').append(html);
+			tags.each(_(function(tag) {
+				var view = new Tag.views.InSmallList({model: tag});
+				this.$('.tag-list').append(view.render().el);
+			}).bind(this));
 		},
 		
 		render: function() {
-			var data = this.model.toJSON(true);
+			var data = this.model.toJSON();
 			$(this.el).html(this.tmpl(data));
+			this.changeTags();
 			return this;
 		}
 	});
