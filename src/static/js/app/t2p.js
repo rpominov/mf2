@@ -19,6 +19,9 @@ $(function(){
 		},
 		
 		validate: function(attrs) {
+			if (!(attrs.payment instanceof Backbone.Model) || !(attrs.tag instanceof Backbone.Model)) {
+				return 'payment and tag attributes should both be an instances of Backbone.Model';
+			}
 		},
 		
 		toJSON: function() {
