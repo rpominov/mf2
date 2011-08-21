@@ -15,6 +15,9 @@ handlers:
 
 - url: /tag/?[0-9]*
   script: httpHandlers/tag.py
+  
+- url: /t2p/?[0-9]*
+  script: httpHandlers/T2p.py
 
 - url: /.*
   script: httpHandlers/index.py

@@ -1,4 +1,4 @@
-/*global window $ Backbone _ _t Tag Tags Payment Payments AppView*/
+/*global window $ Backbone _ _t Tag Tags Payment Payments AppView T2p T2ps*/
 
 $(function(){
 	"use strict";
@@ -21,6 +21,9 @@ $(function(){
 				, 'addAllTag'
 			);
 			
+			// shortcut for Backbone.Collection
+			window.__ = function(models) { return new Backbone.Collection(models); };
+	
 			window.Payments = new Payment.Collection();
 			Payments.bind('add',   this.addOnePayment);
 			Payments.bind('reset', this.addAllPayment);
@@ -29,9 +32,25 @@ $(function(){
 			Tags.bind('add',   this.addOneTag);
 			Tags.bind('reset', this.addAllTag);
 			
-			Tags.fetch({success: function() {
-				Payments.fetch();
-			}});
+			window.T2ps = new T2p.Collection();
+			// T2ps.bind('all', function(){console.log(arguments[0])}); // debug
+			
+			// data loading
+			$.when(Tags.fetch(), Payments.fetch()).done(function(){
+				$.when(T2ps.fetch()).done(function(){
+					// here we have all data
+					
+					// set lazy removing not used tags
+					window.setInterval(function(){
+						var not_used = Tags.filter(function(tag){
+							return T2ps.getByTag(tag).length === 0; 
+						});
+						if (not_used.length > 0) {
+							not_used[0].destroy();
+						}
+					}, 5000);
+				});
+			});
 		},
 		
 		addOneTag: function(tag) {

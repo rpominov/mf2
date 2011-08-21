@@ -1,64 +1,25 @@
-/*global window $ Backbone _ _t Payment Payments Tags Tag*/
+/*global window $ Backbone _ _t Payment Payments Tags Tag T2ps*/
 
 $(function(){
 	"use strict";
-
-	function expand_tags(model) {
-		model.tags = _(model.tags).chain()
-						.map(function(tag) { return Tags.get(tag); })
-						.filter(function(tag) { return !!tag; })
-						.value();
-		model.tags = new Backbone.Collection(model.tags);
-	}
 
 	window.Payment = Backbone.Model.extend({
 		
 		defaults: {
            name: '',
-           value: 0,
-           tags: null // Backbone.Collection
+           value: 0
 		},
 		
 		initialize: function() {
-			if (this.get('tags') === null) {
-				this.set({tags: new Backbone.Collection()});
-			}
 		},
 		
 		validate: function(attrs) {
-		    /*if (attrs.end < attrs.start) {
-		      return "can't end before it starts";
-		    }*/
-		},
-		
-		// redefine toJSON for correct save collection of tags
-		toJSON: function(pluck_names) {
-			var result = Backbone.Model.prototype.toJSON.call(this);
-			
-			result.tags = result.tags.pluck(pluck_names ? 'name' : 'id');
-			return result;
-		},
-		
-		// redefine parse for correct restore collection of tags
-		parse: function (resp, xhr) {
-			var result = Backbone.Model.prototype.parse(resp, xhr);
-			
-			expand_tags(result);
-			return result;
 		}
 	});
 	
 	Payment.Collection = Backbone.Collection.extend({
 		model: Payment,
-		url: '/payment',
-		
-		// redefine parse for correct restore collection of tags
-		parse: function (resp, xhr) {
-			var result = Backbone.Collection.prototype.parse(resp, xhr);
-			
-			_(result).map(expand_tags);
-			return result;
-		}
+		url: '/payment'
 	});
 	
 	Payment.views = {};
@@ -88,14 +49,15 @@ $(function(){
 			});
 			
 			var tags = this.$('.tags').val().split(',');
-				tags = _(tags).chain()
-							.map(function(tag) { return _(tag).trim(); })
-							.filter(function(tag) { return tag.length > 0; })
-							.value();
+				tags = _(tags)
+					.chain()
+					.map(function(tag) { return _(tag).trim(); })
+					.filter(function(tag) { return tag.length > 0; })
+					.uniq()
+					.value();
 			
-			Tags.getByNames(tags, _(function(tags) {
-				this.model.set({'tags': new Backbone.Collection(tags)});
-				this.model.save();
+			$.when(this.model.save()).done(_(function(){
+				T2ps.setForPayment(this.model, tags);
 			}).bind(this));
 			
 			this.trigger('close');
@@ -111,9 +73,10 @@ $(function(){
 		},
 		
 		render: function() {
-			var data = this.model.toJSON(true);
+			var data = this.model.toJSON();
 			data.cid = this.model.cid; // need cid for labels in form
-			data.tags = data.tags.join(', ');
+			data.tags = '';
+			data.tags = T2ps.getByPayment(this.model).pluck('name').join(', ');
 			$(this.el).html(this.tmpl(data));
 			return this;
 		}
@@ -131,10 +94,10 @@ $(function(){
 		},
 		
 		initialize: function (args) {
-			_.bindAll(this, 'changeName', 'changeValue', 'changeTags');
+			_.bindAll(this, 'changeName', 'changeValue', 'resetTags', 'addTag');
 			this.model.bind('change:name', this.changeName);
 			this.model.bind('change:value', this.changeValue);
-			this.model.bind('change:tags', this.changeTags);
+			T2ps.bind('payment_' + this.model.cid + ':add', this.addTag);
 			this.model.bind('destroy', _.bind(function(){ $(this.el).remove(); }, this));
 		},
 		
@@ -154,21 +117,20 @@ $(function(){
 			this.$('.value').text(this.model.get('value'));
 		},
 		
-		changeTags: function() {
-			this.$('.tag').remove();
-			
-			var tags = this.model.get('tags');
-			
-			tags.each(_(function(tag) {
-				var view = new Tag.views.InSmallList({model: tag});
-				this.$('.tag-list').append(view.render().el);
-			}).bind(this));
+		addTag: function(tag) {
+			var view = new Tag.views.InSmallList({model: tag, payment: this.model});
+			this.$('.tag-list').append(view.render().el);
+		},
+		
+		resetTags: function() {
+			var tags = T2ps.getByPayment(this.model);
+			tags.each(this.addTag);
 		},
 		
 		render: function() {
 			var data = this.model.toJSON();
 			$(this.el).html(this.tmpl(data));
-			this.changeTags();
+			this.resetTags();
 			return this;
 		}
 	});

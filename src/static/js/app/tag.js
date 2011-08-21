@@ -1,4 +1,4 @@
-/*global window $ Backbone _ _t Tag Tags Payment Payments*/
+/*global window $ Backbone _ _t Tag Tags Payment Payments T2ps*/
 
 $(function(){
 	"use strict";
@@ -6,48 +6,16 @@ $(function(){
 	window.Tag = Backbone.Model.extend({
 		
 		defaults: {
-			name: '',
-			payments: null // Backbone.Collection
+			name: ''
 		},
 		
 		initialize: function() {
-			
-			if (this.get('payments') === null) {
-				this.set({payments: new Backbone.Collection()});
-			}
-			
-			this.get('payments')
-				.bind('all', _(function(){
-					this.trigger('change:payments', this, this.get('payments'));
-				}).bind(this));
-				
-			this.bind('destroy', function(tag) {
-				tag.get('payments').each(function(payment){
-					payment.get('tags').remove(tag);
-					payment.save();
-				});
-			});
-				
-			
 		},
 		
 		validate: function(attrs) {
 		    if (typeof attrs.name !== 'undefined' && !_.isString(attrs.name)) {
 				return "'name' must be an String";
 			}
-		},
-		
-		// redefine toJSON to don't send to server collection of payments
-		toJSON: function(count_payments) {
-			var result = Backbone.Model.prototype.toJSON.call(this);
-			
-			if (count_payments) {
-				result.payments = result.payments.length;
-			} else {
-				delete result.payments;
-			}
-			
-			return result;
 		}
 	});
 	
@@ -56,54 +24,14 @@ $(function(){
 		url: '/tag',
 		
 		initialize: function() {
-			
-			function add(model, tag) {
-				tag.get('payments').add(model);
-			}
-			
-			function remove(model, tag) {
-				tag.get('payments').remove(model);
-			}
-			
-			function callback(action, model) {
-				_(model.get('tags').models).each(_(action).bind(null, model));
-			}
-			
-			var add_callback    = _(callback).bind(null, add);
-			var remove_callback = _(callback).bind(null, remove);
-			
-			Payments.bind('add', add_callback);
-			Payments.bind('remove', remove_callback);
-			
-			Payments.bind('reset', function(collection){
-				collection.each(add_callback);
-			});
-			
-			Payments.bind('change:tags', function(model, tags){ 
-				tags = tags.models;
-				var previous_tags = model.previous('tags').models,
-					added = _(tags).difference(previous_tags),
-					removed = _(previous_tags).difference(tags);
-					
-				_(added).each(_(add).bind(null, model));
-				_(removed).each(_(remove).bind(null, model));
-			});
-			
-			// lazy removing not used tags
-			window.setInterval(function(){
-				var not_used = Tags.getNotUsed();
-				if (not_used.length > 0) {
-					not_used[0].destroy();
-				}
-			}, 5000);
 		},
 		
 		getUsed: function() {
-			return this.filter(function(tag) { return tag.get('payments').length > 0; });
+			/*return this.filter(function(tag) { return tag.get('payments').length > 0; });*/
 		},
 		
 		getNotUsed: function() {
-			return this.filter(function(tag) { return tag.get('payments').length === 0; });
+			/*return this.filter(function(tag) { return tag.get('payments').length === 0; });*/
 		},
 		
 		/**
@@ -124,7 +52,7 @@ $(function(){
 				};
 			}).bind(this));
 			
-			$.when.apply($, _(create).pluck('deferred')).done( function() {
+			return $.when.apply($, _(create).pluck('deferred')).done( function() {
 				callback( _.union(existed, _(create).pluck('model')) );
 			});
 		}
@@ -149,7 +77,7 @@ $(function(){
 			
 			this.model.bind('destroy', _.bind(function(){ $(this.el).remove(); }, this));
 			this.model.bind('change:name', this.changeName);
-			this.model.bind('change:payments', this.changePayments);
+			T2ps.bind('tag_' + this.model.cid, this.changePayments);
 		},
 		
 		onClickEdit: function() {
@@ -169,19 +97,18 @@ $(function(){
 		},
 		
 		changePayments: function() {
-			var data = this.model.toJSON(true);
+			var payments = T2ps.getByTag(this.model);
 			
-			$(this.el)[ data.payments === 0 ? 'hide' : 'show' ]();
-			 
-			this.$('.payments').text(data.payments);
+			payments = payments.length;
+			
+			$(this.el)[ payments === 0 ? 'hide' : 'show' ]();
+			this.$('.payments').text(payments);
 		},
 		
 		render: function() {
-			var data = this.model.toJSON(true);
+			var data = this.model.toJSON();
 			$(this.el).html(this.tmpl(data));
-			if (data.payments === 0) {
-				$(this.el).hide();
-			}
+			this.changePayments();
 			return this;
 		}
 	});
@@ -201,6 +128,12 @@ $(function(){
 			
 			this.model.bind('destroy', _.bind(function(){ $(this.el).remove(); }, this));
 			this.model.bind('change:name', this.changeName);
+			
+			T2ps.bind('tag_' + this.model.cid + ':remove', _(function(payment){
+				if(payment === this.options.payment) {
+					$(this.el).remove();
+				}
+			}).bind(this));
 		},
 		
 		changeName: function() {
