@@ -17,7 +17,10 @@ handlers:
   script: httpHandlers/tag.py
   
 - url: /t2p/?[0-9]*
-  script: httpHandlers/T2p.py
+  script: httpHandlers/t2p.py
+  
+- url: /vault/?[0-9]*
+  script: httpHandlers/vault.py
 
 - url: /.*
   script: httpHandlers/index.py

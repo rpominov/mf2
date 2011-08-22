@@ -209,7 +209,7 @@ html, body {
 			margin-top: 40px; /* depends on .top(height) */
 			margin-bottom: 30px; /* depends on .footer(height) */
 			border: 1px solid #EBEBEB;
-			min-height: 80%;
+			min-height: 75%;
 			position: relative;
 		}
 			.footer {

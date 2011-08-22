@@ -1,4 +1,4 @@
-/*global window $ Backbone _ _t Tag Tags Payment Payments AppView T2p T2ps*/
+/*global window $ Backbone _ _t Tag Tags Payment Payments AppView T2p T2ps Vault Vaults*/
 
 $(function(){
 	"use strict";
@@ -24,6 +24,8 @@ $(function(){
 			// shortcut for Backbone.Collection
 			window.__ = function(models) { return new Backbone.Collection(models); };
 	
+			window.Vaults = new Vault.Collection();
+	
 			window.Payments = new Payment.Collection();
 			Payments.bind('add',   this.addOnePayment);
 			Payments.bind('reset', this.addAllPayment);
@@ -32,25 +34,40 @@ $(function(){
 			Tags.bind('add',   this.addOneTag);
 			Tags.bind('reset', this.addAllTag);
 			
-			window.T2ps = new T2p.Collection();
-			// T2ps.bind('all', function(){console.log(arguments[0])}); // debug
+			window.T2ps = new T2p.Collection();			
 			
-			// data loading
-			$.when(Tags.fetch(), Payments.fetch()).done(function(){
-				$.when(T2ps.fetch()).done(function(){
-					// here we have all data
-					
-					// set lazy removing not used tags
-					window.setInterval(function(){
-						var not_used = Tags.filter(function(tag){
-							return T2ps.getByTag(tag).length === 0; 
-						});
-						if (not_used.length > 0) {
-							not_used[0].destroy();
-						}
-					}, 5000);
+			/**
+			 * Fetch dependences:
+			 * T2ps → Payments, Tags
+			 * Payments → Vaults
+			 */
+			
+			var payments_def, vaults_def, tags_def, when_all_data_loaded;
+			
+			vaults_def = Vaults.fetch();
+			tags_def = Tags.fetch();
+			
+			vaults_def.done(function(){
+				payments_def = Payments.fetch();
+			});
+			
+			$.when(tags_def, vaults_def).done(function(){
+				payments_def.done(function(){
+					T2ps.fetch().done(when_all_data_loaded);
 				});
 			});
+			
+			when_all_data_loaded = function() {
+				// set lazy removing not used tags
+				window.setInterval(function(){
+					var not_used = Tags.filter(function(tag){
+						return T2ps.getByTag(tag).length === 0; 
+					});
+					if (not_used.length > 0) {
+						not_used[0].destroy();
+					}
+				}, 5000);
+			};
 		},
 		
 		addOneTag: function(tag) {

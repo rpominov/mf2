@@ -26,14 +26,6 @@ $(function(){
 		initialize: function() {
 		},
 		
-		getUsed: function() {
-			/*return this.filter(function(tag) { return tag.get('payments').length > 0; });*/
-		},
-		
-		getNotUsed: function() {
-			/*return this.filter(function(tag) { return tag.get('payments').length === 0; });*/
-		},
-		
 		/**
 		 * Returns tags by their names,
 		 * in case of tag not exist creates it.
