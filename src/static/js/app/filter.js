@@ -1,9 +1,9 @@
-/*global window $ Backbone _ _t Vault Vaults Payment Payments T2ps*/
+/*global window $ Backbone _ _t Filter Filters Payment Payments T2ps*/
 
 $(function(){
 	"use strict";
 
-	window.Vault = Backbone.Model.extend({
+	window.Filter = Backbone.Model.extend({
 		
 		defaults: {
 			name: ''
@@ -20,21 +20,21 @@ $(function(){
 		}
 	});
 	
-	Vault.Collection = Backbone.Collection.extend({
-		model: Vault,
-		url: '/vault',
+	Filter.Collection = Backbone.Collection.extend({
+		model: Filter,
+		url: '/filter',
 		
 		initialize: function() {
 		}
 	});
 	
-	Vault.views = {};
+	Filter.views = {};
 	
-	Vault.views.InList = Backbone.View.extend({
+	Filter.views.InList = Backbone.View.extend({
 		
 		tagName: "li",
-		className: "vault",
-		tmpl: _t('vault.in-list'),
+		className: "filter",
+		tmpl: _t('filter.in-list'),
 		
 		events: {
 			'click .text': 'onClickText',
@@ -73,11 +73,11 @@ $(function(){
 	});
 	
 	
-	Vault.views.Form = Backbone.View.extend({
+	Filter.views.Form = Backbone.View.extend({
 		
 		tagName: "form",
-		className: "vault",
-		tmpl: _t('vault.form'),
+		className: "filter",
+		tmpl: _t('filter.form'),
 		
 		events: {
 			'submit'       : 'onSubmit',

@@ -21,6 +21,9 @@ handlers:
   
 - url: /vault/?[0-9]*
   script: httpHandlers/vault.py
+  
+- url: /filter/?[0-9]*
+  script: httpHandlers/filter.py
 
 - url: /.*
   script: httpHandlers/index.py

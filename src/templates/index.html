@@ -26,6 +26,7 @@
 		<script type="text/javascript" src="/static/js/app/tag.js"></script>
 		<script type="text/javascript" src="/static/js/app/t2p.js"></script>
 		<script type="text/javascript" src="/static/js/app/vault.js"></script>
+		<script type="text/javascript" src="/static/js/app/filter.js"></script>
 		<script type="text/javascript" src="/static/js/app/settings.js"></script>
 		<script type="text/javascript" src="/static/js/app/app.js"></script>
 	</head>
@@ -54,40 +55,29 @@
 						<span class="text">
 							Фильтры<div class="expand"></div>
 						</span>
-						<div class="icon add" title="Добавить"></div>
+						<div class="icon add" id="add-filter" title="Добавить"></div>
 					</h3>
-					<ul>
-						<li><span class="text">Фильтр 1</span>
-							<div class="icon settings tooltip-contener">
-								<div class="tooltip">
-									<div class="arrow"></div>
-									<div class="content">
-										<div class="icon edit" title="править"></div>
-										<div class="icon delete" title="удалить"></div>
-									</div>
-								</div>
-							</div>
-						</li>
-						<li>Фильтр 2
-							<div class="icon settings"></div>
-						</li>
-						<li class="current">Фильтр 3
-							<div class="icon settings"></div>
-						</li>
+					<ul id="main-filters-list">
 					</ul>
 				</div>
 				
-				<div class="block storages">
-					<h3>Храилища</h3>
-					<ul>
-						<li>Наличные</li>
-						<li>Счет 2</li>
-						<li>Счет 3</li>
+				<div class="block vaults">
+					<h3>
+						<span class="text">
+							Хранилища<div class="expand"></div>
+						</span>
+						<div class="icon add" id="add-vault" title="Добавить"></div>
+					</h3>
+					<ul id="main-vaults-list">
 					</ul>
 				</div>
 				
 				<div class="block tags">
-					<h3>Теги</h3>
+					<h3>
+						<span class="text">
+							Теги<div class="expand"></div>
+						</span>
+					</h3>
 					<ul id="main-tags-list">
 					</ul>
 				</div>

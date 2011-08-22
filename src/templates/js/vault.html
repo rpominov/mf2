@@ -1,0 +1,17 @@
+<script type="text/html" class="template" data-bind="vault.in-list">
+	<span class="text"><span class="name"><%! it.name %></span></span>
+	<%#def['tooltip.standart-settings']%>
+</script>
+
+<script type="text/html" class="template" data-bind="vault.form">
+	<h2>Хранилище</h2>	
+	
+	<table class="form-table">
+		<tr>
+			<td><label for="name_<%! it.cid %>">Название:</label></td>
+			<td><input type="text" id="name_<%! it.cid %>" class="name" value="<%! it.name %>"/></td>
+		</tr>
+	</table>
+	
+	<input type="submit" value="Сохранить" /> <span class="clickable cancel">отмена</span>
+</script>

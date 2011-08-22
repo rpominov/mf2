@@ -14,6 +14,7 @@ $(function(){
 		},
 		
 		validate: function(attrs) {
+			// todo
 		}
 	});
 	
@@ -35,7 +36,7 @@ $(function(){
 			'click .cancel': 'onClickCancel'
 		},
 		
-		initialize: function (args) {
+		initialize: function () {
 			var remove = _.bind(function(){ $(this.el).remove(); }, this);
 			this.model.bind('destroy', remove);
 			this.bind('close', remove);
@@ -75,7 +76,6 @@ $(function(){
 		render: function() {
 			var data = this.model.toJSON();
 			data.cid = this.model.cid; // need cid for labels in form
-			data.tags = '';
 			data.tags = T2ps.getByPayment(this.model).pluck('name').join(', ');
 			$(this.el).html(this.tmpl(data));
 			return this;
