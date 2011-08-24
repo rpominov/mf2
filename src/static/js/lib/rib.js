@@ -113,7 +113,47 @@
 			data.cid = this.model.cid; // need cid for labels in form
 			return data;
 		}
-	});	
+	});
+	
+	/**
+	 * Utils
+	 */
+	Rib.U = {
+		el2ModelProxy: function(callback){
+			return function(event){
+				var el = $(event.target);
+			
+				while(true){
+					
+					if (el.filter(document.body).length === 1) {
+						return;
+					}
+					
+					if (_(el.attr('id')).startsWith('cid_')) {
+						var cid = el.attr('id').split('_')[1],
+						    model = this.collection.getByCid(cid);
+						    
+						if (model) {
+							callback.call(this, model, el);
+						}
+						return;
+					}
+					
+					el = el.parent();
+				}
+			};
+		},
+		
+		model2ElProxy: function(callback){
+			return function(model){
+				var el = this.$('#cid_' + model.cid); // will called in View context, so we can use this.$
+				if(el.length > 0){
+					var params = [el[0]].concat([].slice.call(arguments));
+					callback.apply(this, params);
+				}
+			};
+		}
+	};
 	
 	// ------------------------
 	win.Rib = Rib;

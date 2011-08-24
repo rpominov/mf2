@@ -46,7 +46,7 @@ class T2pRESTfulHandler(webapp.RequestHandler):
         t2p = T2p.get_by_id(int(id))
         t2p.delete()
             
-application = webapp.WSGIApplication([('/t2p/?([0-9]*)', T2pRESTfulHandler)], debug=True)
+application = webapp.WSGIApplication([('/api/t2p/?([0-9]*)', T2pRESTfulHandler)], debug=True)
 
 def main():
     run_wsgi_app(application)

@@ -43,7 +43,7 @@ class VaultRESTfulHandler(webapp.RequestHandler):
         vault = Vault.get_by_id(int(id))
         vault.delete()
             
-application = webapp.WSGIApplication([('/vault/?([0-9]*)', VaultRESTfulHandler)], debug=True)
+application = webapp.WSGIApplication([('/api/vault/?([0-9]*)', VaultRESTfulHandler)], debug=True)
 
 def main():
     run_wsgi_app(application)

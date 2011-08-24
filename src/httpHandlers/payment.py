@@ -49,7 +49,7 @@ class PaymentRESTfulHandler(webapp.RequestHandler):
         payment = Payment.get_by_id(int(id))
         payment.delete()
             
-application = webapp.WSGIApplication([('/payment/?([0-9]*)', PaymentRESTfulHandler)], debug=True)
+application = webapp.WSGIApplication([('/api/payment/?([0-9]*)', PaymentRESTfulHandler)], debug=True)
 
 def main():
     run_wsgi_app(application)

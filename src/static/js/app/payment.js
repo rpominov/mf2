@@ -17,7 +17,7 @@ $(function(){
 	
 	Payment.Collection = Backbone.Collection.extend({
 		model: Payment,
-		url: '/payment'
+		url: '/api/payment'
 	});
 	
 	Payment.Views = {};

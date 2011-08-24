@@ -59,7 +59,7 @@ $(function(){
 	
 	T2p.Collection = Backbone.Collection.extend({
 		model: T2p,
-		url: '/t2p',
+		url: '/api/t2p',
 		
 		initialize: function() {
 			
@@ -69,15 +69,19 @@ $(function(){
 			function trigger(type, t2p) {
 				if (type !== 'reset') {
 					_([{p1: 'payment', p2: 'tag'}, {p1: 'tag', p2: 'payment'}]).each(function(p){
-						var cid = t2p.get(p.p1);
+						var model = t2p.get(p.p1);
 						var param = t2p.get(p.p2);
-						if (!cid || !param) {
+						if (!model || !param) {
 							return;
 						}
-						cid = cid.cid;
+						var cid = model.cid;
 						var event_name = p.p1 + '_' + cid;
 						coll.trigger(event_name);
 						coll.trigger(event_name + ':' + type, param);
+						
+						// collection style events
+						coll.trigger(p.p1 + ':' + type, model, param);
+						coll.trigger(p.p1, model, param);
 					});
 				} else {
 					t2p.each(function(t2p) {

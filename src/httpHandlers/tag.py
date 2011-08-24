@@ -43,7 +43,7 @@ class TagRESTfulHandler(webapp.RequestHandler):
         tag = Tag.get_by_id(int(id))
         tag.delete()
             
-application = webapp.WSGIApplication([('/tag/?([0-9]*)', TagRESTfulHandler)], debug=True)
+application = webapp.WSGIApplication([('/api/tag/?([0-9]*)', TagRESTfulHandler)], debug=True)
 
 def main():
     run_wsgi_app(application)

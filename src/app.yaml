@@ -10,19 +10,19 @@ handlers:
 - url: /static
   static_dir: static
 
-- url: /payment/?[0-9]*
+- url: /api/payment/?[0-9]*
   script: httpHandlers/payment.py
 
-- url: /tag/?[0-9]*
+- url: /api/tag/?[0-9]*
   script: httpHandlers/tag.py
   
-- url: /t2p/?[0-9]*
+- url: /api/t2p/?[0-9]*
   script: httpHandlers/t2p.py
   
-- url: /vault/?[0-9]*
+- url: /api/vault/?[0-9]*
   script: httpHandlers/vault.py
   
-- url: /filter/?[0-9]*
+- url: /api/filter/?[0-9]*
   script: httpHandlers/filter.py
 
 - url: /.*

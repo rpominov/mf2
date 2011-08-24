@@ -22,7 +22,7 @@ $(function(){
 	
 	Filter.Collection = Backbone.Collection.extend({
 		model: Filter,
-		url: '/filter',
+		url: '/api/filter',
 		
 		initialize: function() {
 		}

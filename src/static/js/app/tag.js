@@ -21,7 +21,7 @@ $(function(){
 	
 	Tag.Collection = Backbone.Collection.extend({
 		model: Tag,
-		url: '/tag',
+		url: '/api/tag',
 		
 		initialize: function() {
 		},
@@ -52,10 +52,7 @@ $(function(){
 	
 	Tag.Views = {};
 	
-	Tag.Views.InList = Backbone.View.extend({
-		
-		tagName: "li",
-		className: "tag",
+	Tag.Views.List = Backbone.View.extend({
 		tmpl: _t('tag.big-list'),
 		
 		events: {
@@ -65,44 +62,57 @@ $(function(){
 		},
 		
 		initialize: function (args) {
-			_.bindAll(this, 'changeName', 'changePayments');
+			_.bindAll(this, 'addOne', 'addAll', 'removeOne', 'changeName', 'changePayments');
 			
-			this.model.bind('destroy', _.bind(function(){ $(this.el).remove(); }, this));
-			this.model.bind('change:name', this.changeName);
-			T2ps.bind('tag_' + this.model.cid, this.changePayments);
+			this.collection.bind('add', this.addOne);
+			this.collection.bind('remove', this.removeOne);
+			this.collection.bind('reset', this.addAll);
+			
+			this.collection.bind('change:name', this.changeName);
+			T2ps.bind('tag', this.changePayments);
 		},
 		
-		onClickEdit: function() {
-			this.trigger('edit_clicked', this.model);
+		removeOne: Rib.U.model2ElProxy(function(el, model) {
+			$(el).remove();
+		}),
+		
+		addOne: function(tag) {
+			var data = tag.toJSON();
+			data.cid = tag.cid;
+			this.$('.list').append(this.tmpl(data));
+			
+			this.changePayments(tag);
 		},
 		
-		onClickDelete: function() {
-			this.model.destroy();
+		addAll: function() {
+			this.collection.each(this.addOne);
 		},
 		
-		onClickText: function() {
+		onClickEdit: Rib.U.el2ModelProxy(function(tag){
+			var view = new Tag.Views.Form({model: tag});
+			this.trigger('need_dialog', view);
+		}),
+		
+		onClickDelete: Rib.U.el2ModelProxy(function(model){
+			model.destroy();
+		}),
+		
+		onClickText: Rib.U.el2ModelProxy(function(model){
 			// todo
-		},
+		}),
 		
-		changeName: function() {
-			this.$('.name').text(this.model.get('name'));
-		},
+		changeName: Rib.U.model2ElProxy(function(el, model) {
+			$('.name', el).text(model.get('name'));
+		}),
 		
-		changePayments: function() {
-			var payments = T2ps.getByTag(this.model);
+		changePayments: Rib.U.model2ElProxy(function(el, model) {
+			var payments = T2ps.getByTag(model);
 			
 			payments = payments.length;
 			
-			$(this.el)[ payments === 0 ? 'hide' : 'show' ]();
-			this.$('.payments').text(payments);
-		},
-		
-		render: function() {
-			var data = this.model.toJSON();
-			$(this.el).html(this.tmpl(data));
-			this.changePayments();
-			return this;
-		}
+			$(el)[ payments === 0 ? 'hide' : 'show' ]();
+			$('.payments', el).text(payments);
+		})
 	});
 	
 	

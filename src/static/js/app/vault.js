@@ -22,7 +22,7 @@ $(function(){
 	
 	Vault.Collection = Backbone.Collection.extend({
 		model: Vault,
-		url: '/vault',
+		url: '/api/vault',
 		
 		initialize: function() {
 		}

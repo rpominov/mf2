@@ -22,10 +22,6 @@ $(function(){
 				, 'addAllPayment'
 				, 'editPayment'
 				
-				, 'addOneTag'
-				, 'addAllTag'
-				, 'editTag'
-				
 				, 'addOneVault'
 				, 'addAllVault'
 				, 'editVault'
@@ -35,6 +31,7 @@ $(function(){
 				, 'editFilter'
 				
 				, 'hideDialog'
+				, 'openDialog'
 			);
 			
 			window.Vaults = new Vault.Collection();
@@ -50,10 +47,10 @@ $(function(){
 			Payments.bind('reset', this.addAllPayment);
 			
 			window.Tags = new Tag.Collection();
-			Tags.bind('add',   this.addOneTag);
-			Tags.bind('reset', this.addAllTag);
+			window.T2ps = new T2p.Collection();
 			
-			window.T2ps = new T2p.Collection();			
+			var tagsView = new Tag.Views.List({collection: Tags, el: this.$('#tags-block')});
+			tagsView.bind('need_dialog', this.openDialog);
 			
 			/**
 			 * Fetch dependences:
@@ -83,7 +80,7 @@ $(function(){
 				
 				// set lazy removing not used tags
 				/* causes memory leak 
-				 * dangerous thing in any way */
+				 * dangerous thing in any way 
 				window.setInterval(function(){
 					var not_used = Tags.filter(function(tag){
 						return !tag.isNew() && T2ps.getByTag(tag).length === 0; 
@@ -91,19 +88,9 @@ $(function(){
 					if (not_used.length > 0) {
 						not_used[0].destroy();
 					}
-				}, 5000);
+				}, 5000);*/
 				
 			};
-		},
-		
-		addOneTag: function(tag) {
-			var view = new Tag.Views.InList({model: tag});
-			this.$("#main-tags-list").prepend(view.render().el);
-			view.bind('edit_clicked', this.editTag);
-		},
-		
-		addAllTag: function() {
-			Tags.each(this.addOneTag);
 		},
 		
 		addOnePayment: function(payment) {
@@ -169,12 +156,6 @@ $(function(){
 			this.showDialog(view.render().el);
 		},
 		
-		editTag: function(tag) {
-			var view = new Tag.Views.Form({model: tag});
-			view.bind('close', this.hideDialog);
-			this.showDialog(view.render().el);
-		},
-		
 		onClickAddPayment: function() {
 			Payments.add({});
 		},
@@ -193,6 +174,11 @@ $(function(){
 		
 		hideDialog: function() {
 			this.$("#modal-dialog").hide();
+		},
+		
+		openDialog: function(view) {
+			view.bind('close', this.hideDialog);
+			this.showDialog(view.render().el);
 		}
 	});
 	

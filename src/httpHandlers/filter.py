@@ -43,7 +43,7 @@ class FilterRESTfulHandler(webapp.RequestHandler):
         filter = Filter.get_by_id(int(id))
         filter.delete()
             
-application = webapp.WSGIApplication([('/filter/?([0-9]*)', FilterRESTfulHandler)], debug=True)
+application = webapp.WSGIApplication([('/api/filter/?([0-9]*)', FilterRESTfulHandler)], debug=True)
 
 def main():
     run_wsgi_app(application)
