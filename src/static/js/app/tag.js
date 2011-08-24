@@ -1,4 +1,4 @@
-/*global window $ Backbone _ _t Tag Tags Payment Payments T2ps*/
+/*global window $ Backbone Rib _ _t Tag Tags Payment Payments T2ps*/
 
 $(function(){
 	"use strict";
@@ -50,9 +50,9 @@ $(function(){
 		}
 	});
 	
-	Tag.views = {};
+	Tag.Views = {};
 	
-	Tag.views.InList = Backbone.View.extend({
+	Tag.Views.InList = Backbone.View.extend({
 		
 		tagName: "li",
 		className: "tag",
@@ -106,7 +106,7 @@ $(function(){
 	});
 	
 	
-	Tag.views.InSmallList = Backbone.View.extend({
+	Tag.Views.InSmallList = Backbone.View.extend({
 		
 		tagName: "li",
 		className: "tag",
@@ -136,6 +136,19 @@ $(function(){
 			var data = this.model.toJSON();
 			$(this.el).html(this.tmpl(data));
 			return this;
+		}
+	});
+	
+	Tag.Views.Form = Rib.Views.Form.extend({
+		className: "tag",
+		tmpl: _t('tag.form'),
+		
+		save: function(){
+			this.model.set({
+				'name': this.$('.name').val()
+			});
+			
+			this.model.save();
 		}
 	});
 });

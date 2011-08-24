@@ -1,4 +1,4 @@
-/*global window $ Backbone _ _t Payment Payments Tags Tag T2ps*/
+/*global window $ Backbone Rib _ __ _t Payment Payments Tags Tag T2ps*/
 
 $(function(){
 	"use strict";
@@ -8,9 +8,6 @@ $(function(){
 		defaults: {
            name: '',
            value: 0
-		},
-		
-		initialize: function() {
 		},
 		
 		validate: function(attrs) {
@@ -23,27 +20,13 @@ $(function(){
 		url: '/payment'
 	});
 	
-	Payment.views = {};
+	Payment.Views = {};
 	
-	Payment.views.Form = Backbone.View.extend({
-		
-		tagName: "form",
+	Payment.Views.Form = Rib.Views.Form.extend({
 		className: "payment",
 		tmpl: _t('payment.form'),
 		
-		events: {
-			'submit'       : 'onSubmit',
-			'click .cancel': 'onClickCancel'
-		},
-		
-		initialize: function () {
-			var remove = _.bind(function(){ $(this.el).remove(); }, this);
-			this.model.bind('destroy', remove);
-			this.bind('close', remove);
-		},
-		
-		onSubmit: function() {
-			
+		save: function() {
 			this.model.set({
 				'name': this.$('.name').val(),
 				'value': this.$('.value').val()
@@ -57,32 +40,20 @@ $(function(){
 					.uniq()
 					.value();
 			
-			$.when(this.model.save()).done(_(function(){
+			this.model.save().done(_(function(){
 				T2ps.setForPayment(this.model, tags);
 			}).bind(this));
-			
-			this.trigger('close');
-			
-			return false; // prevent submit
 		},
 		
-		onClickCancel: function() {
-			if(this.model.isNew()) {
-				this.model.destroy();
-			}
-			this.trigger('close');
-		},
-		
-		render: function() {
-			var data = this.model.toJSON();
-			data.cid = this.model.cid; // need cid for labels in form
-			data.tags = T2ps.getByPayment(this.model).pluck('name').join(', ');
-			$(this.el).html(this.tmpl(data));
-			return this;
+		prepareDataForRender: function(data) {
+			data = Rib.Views.Form.prototype.prepareDataForRender.call(this, data);
+			data.tags = T2ps.getByPayment(this.model);
+			data.tags = __(data.tags).pluck('name').join(', ');
+			return data;
 		}
 	});
 	
-	Payment.views.InList = Backbone.View.extend({
+	Payment.Views.InList = Rib.Views.DefaultModel.extend({
 		
 		tagName: "li",
 		className: "payment",
@@ -94,11 +65,12 @@ $(function(){
 		},
 		
 		initialize: function (args) {
+			Rib.Views.DefaultModel.prototype.initialize.call(this);
+			
 			_.bindAll(this, 'changeName', 'changeValue', 'resetTags', 'addTag');
 			this.model.bind('change:name', this.changeName);
 			this.model.bind('change:value', this.changeValue);
 			T2ps.bind('payment_' + this.model.cid + ':add', this.addTag);
-			this.model.bind('destroy', _.bind(function(){ $(this.el).remove(); }, this));
 		},
 		
 		onClickEdit: function() {
@@ -118,20 +90,19 @@ $(function(){
 		},
 		
 		addTag: function(tag) {
-			var view = new Tag.views.InSmallList({model: tag, payment: this.model});
+			var view = new Tag.Views.InSmallList({model: tag, payment: this.model});
 			this.$('.tag-list').append(view.render().el);
 		},
 		
 		resetTags: function() {
 			var tags = T2ps.getByPayment(this.model);
-			tags.each(this.addTag);
+			_(tags).each(this.addTag);
 		},
 		
 		render: function() {
-			var data = this.model.toJSON();
-			$(this.el).html(this.tmpl(data));
+			var result = Rib.Views.DefaultModel.prototype.render.call(this);
 			this.resetTags();
-			return this;
+			return result;
 		}
 	});
 });

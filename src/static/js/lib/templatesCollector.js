@@ -2,6 +2,7 @@
  * Templates collector grabs all templates from dom,
  * removes dom elemets
  * and compiles templates for later use.
+ *
  * Also replaces {{}} with <%%> for Django templates compatibility.
  * 
  * Author: https://github.com/pozadi

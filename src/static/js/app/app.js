@@ -24,6 +24,7 @@ $(function(){
 				
 				, 'addOneTag'
 				, 'addAllTag'
+				, 'editTag'
 				
 				, 'addOneVault'
 				, 'addAllVault'
@@ -79,21 +80,26 @@ $(function(){
 			});
 			
 			when_all_data_loaded = function() {
+				
 				// set lazy removing not used tags
+				/* causes memory leak 
+				 * dangerous thing in any way */
 				window.setInterval(function(){
 					var not_used = Tags.filter(function(tag){
-						return T2ps.getByTag(tag).length === 0; 
+						return !tag.isNew() && T2ps.getByTag(tag).length === 0; 
 					});
 					if (not_used.length > 0) {
 						not_used[0].destroy();
 					}
 				}, 5000);
+				
 			};
 		},
 		
 		addOneTag: function(tag) {
-			var view = new Tag.views.InList({model: tag});
+			var view = new Tag.Views.InList({model: tag});
 			this.$("#main-tags-list").prepend(view.render().el);
+			view.bind('edit_clicked', this.editTag);
 		},
 		
 		addAllTag: function() {
@@ -101,7 +107,7 @@ $(function(){
 		},
 		
 		addOnePayment: function(payment) {
-			var view = new Payment.views.InList({model: payment});
+			var view = new Payment.Views.InList({model: payment});
 			this.$("#payments-list").prepend(view.render().el);
 			
 			view.bind('edit_clicked', this.editPayment);
@@ -116,7 +122,7 @@ $(function(){
 		},
 		
 		addOneVault: function(vault) {
-			var view = new Vault.views.InList({model: vault});
+			var view = new Vault.Views.InList({model: vault});
 			this.$("#main-vaults-list").prepend(view.render().el);
 			
 			view.bind('edit_clicked', this.editVault);
@@ -131,7 +137,7 @@ $(function(){
 		},
 		
 		addOneFilter: function(filter) {
-			var view = new Filter.views.InList({model: filter});
+			var view = new Filter.Views.InList({model: filter});
 			this.$("#main-filters-list").prepend(view.render().el);
 			
 			view.bind('edit_clicked', this.editFilter);
@@ -146,19 +152,25 @@ $(function(){
 		},
 		
 		editPayment: function(payment) {
-			var view = new Payment.views.Form({model: payment});
+			var view = new Payment.Views.Form({model: payment});
 			view.bind('close', this.hideDialog);
 			this.showDialog(view.render().el);
 		},
 		
 		editVault: function(vault) {
-			var view = new Vault.views.Form({model: vault});
+			var view = new Vault.Views.Form({model: vault});
 			view.bind('close', this.hideDialog);
 			this.showDialog(view.render().el);
 		},
 		
 		editFilter: function(filter) {
-			var view = new Filter.views.Form({model: filter});
+			var view = new Filter.Views.Form({model: filter});
+			view.bind('close', this.hideDialog);
+			this.showDialog(view.render().el);
+		},
+		
+		editTag: function(tag) {
+			var view = new Tag.Views.Form({model: tag});
 			view.bind('close', this.hideDialog);
 			this.showDialog(view.render().el);
 		},
@@ -176,7 +188,7 @@ $(function(){
 		},
 		
 		showDialog: function(content) {
-			this.$("#modal-dialog").empty().append(content).show();
+			this.$("#modal-dialog")/*.empty()*/.append(content).show();
 		},
 		
 		hideDialog: function() {

@@ -1,4 +1,4 @@
-/*global window $ Backbone _ _t Filter Filters Payment Payments T2ps*/
+/*global window $ Backbone Rib _ _t Filter Filters Payment Payments T2ps*/
 
 $(function(){
 	"use strict";
@@ -28,9 +28,9 @@ $(function(){
 		}
 	});
 	
-	Filter.views = {};
+	Filter.Views = {};
 	
-	Filter.views.InList = Backbone.View.extend({
+	Filter.Views.InList = Rib.Views.DefaultModel.extend({
 		
 		tagName: "li",
 		className: "filter",
@@ -43,9 +43,9 @@ $(function(){
 		},
 		
 		initialize: function (args) {
-			_.bindAll(this, 'changeName');
+			Rib.Views.DefaultModel.prototype.initialize.call(this);
 			
-			this.model.bind('destroy', _.bind(function(){ $(this.el).remove(); }, this));
+			_.bindAll(this, 'changeName');
 			this.model.bind('change:name', this.changeName);
 		},
 		
@@ -63,56 +63,20 @@ $(function(){
 		
 		changeName: function() {
 			this.$('.name').text(this.model.get('name'));
-		},
-		
-		render: function() {
-			var data = this.model.toJSON();
-			$(this.el).html(this.tmpl(data));
-			return this;
 		}
 	});
 	
 	
-	Filter.views.Form = Backbone.View.extend({
-		
-		tagName: "form",
+	Filter.Views.Form = Rib.Views.Form.extend({
 		className: "filter",
 		tmpl: _t('filter.form'),
 		
-		events: {
-			'submit'       : 'onSubmit',
-			'click .cancel': 'onClickCancel'
-		},
-		
-		initialize: function () {
-			var remove = _.bind(function(){ $(this.el).remove(); }, this);
-			this.model.bind('destroy', remove);
-			this.bind('close', remove);
-		},
-		
-		onSubmit: function() {
-			
+		save: function(){
 			this.model.set({
 				'name': this.$('.name').val()
 			});
 			
 			this.model.save();
-			this.trigger('close');
-			return false; // prevent submit
-		},
-		
-		onClickCancel: function() {
-			if(this.model.isNew()) {
-				this.model.destroy();
-			}
-			this.trigger('close');
-		},
-		
-		render: function() {
-			var data = this.model.toJSON();
-			data.cid = this.model.cid; // need cid for labels in form
-			$(this.el).html(this.tmpl(data));
-			return this;
 		}
 	});
 });

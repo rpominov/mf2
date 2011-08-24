@@ -3,6 +3,23 @@
 $(function(){
 	"use strict";
 	
+	var SearchResult = function(t2ps) {
+		this.t2ps = t2ps;
+	};
+	_.extend(SearchResult.prototype, {
+		tags: function(){
+			return __(this.t2ps).pluck('tag');
+		},
+		payments: function(){
+			return __(this.t2ps).pluck('payment');
+		},
+		destroy: function(){
+			_(this.t2ps).each(function(t2p){
+				t2p.destroy();
+			});
+		}
+	});
+	
 	function id2model(obj) {
 		obj.tag = Tags.get(obj.tag);
 		obj.payment = Payments.get(obj.payment);
@@ -90,16 +107,16 @@ $(function(){
 		},
 		
 		getByPayment: function(payment) {
-			return __(this.find({payment: payment}).tags);
+			return this.find({payment: payment}).tags();
 		},
 		
 		getByTag: function(tag) {
-			return __(this.find({tag: tag}).payments);
+			return this.find({tag: tag}).payments();
 		},
 		
 		setForPayment: function(payment, tags) {
 			
-			var current = this.getByPayment(payment).pluck('name'),
+			var current = __(this.getByPayment(payment)).pluck('name'),
 				add =     _(tags).difference(current),
 				remove =  _(current).difference(tags),
 				me = this;
@@ -130,17 +147,7 @@ $(function(){
 				return (!options.payment || t2p.get('payment') === options.payment) 
 					&& (!options.tag     || t2p.get('tag')     === options.tag);
 			});
-			
-			found.destroy = function() {
-				for (var i=0, l=this.length; i<l; i++) {
-					this[i].destroy();
-				}
-			};
-			
-			found.tags = __(found).pluck('tag');
-			found.payments = __(found).pluck('payment');
-			
-			return found;
+			return new SearchResult(found);
 		}
-	});
+	});	
 });
