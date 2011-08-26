@@ -4,17 +4,7 @@ from google.appengine.ext.webapp.util import run_wsgi_app
 
 from django.utils import simplejson
 
-    
-class T2p(db.Model):
-    tag = db.IntegerProperty()
-    payment = db.IntegerProperty()
-    
-    def toDict(self):
-        return {
-            'id': self.key().id(),
-            'tag': self.tag,
-            'payment': self.payment
-        }
+from httpHandlers.all import T2p
 
 class T2pRESTfulHandler(webapp.RequestHandler):
     

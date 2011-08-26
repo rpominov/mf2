@@ -4,17 +4,7 @@ from google.appengine.ext.webapp.util import run_wsgi_app
 
 from django.utils import simplejson
 
-    
-class Payment(db.Model):
-    name = db.StringProperty()
-    value = db.IntegerProperty()
-    
-    def toDict(self):
-        return {
-            'id':    self.key().id(),
-            'name':  self.name,
-            'value': self.value
-        }
+from httpHandlers.all import Payment
 
 class PaymentRESTfulHandler(webapp.RequestHandler):
     

@@ -4,15 +4,7 @@ from google.appengine.ext.webapp.util import run_wsgi_app
 
 from django.utils import simplejson
 
-    
-class Tag(db.Model):
-    name = db.StringProperty()
-    
-    def toDict(self):
-        return {
-            'id':    self.key().id(),
-            'name':  self.name
-        }
+from httpHandlers.all import Tag
 
 class TagRESTfulHandler(webapp.RequestHandler):
     
