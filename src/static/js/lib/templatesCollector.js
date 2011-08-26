@@ -39,7 +39,7 @@ window._t = function(_, $, doT){
 	
 	_t = function(name, model) {
 		var t = _t._compiled[name] || _(promise).bind(null, name);
-		return t ? (model ? t(model) : t) : null;
+		return model ? t(model) : t;
 	};
 	
 	promise = function(name) {
