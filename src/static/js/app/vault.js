@@ -1,9 +1,7 @@
-/*global window $ Backbone Rib _ _t Vault Vaults Payment Payments T2ps*/
-
-$(function(){
+window.Vault = (function(_, Backbone, Rib, _t){
 	"use strict";
 
-	window.Vault = Backbone.Model.extend({
+	var Vault = Backbone.Model.extend({
 		
 		defaults: {
 			name: ''
@@ -80,4 +78,6 @@ $(function(){
 			this.model.save();
 		}
 	});
-});
+	
+	return Vault;
+})(window._, window.Backbone, window.Rib, window._t);

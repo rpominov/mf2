@@ -6,9 +6,8 @@
 
 /*global window*/
 
-(function(win, Backbone, $, _){
+window.Rib = (function(Backbone, $, _){
 	"use strict";
-	// ------------------------
 	
 	var 
 	
@@ -155,6 +154,6 @@
 		}
 	};
 	
-	// ------------------------
-	win.Rib = Rib;
-})(window, window.Backbone, window.jQuery, window._);
+	return Rib;
+	
+})(window.Backbone, window.jQuery, window._);

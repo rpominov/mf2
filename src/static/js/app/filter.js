@@ -1,9 +1,7 @@
-/*global window $ Backbone Rib _ _t Filter Filters Payment Payments T2ps*/
-
-$(function(){
+window.Filter = (function(_, Backbone, Rib, _t){
 	"use strict";
 
-	window.Filter = Backbone.Model.extend({
+	var Filter = Backbone.Model.extend({
 		
 		defaults: {
 			name: ''
@@ -79,4 +77,6 @@ $(function(){
 			this.model.save();
 		}
 	});
-});
+	
+	return Filter;
+})(window._, window.Backbone, window.Rib, window._t);

@@ -1,9 +1,9 @@
-/*global window $ Backbone Rib _ __ _t Payment Payments Tags Tag T2ps*/
-
-$(function(){
+window.Payment = (function(_, __, Backbone, Rib, _t, core){
 	"use strict";
+	
+	/*global Tag*/
 
-	window.Payment = Backbone.Model.extend({
+	var Payment = Backbone.Model.extend({
 		
 		defaults: {
            name: '',
@@ -41,13 +41,13 @@ $(function(){
 					.value();
 			
 			this.model.save().done(_(function(){
-				T2ps.setForPayment(this.model, tags);
+				core._coll.T2ps.setForPayment(this.model, tags);
 			}).bind(this));
 		},
 		
 		prepareDataForRender: function(data) {
 			data = Rib.Views.Form.prototype.prepareDataForRender.call(this, data);
-			data.tags = T2ps.getByPayment(this.model);
+			data.tags = core._coll.T2ps.getByPayment(this.model);
 			data.tags = __(data.tags).pluck('name').join(', ');
 			return data;
 		}
@@ -70,7 +70,7 @@ $(function(){
 			_.bindAll(this, 'changeName', 'changeValue', 'resetTags', 'addTag');
 			this.model.bind('change:name', this.changeName);
 			this.model.bind('change:value', this.changeValue);
-			T2ps.bind('payment_' + this.model.cid + ':add', this.addTag);
+			core._coll.T2ps.bind('payment_' + this.model.cid + ':add', this.addTag);
 		},
 		
 		onClickEdit: function() {
@@ -95,7 +95,7 @@ $(function(){
 		},
 		
 		resetTags: function() {
-			var tags = T2ps.getByPayment(this.model);
+			var tags = core._coll.T2ps.getByPayment(this.model);
 			_(tags).each(this.addTag);
 		},
 		
@@ -105,4 +105,6 @@ $(function(){
 			return result;
 		}
 	});
-});
+	
+	return Payment;
+})(window._, window.__, window.Backbone, window.Rib, window._t, window.core);

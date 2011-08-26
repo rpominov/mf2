@@ -1,6 +1,4 @@
-/*global window $ Backbone _ __ _t Tag Tags Payment Payments T2p*/
-
-$(function(){
+window.T2p = (function(_, __, Backbone, core){
 	"use strict";
 	
 	var SearchResult = function(t2ps) {
@@ -21,11 +19,11 @@ $(function(){
 	});
 	
 	function id2model(obj) {
-		obj.tag = Tags.get(obj.tag);
-		obj.payment = Payments.get(obj.payment);
+		obj.tag = core._coll.Tags.get(obj.tag);
+		obj.payment = core._coll.Payments.get(obj.payment);
 	}
 	
-	window.T2p = Backbone.Model.extend({
+	var T2p = Backbone.Model.extend({
 		
 		defaults: {
 			tag: null,
@@ -63,7 +61,7 @@ $(function(){
 		
 		initialize: function() {
 			
-			var coll = this;
+			var me = this;
 			
 			// sorry for this
 			function trigger(type, t2p) {
@@ -76,12 +74,12 @@ $(function(){
 						}
 						var cid = model.cid;
 						var event_name = p.p1 + '_' + cid;
-						coll.trigger(event_name);
-						coll.trigger(event_name + ':' + type, param);
+						me.trigger(event_name);
+						me.trigger(event_name + ':' + type, param);
 						
 						// collection style events
-						coll.trigger(p.p1 + ':' + type, model, param);
-						coll.trigger(p.p1, model, param);
+						me.trigger(p.p1 + ':' + type, model, param);
+						me.trigger(p.p1, model, param);
 					});
 				} else {
 					t2p.each(function(t2p) {
@@ -91,16 +89,21 @@ $(function(){
 			}
 			
 			_(['add', 'reset', 'remove']).each(function(type){
-				coll.bind(type, _(trigger).bind(null, type));
+				me.bind(type, _(trigger).bind(null, type));
 			});
 			
-			Tags.bind('destroy', function(tag){
-				coll.removeAllForTag(tag);
+			core.coll(function(cc){
+				
+				cc.Tags.bind('destroy', function(tag){
+					me.removeAllForTag(tag);
+				});
+				
+				cc.Payments.bind('destroy', function(payment){
+					me.removeAllForPayment(payment);
+				});
+				
 			});
 			
-			Payments.bind('destroy', function(payment){
-				coll.removeAllForPayment(payment);
-			});
 		},
 		
 		parse: function (resp, xhr) {
@@ -125,13 +128,13 @@ $(function(){
 				remove =  _(current).difference(tags),
 				me = this;
 				
-			Tags.getByNames(add, function(tags){
+			core._coll.Tags.getByNames(add, function(tags){
 				_(tags).each(function(tag){
 					me.create({payment: payment, tag: tag});
 				});
 			});
 			
-			Tags.getByNames(remove, function(tags){
+			core._coll.Tags.getByNames(remove, function(tags){
 				_(tags).each(function(tag){
 					me.find({payment: payment, tag: tag}).destroy();
 				});
@@ -148,10 +151,11 @@ $(function(){
 		
 		find: function(options) {
 			var found = this.filter(function(t2p) {
-				return (!options.payment || t2p.get('payment') === options.payment) 
-					&& (!options.tag     || t2p.get('tag')     === options.tag);
+				return (!options.payment || t2p.get('payment') === options.payment) && (!options.tag || t2p.get('tag') === options.tag);
 			});
 			return new SearchResult(found);
 		}
-	});	
-});
+	});
+
+	return T2p;
+})(window._, window.__, window.Backbone, window.core);

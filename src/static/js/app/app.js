@@ -1,14 +1,7 @@
-/*global window $ Backbone _ _t Tag Tags Payment Payments AppView T2p T2ps Vault Vaults Filter Filters*/
-
-$(function(){
+window.AppView = (function(Backbone, $, _, core, Tag, Payment, Vault, Filter){
 	"use strict";
 	
-	// shortcut for Backbone.Collection
-	window.__ = function(models) { return new Backbone.Collection(models); };
-	
-	window.AppView = Backbone.View.extend({
-	
-		el: $('body'),
+	var AppView = Backbone.View.extend({
 		
 		events: {
 			'click #add-payment': 'onClickAddPayment',
@@ -17,80 +10,25 @@ $(function(){
 		},
 		
 		initialize: function() {
-			_.bindAll(this
-				, 'addOnePayment'
-				, 'addAllPayment'
-				, 'editPayment'
-				
-				, 'addOneVault'
-				, 'addAllVault'
-				, 'editVault'
-				
-				, 'addOneFilter'
-				, 'addAllFilter'
-				, 'editFilter'
-				
-				, 'hideDialog'
-				, 'openDialog'
+			_.bindAll(this, 'addOnePayment', 'addAllPayment', 'editPayment', 
+				 'addOneVault', 'addAllVault', 'editVault',
+				 'addOneFilter', 'addAllFilter', 'editFilter',
+				 'hideDialog', 'openDialog'
 			);
 			
-			window.Vaults = new Vault.Collection();
-			Vaults.bind('add',   this.addOneVault);
-			Vaults.bind('reset', this.addAllVault);
-			
-			window.Filters = new Filter.Collection();
-			Filters.bind('add',   this.addOneFilter);
-			Filters.bind('reset', this.addAllFilter);
+			core.coll(_(function(coll){
+				coll.Vaults.bind('add',   this.addOneVault);
+				coll.Vaults.bind('reset', this.addAllVault);
 	
-			window.Payments = new Payment.Collection();
-			Payments.bind('add',   this.addOnePayment);
-			Payments.bind('reset', this.addAllPayment);
-			
-			window.Tags = new Tag.Collection();
-			window.T2ps = new T2p.Collection();
-			
-			var tagsView = new Tag.Views.List({collection: Tags, el: this.$('#tags-block')});
-			tagsView.bind('need_dialog', this.openDialog);
-			
-			/**
-			 * Fetch dependences:
-			 * T2ps → Payments, Tags
-			 * Payments → Vaults
-			 * Filters → Payments, T2ps
-			 */
-			
-			var payments_def, vaults_def, tags_def, when_all_data_loaded;
-			
-			vaults_def = Vaults.fetch();
-			tags_def = Tags.fetch();
-			
-			vaults_def.done(function(){
-				payments_def = Payments.fetch();
-			});
-			
-			$.when(tags_def, vaults_def).done(function(){
-				payments_def.done(function(){
-					T2ps.fetch().done(function(){
-						Filters.fetch().done(when_all_data_loaded);
-					});
-				});
-			});
-			
-			when_all_data_loaded = function() {
+				coll.Filters.bind('add',   this.addOneFilter);
+				coll.Filters.bind('reset', this.addAllFilter);
+	
+				coll.Payments.bind('add',   this.addOnePayment);
+				coll.Payments.bind('reset', this.addAllPayment);
 				
-				// set lazy removing not used tags
-				/* causes memory leak 
-				 * dangerous thing in any way 
-				window.setInterval(function(){
-					var not_used = Tags.filter(function(tag){
-						return !tag.isNew() && T2ps.getByTag(tag).length === 0; 
-					});
-					if (not_used.length > 0) {
-						not_used[0].destroy();
-					}
-				}, 5000);*/
-				
-			};
+				var tagsView = new Tag.Views.List({collection: coll.Tags, el: this.$('#tags-block')});
+				tagsView.bind('need_dialog', this.openDialog);
+			}).bind(this));
 		},
 		
 		addOnePayment: function(payment) {
@@ -105,7 +43,7 @@ $(function(){
 		},
 		
 		addAllPayment: function() {
-			Payments.each(this.addOnePayment);
+			core._coll.Payments.each(this.addOnePayment);
 		},
 		
 		addOneVault: function(vault) {
@@ -120,7 +58,7 @@ $(function(){
 		},
 		
 		addAllVault: function() {
-			Vaults.each(this.addOneVault);
+			core._coll.Vaults.each(this.addOneVault);
 		},
 		
 		addOneFilter: function(filter) {
@@ -135,7 +73,7 @@ $(function(){
 		},
 		
 		addAllFilter: function() {
-			Filters.each(this.addOneFilter);
+			core._coll.Filters.each(this.addOneFilter);
 		},
 		
 		editPayment: function(payment) {
@@ -157,19 +95,19 @@ $(function(){
 		},
 		
 		onClickAddPayment: function() {
-			Payments.add({});
+			core._coll.Payments.add({});
 		},
 		
 		onClickAddFilter: function() {
-			Filters.add({});
+			core._coll.Filters.add({});
 		},
 		
 		onClickAddVault: function() {
-			Vaults.add({});
+			core._coll.Vaults.add({});
 		},
 		
 		showDialog: function(content) {
-			this.$("#modal-dialog")/*.empty()*/.append(content).show();
+			this.$("#modal-dialog").empty().append(content).show();
 		},
 		
 		hideDialog: function() {
@@ -182,5 +120,8 @@ $(function(){
 		}
 	});
 	
-	window.App = new AppView();
-});
+	return AppView;
+	
+})(window.Backbone, window.jQuery, window._, 
+   window.core,
+   window.Tag, window.Payment, window.Vault, window.Filter);

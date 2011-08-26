@@ -33,15 +33,37 @@
  */
 "use strict";
 
-window._t = function(win, $, doT){
+window._t = function(_, $, doT){
 	
-	var _t = function(name, model) {
-		var t = _t._compiled[name]
-		return t ? (model ? t(model) : t) : null
-	}
+	var promise,
 	
-	_t._compiled = {}
-	_t._source = {}
+	_t = function(name, model) {
+		var t = _t._compiled[name] || _(promise).bind(null, name);
+		return t ? (model ? t(model) : t) : null;
+	};
+	
+	promise = function(name) {
+		if (!_t._grabbing.isResolved()) {
+			throw "try to draw template before grabbing";
+		}
+		
+		var t = _t._compiled[name];
+		
+		if (t) {
+			return t.apply(this, [].slice.call(arguments, 1));
+		} else {
+			throw "unknown template";
+		}
+	};
+	
+	_t._grabbing = $.Deferred();
+	
+	_t.ready = function(callback) {
+		_t._grabbing.done(callback);
+	};
+	
+	_t._compiled = {};
+	_t._source = {};
 	
 	_t._settings = {
 		evaluate:    /<%([\s\S]+?)%>/g,
@@ -52,27 +74,25 @@ window._t = function(win, $, doT){
 		varname: 'it',
 		strip : true,
 		append: true
-	}
+	};
 	
 	_t._grabAll = function() {
 		
-		//win.console && win.console.time && win.console.time('templates grabbing');
-		
 		$('script.template').each(function(){
-			var el = $(this)
-			_t._source[el.attr('data-bind')] = el.html()
-			el.remove()
-		})
+			var el = $(this);
+			_t._source[el.attr('data-bind')] = el.html();
+			el.remove();
+		});
 		
 		for (var name in _t._source) {
-			_t._compiled[name] = doT.template(_t._source[name], _t._settings, _t._source)
+			_t._compiled[name] = doT.template(_t._source[name], _t._settings, _t._source);
 		}
 		
-		//win.console && win.console.timeEnd && win.console.timeEnd('templates grabbing');
-	}
+		_t._grabbing.resolve();
+	};
 	
-	$(_t._grabAll)
+	$(_t._grabAll);
 	
-	return _t
+	return _t;
 	
-}(window, window.jQuery || window.Zepto, window.doT || window.doU)
+}(window._, window.jQuery || window.Zepto, window.doT || window.doU);

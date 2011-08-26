@@ -1,9 +1,7 @@
-/*global window $ Backbone Rib _ _t Tag Tags Payment Payments T2ps*/
-
-$(function(){
+window.Tag = (function($, _, Backbone, Rib, _t, core){
 	"use strict";
 
-	window.Tag = Backbone.Model.extend({
+	var Tag = Backbone.Model.extend({
 		
 		defaults: {
 			name: ''
@@ -69,7 +67,7 @@ $(function(){
 			this.collection.bind('reset', this.addAll);
 			
 			this.collection.bind('change:name', this.changeName);
-			T2ps.bind('tag', this.changePayments);
+			core._coll.T2ps.bind('tag', this.changePayments);
 		},
 		
 		removeOne: Rib.U.model2ElProxy(function(el, model) {
@@ -106,7 +104,7 @@ $(function(){
 		}),
 		
 		changePayments: Rib.U.model2ElProxy(function(el, model) {
-			var payments = T2ps.getByTag(model);
+			var payments = core._coll.T2ps.getByTag(model);
 			
 			payments = payments.length;
 			
@@ -131,7 +129,7 @@ $(function(){
 			this.model.bind('destroy', _.bind(function(){ $(this.el).remove(); }, this));
 			this.model.bind('change:name', this.changeName);
 			
-			T2ps.bind('tag_' + this.model.cid + ':remove', _(function(payment){
+			core._coll.T2ps.bind('tag_' + this.model.cid + ':remove', _(function(payment){
 				if(payment === this.options.payment) {
 					$(this.el).remove();
 				}
@@ -161,4 +159,6 @@ $(function(){
 			this.model.save();
 		}
 	});
-});
+	
+	return Tag;
+})(window.$, window._, window.Backbone, window.Rib, window._t, window.core);

@@ -23,6 +23,7 @@
 		<script type="text/javascript" src="/static/js/tricks.js"></script>
 		
 		<!-- application -->
+		<script type="text/javascript" src="/static/js/app/core.js"></script>
 		<script type="text/javascript" src="/static/js/app/payment.js"></script>
 		<script type="text/javascript" src="/static/js/app/tag.js"></script>
 		<script type="text/javascript" src="/static/js/app/t2p.js"></script>
@@ -30,6 +31,13 @@
 		<script type="text/javascript" src="/static/js/app/filter.js"></script>
 		<script type="text/javascript" src="/static/js/app/settings.js"></script>
 		<script type="text/javascript" src="/static/js/app/app.js"></script>
+		<script type="text/javascript" src="/static/js/app/router.js"></script>
+		
+		<script type="text/javascript">
+			$(function(){
+				core.init(Vault, Filter, Payment, Tag, T2p, AppView);
+			});
+		</script>
 	</head>
 	<body>
 		
