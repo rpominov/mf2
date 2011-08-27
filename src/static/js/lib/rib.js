@@ -128,7 +128,7 @@ window.Rib = (function(Backbone, $, _){
 						return;
 					}
 					
-					if (_(el.attr('id')).startsWith('cid_')) {
+					if (el.attr('id') && _(el.attr('id')).startsWith('cid_')) {
 						var cid = el.attr('id').split('_')[1],
 						    model = this.collection.getByCid(cid);
 						    
