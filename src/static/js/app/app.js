@@ -4,84 +4,28 @@ window.AppView = (function(Backbone, $, _, core, Tag, Payment, Vault, Filter){
 	var AppView = Backbone.View.extend({
 		
 		events: {
-			'click #add-filter': 'onClickAddFilter',
-			'click #add-vault': 'onClickAddVault'
 		},
 		
 		initialize: function() {
-			_.bindAll(this,
-				 'addOneVault', 'addAllVault', 'editVault',
-				 'addOneFilter', 'addAllFilter', 'editFilter',
-				 'hideDialog', 'openDialog'
-			);
+			_.bindAll(this, 'hideDialog', 'openDialog');
 			
-			core.coll(_(function(coll){
-				coll.Vaults.bind('add',   this.addOneVault);
-				coll.Vaults.bind('reset', this.addAllVault);
-	
-				coll.Filters.bind('add',   this.addOneFilter);
-				coll.Filters.bind('reset', this.addAllFilter);
+			var appView = this;
+			
+			core.coll(function(cc){
 				
-				var paymentsView = new Payment.Views.List({collection: coll.Payments, el: this.$('#payments-list')});
-				paymentsView.bind('need_dialog', this.openDialog);
+				appView.childViews = {
+					vaults: new Vault.Views.List({collection: cc.Vaults, el: appView.$('#vaults-block')}),
+					filters: new Filter.Views.List({collection: cc.Filters, el: appView.$('#filters-block')}),
+					payments: new Payment.Views.List({collection: cc.Payments, el: appView.$('#payments-list')}),
+					tags: new Tag.Views.List({collection: cc.Tags, el: appView.$('#tags-block')})
+				};
 				
-				var tagsView = new Tag.Views.List({collection: coll.Tags, el: this.$('#tags-block')});
-				tagsView.bind('need_dialog', this.openDialog);
-			}).bind(this));
+				_(appView.childViews).each(function(view){
+					view.bind('need_dialog', appView.openDialog);
+				});
+				
+			});
 		},
-		
-		
-		//--------------------------
-		addOneVault: function(vault) {
-			var view = new Vault.Views.InList({model: vault});
-			this.$("#main-vaults-list").prepend(view.render().el);
-			
-			view.bind('edit_clicked', this.editVault);
-			
-			if(vault.isNew()){
-				this.editVault(vault);
-			}
-		},
-		
-		addAllVault: function() {
-			core._coll.Vaults.each(this.addOneVault);
-		},
-		
-		addOneFilter: function(filter) {
-			var view = new Filter.Views.InList({model: filter});
-			this.$("#main-filters-list").prepend(view.render().el);
-			
-			view.bind('edit_clicked', this.editFilter);
-			
-			if(filter.isNew()){
-				this.editFilter(filter);
-			}
-		},
-		
-		addAllFilter: function() {
-			core._coll.Filters.each(this.addOneFilter);
-		},
-		
-		editVault: function(vault) {
-			var view = new Vault.Views.Form({model: vault});
-			view.bind('close', this.hideDialog);
-			this.showDialog(view.render().el);
-		},
-		
-		editFilter: function(filter) {
-			var view = new Filter.Views.Form({model: filter});
-			view.bind('close', this.hideDialog);
-			this.showDialog(view.render().el);
-		},
-		
-		onClickAddFilter: function() {
-			core._coll.Filters.add({});
-		},
-		
-		onClickAddVault: function() {
-			core._coll.Vaults.add({});
-		},
-		//--------------------------
 		
 		showDialog: function(content) {
 			this.$("#modal-dialog").empty().append(content).show();

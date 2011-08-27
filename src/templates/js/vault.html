@@ -1,6 +1,8 @@
 <script type="text/html" class="template" data-bind="vault.in-list">
-	<span class="text"><span class="name"><%! it.name %></span></span>
-	<%#def['tooltip.standart-settings']%>
+	<li id="cid_<%= it.cid %>">
+		<span class="text"><span class="name"><%! it.name %></span></span>
+		<%#def['tooltip.standart-settings']%>
+	</li>
 </script>
 
 <script type="text/html" class="template" data-bind="vault.form">

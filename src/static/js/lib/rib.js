@@ -129,10 +129,10 @@ window.Rib = (function(Backbone, $, _){
 		initialize: function (args) {
 			Rib.Views.DefaultCollection.prototype.initialize.call(this);
 			
-			this.delegateEvents({
+			this.delegateEvents(_(this.events).extend({
 				'click .edit': 'onClickEdit',
 				'click .delete': 'onClickDelete'
-			});
+			}));
 		},
 		
 		edit: edit,

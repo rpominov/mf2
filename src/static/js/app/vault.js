@@ -1,6 +1,9 @@
-window.Vault = (function(_, Backbone, Rib, _t){
+window.Vault = (function($, _, Backbone, Rib, _t){
 	"use strict";
 
+	/**
+	 * Model
+	 */
 	var Vault = Backbone.Model.extend({
 		
 		defaults: {
@@ -18,6 +21,9 @@ window.Vault = (function(_, Backbone, Rib, _t){
 		}
 	});
 	
+	/**
+	 * Collection
+	 */
 	Vault.Collection = Backbone.Collection.extend({
 		model: Vault,
 		url: '/api/vault',
@@ -28,43 +34,9 @@ window.Vault = (function(_, Backbone, Rib, _t){
 	
 	Vault.Views = {};
 	
-	Vault.Views.InList = Rib.Views.DefaultModel.extend({
-		
-		tagName: "li",
-		className: "vault",
-		tmpl: _t('vault.in-list'),
-		
-		events: {
-			'click .text': 'onClickText',
-			'click .edit': 'onClickEdit',
-			'click .delete': 'onClickDelete'
-		},
-		
-		initialize: function (args) {
-			Rib.Views.DefaultModel.prototype.initialize.call(this);
-			
-			_.bindAll(this, 'changeName');
-			this.model.bind('change:name', this.changeName);
-		},
-		
-		onClickEdit: function() {
-			this.trigger('edit_clicked', this.model);
-		},
-		
-		onClickDelete: function() {
-			this.model.destroy();
-		},
-		
-		onClickText: function() {
-			// todo
-		},
-		
-		changeName: function() {
-			this.$('.name').text(this.model.get('name'));
-		}
-	});
-	
-	
+	/**
+	 * Form view
+	 */
 	Vault.Views.Form = Rib.Views.Form.extend({
 		
 		className: "vault",
@@ -79,5 +51,49 @@ window.Vault = (function(_, Backbone, Rib, _t){
 		}
 	});
 	
+	/**
+	 * List view
+	 */
+	Vault.Views.List = Rib.Views.EditableCollection.extend({
+		
+		tmpl: _t('vault.in-list'),
+		
+		list_selector: '.list',
+		FormView: Vault.Views.Form,
+		
+		events: {
+			'click .text': 'onClickText',
+			'click .add': 'addClicked'
+		},
+		
+		initialize: function (args) {
+			Rib.Views.EditableCollection.prototype.initialize.call(this);
+			
+			_.bindAll(this, 'changeName');
+			
+			this.collection.bind('change:name', this.changeName);
+		},
+		
+		addOne: function(model) {
+			Rib.Views.EditableCollection.prototype.addOne.call(this, model);
+			
+			if(model.isNew()){
+				this.edit(model);
+			}
+		},
+		
+		onClickText: Rib.U.el2ModelProxy(function(model){
+			// todo
+		}),
+		
+		changeName: Rib.U.model2ElProxy(function(el, model) {
+			$('.name', el).text(model.get('name'));
+		}),
+		
+		addClicked: function(){
+			this.collection.add({});
+		}
+	});
+	
 	return Vault;
-})(window._, window.Backbone, window.Rib, window._t);
+})(window.jQuery, window._, window.Backbone, window.Rib, window._t);

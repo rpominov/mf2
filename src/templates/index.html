@@ -60,8 +60,11 @@
 		</div>
 		
 		<div class="top"><div class="padding"><div class="padding">
+			<div class="veil"></div>
+			<div class="settings-wrap">
+				<div id="sys-settings" class="icon settings" title="Настройки"></div>
+			</div>
 			<div id="add-payment" class="icon add" title="Добавить платеж"></div>
-			<div id="sys-settings" class="icon settings" title="Настройки"></div>
 			<div class="user-info">
 				<span class="balance plus">2356 $</span> 
 				<span class="user-name">pozadi</span> 
@@ -71,46 +74,47 @@
 		
 		<div class="middle">
 			
-			<div class="settings-wrap">
-				<div id="settings"><div class="padding">
-					<h2>Настройки</h2>
-					<form>
-						<ul class="menu">
-							<li class="views">Вид</li>
-							<li class="curencies current">Валюты</li>
-							<li class="import">Импорт / экспорт</li>
-						</ul>
-						<div class="content">
-							
-						</div>
-						<div class="clear delimiter"></div>
-						<input type="submit" value="Сохранить" /> <span class="clickable cancel">отмена</span>
-					</form>
-				</div></div><!-- #settings -->
-			</div>
+			<div id="settings"><div class="panel"><div class="padding">
+				<h2>Настройки</h2>
+				<form>
+					<ul class="menu">
+						<li class="views current">Вид</li>
+						<li class="curencies">Валюты</li>
+						<li class="import">Импорт / экспорт</li>
+					</ul>
+					<div class="content">
+						<div class="views"> ... </div>
+						<div class="curencies"> ... </div>
+						<div class="import"> ... </div>
+					</div>
+					<div class="clear delimiter"></div>
+					<input type="submit" value="Сохранить" /> <span class="clickable cancel">отмена</span>
+				</form>
+			</div></div></div><!-- #settings -->
+			
 			
 			<div class="sidebar"><div class="padding">
 				<div class="logo"></div>
 				
-				<div class="block filters">
+				<div class="block filters" id="filters-block">
 					<h3>
 						<span class="text">
 							Фильтры<div class="expand"></div>
 						</span>
-						<div class="icon add" id="add-filter" title="Добавить"></div>
+						<div class="icon add" title="Добавить"></div>
 					</h3>
-					<ul id="main-filters-list">
+					<ul class="list">
 					</ul>
 				</div>
 				
-				<div class="block vaults">
+				<div class="block vaults" id="vaults-block">
 					<h3>
 						<span class="text">
 							Хранилища<div class="expand"></div>
 						</span>
-						<div class="icon add" id="add-vault" title="Добавить"></div>
+						<div class="icon add" title="Добавить"></div>
 					</h3>
-					<ul id="main-vaults-list">
+					<ul class="list">
 					</ul>
 				</div>
 				
@@ -132,7 +136,7 @@
 				</ul>
 				
 				<div class="total"><div class="padding">
-					<span class="title">Итого:</span> <span class="plus">1245</span> - <span class="minus">227</span> = 965
+					<span class="title">Итого:</span> <span class="plus">0</span> - <span class="minus">0</span> = <span class="result">0</span>
 				</div></div>
 				
 				<div class="footer">

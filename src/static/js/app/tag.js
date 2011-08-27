@@ -90,6 +90,7 @@ window.Tag = (function($, _, Backbone, Rib, _t, core){
 		
 		onClickText: Rib.U.el2ModelProxy(function(model){
 			// todo
+			alert(1);
 		}),
 		
 		changeName: Rib.U.model2ElProxy(function(el, model) {

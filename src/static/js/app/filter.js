@@ -1,6 +1,9 @@
-window.Filter = (function(_, Backbone, Rib, _t){
+window.Filter = (function($, _, Backbone, Rib, _t){
 	"use strict";
 
+	/**
+	 * Model
+	 */
 	var Filter = Backbone.Model.extend({
 		
 		defaults: {
@@ -18,6 +21,9 @@ window.Filter = (function(_, Backbone, Rib, _t){
 		}
 	});
 	
+	/**
+	 * Collection
+	 */
 	Filter.Collection = Backbone.Collection.extend({
 		model: Filter,
 		url: '/api/filter',
@@ -28,43 +34,9 @@ window.Filter = (function(_, Backbone, Rib, _t){
 	
 	Filter.Views = {};
 	
-	Filter.Views.InList = Rib.Views.DefaultModel.extend({
-		
-		tagName: "li",
-		className: "filter",
-		tmpl: _t('filter.in-list'),
-		
-		events: {
-			'click .text': 'onClickText',
-			'click .edit': 'onClickEdit',
-			'click .delete': 'onClickDelete'
-		},
-		
-		initialize: function (args) {
-			Rib.Views.DefaultModel.prototype.initialize.call(this);
-			
-			_.bindAll(this, 'changeName');
-			this.model.bind('change:name', this.changeName);
-		},
-		
-		onClickEdit: function() {
-			this.trigger('edit_clicked', this.model);
-		},
-		
-		onClickDelete: function() {
-			this.model.destroy();
-		},
-		
-		onClickText: function() {
-			// todo
-		},
-		
-		changeName: function() {
-			this.$('.name').text(this.model.get('name'));
-		}
-	});
-	
-	
+	/**
+	 * Form view
+	 */
 	Filter.Views.Form = Rib.Views.Form.extend({
 		className: "filter",
 		tmpl: _t('filter.form'),
@@ -78,5 +50,49 @@ window.Filter = (function(_, Backbone, Rib, _t){
 		}
 	});
 	
+	/**
+	 * List view
+	 */
+	Filter.Views.List = Rib.Views.EditableCollection.extend({
+		
+		tmpl: _t('filter.in-list'),
+		
+		list_selector: '.list',
+		FormView: Filter.Views.Form,
+		
+		events: {
+			'click .text': 'onClickText',
+			'click .add': 'addClicked'
+		},
+		
+		initialize: function (args) {
+			Rib.Views.EditableCollection.prototype.initialize.call(this);
+			
+			_.bindAll(this, 'changeName');
+			
+			this.collection.bind('change:name', this.changeName);
+		},
+		
+		addOne: function(model) {
+			Rib.Views.EditableCollection.prototype.addOne.call(this, model);
+			
+			if(model.isNew()){
+				this.edit(model);
+			}
+		},
+		
+		onClickText: Rib.U.el2ModelProxy(function(model){
+			// todo
+		}),
+		
+		changeName: Rib.U.model2ElProxy(function(el, model) {
+			$('.name', el).text(model.get('name'));
+		}),
+		
+		addClicked: function(){
+			this.collection.add({});
+		}
+	});
+	
 	return Filter;
-})(window._, window.Backbone, window.Rib, window._t);
+})(window.jQuery, window._, window.Backbone, window.Rib, window._t);
