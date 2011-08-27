@@ -17,7 +17,45 @@ window.Rib = (function(Backbone, $, _){
 	
 	empty_template = function(){return '';};
 	
-	
+	/**
+	 * Utils
+	 */
+	Rib.U = {
+		el2ModelProxy: function(callback){
+			return function(event){
+				var el = $(event.target);
+			
+				while(true){
+					
+					if (el.filter(document.body).length === 1) {
+						return;
+					}
+					
+					if (el.attr('id') && _(el.attr('id')).startsWith('cid_')) {
+						var cid = el.attr('id').split('_')[1],
+						    model = this.collection.getByCid(cid);
+						    
+						if (model) {
+							callback.call(this, model, el);
+						}
+						return;
+					}
+					
+					el = el.parent();
+				}
+			};
+		},
+		
+		model2ElProxy: function(callback){
+			return function(model){
+				var el = this.$('#cid_' + model.cid); // will called in View context, so we can use this.$
+				if(el.length > 0){
+					var params = [el[0]].concat([].slice.call(arguments));
+					callback.apply(this, params);
+				}
+			};
+		}
+	};
 	
 	/**
 	 * Default view for model
@@ -41,31 +79,73 @@ window.Rib = (function(Backbone, $, _){
 			data = this.prepareDataForRender(data);
 			$(this.el).html(this.tmpl(data));
 			return this;
+		}
+	});
+	
+	/**
+	 * Default view for collection
+	 */
+	Rib.Views.DefaultCollection = Backbone.View.extend({
+		
+		tmpl: empty_template,
+		list_selector: null,
+		
+		initialize: function () {
+			_.bindAll(this, 'addOne', 'addAll', 'removeOne');
+			
+			this.collection.bind('add', this.addOne);
+			this.collection.bind('remove', this.removeOne);
+			this.collection.bind('reset', this.addAll);
 		},
 		
-		remove: function() {
-			$(this.el).remove();
+		removeOne: Rib.U.model2ElProxy(function(el, model) {
+			$(el).remove();
+		}),
+		
+		addOne: function(model) {
+			var data = model.toJSON();
+			data.cid = model.cid;
+			(this.list_selector ? this.$(this.list_selector) : $(this.el)).append(this.tmpl(data));
+		},
+		
+		addAll: function() {
+			this.collection.each(this.addOne);
 		}
 	});
 	
 	
 	/**
+	 * View for editable collection
+	 */
+	var edit = function(model){
+		var view = new this.FormView({model: model});
+		this.trigger('need_dialog', view);
+	};
+	
+	Rib.Views.EditableCollection = Rib.Views.DefaultCollection.extend({
+		
+		FormView: Rib.Views.DefaultModel,
+		
+		initialize: function (args) {
+			Rib.Views.DefaultCollection.prototype.initialize.call(this);
+			
+			this.delegateEvents({
+				'click .edit': 'onClickEdit',
+				'click .delete': 'onClickDelete'
+			});
+		},
+		
+		edit: edit,
+		onClickEdit: Rib.U.el2ModelProxy(edit),
+		
+		onClickDelete: Rib.U.el2ModelProxy(function(model){
+			model.destroy();
+		})
+	});
+	
+	
+	/**
 	 * Form view skeleton
-	 *
-	 * Usage example:
-	 *
-	 * Filter.Views.Form = Rib.Views.Form.extend({
-	 *	 className: "filter",
-	 *	 tmpl: _t('filter.form'),
-	 *	
-	 *	 save: function(){
-	 *		this.model.set({
-	 *			'name': this.$('.name').val()
-	 *		});
-	 *		
-	 *		this.model.save();
-	 *	 }
-	 * });
 	 */
 	Rib.Views.Form = Rib.Views.DefaultModel.extend({
 		
@@ -113,46 +193,6 @@ window.Rib = (function(Backbone, $, _){
 			return data;
 		}
 	});
-	
-	/**
-	 * Utils
-	 */
-	Rib.U = {
-		el2ModelProxy: function(callback){
-			return function(event){
-				var el = $(event.target);
-			
-				while(true){
-					
-					if (el.filter(document.body).length === 1) {
-						return;
-					}
-					
-					if (el.attr('id') && _(el.attr('id')).startsWith('cid_')) {
-						var cid = el.attr('id').split('_')[1],
-						    model = this.collection.getByCid(cid);
-						    
-						if (model) {
-							callback.call(this, model, el);
-						}
-						return;
-					}
-					
-					el = el.parent();
-				}
-			};
-		},
-		
-		model2ElProxy: function(callback){
-			return function(model){
-				var el = this.$('#cid_' + model.cid); // will called in View context, so we can use this.$
-				if(el.length > 0){
-					var params = [el[0]].concat([].slice.call(arguments));
-					callback.apply(this, params);
-				}
-			};
-		}
-	};
 	
 	return Rib;
 	

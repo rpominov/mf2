@@ -50,50 +50,43 @@ window.Tag = (function($, _, Backbone, Rib, _t, core){
 	
 	Tag.Views = {};
 	
-	Tag.Views.List = Backbone.View.extend({
+	Tag.Views.Form = Rib.Views.Form.extend({
+		className: "tag",
+		tmpl: _t('tag.form'),
+		
+		save: function(){
+			this.model.set({
+				'name': this.$('.name').val()
+			});
+			
+			this.model.save();
+		}
+	});
+	
+	Tag.Views.List = Rib.Views.EditableCollection.extend({
+		
 		tmpl: _t('tag.big-list'),
 		
+		list_selector: '.list',
+		FormView: Tag.Views.Form,
+		
 		events: {
-			'click .text': 'onClickText',
-			'click .edit': 'onClickEdit',
-			'click .delete': 'onClickDelete'
+			'click .text': 'onClickText'
 		},
 		
 		initialize: function (args) {
-			_.bindAll(this, 'addOne', 'addAll', 'removeOne', 'changeName', 'changePayments');
+			Rib.Views.EditableCollection.prototype.initialize.call(this);
 			
-			this.collection.bind('add', this.addOne);
-			this.collection.bind('remove', this.removeOne);
-			this.collection.bind('reset', this.addAll);
+			_.bindAll(this, 'changeName', 'changePayments');
 			
 			this.collection.bind('change:name', this.changeName);
 			core._coll.T2ps.bind('tag', this.changePayments);
 		},
 		
-		removeOne: Rib.U.model2ElProxy(function(el, model) {
-			$(el).remove();
-		}),
-		
-		addOne: function(tag) {
-			var data = tag.toJSON();
-			data.cid = tag.cid;
-			this.$('.list').append(this.tmpl(data));
-			
-			this.changePayments(tag);
+		addOne: function(model) {
+			Rib.Views.EditableCollection.prototype.addOne.call(this, model);
+			this.changePayments(model);
 		},
-		
-		addAll: function() {
-			this.collection.each(this.addOne);
-		},
-		
-		onClickEdit: Rib.U.el2ModelProxy(function(tag){
-			var view = new Tag.Views.Form({model: tag});
-			this.trigger('need_dialog', view);
-		}),
-		
-		onClickDelete: Rib.U.el2ModelProxy(function(model){
-			model.destroy();
-		}),
 		
 		onClickText: Rib.U.el2ModelProxy(function(model){
 			// todo
@@ -112,53 +105,6 @@ window.Tag = (function($, _, Backbone, Rib, _t, core){
 			$('.payments', el).text(payments);
 		})
 	});
-	
-	
-	Tag.Views.InSmallList = Backbone.View.extend({
-		
-		tagName: "li",
-		className: "tag",
-		tmpl: _t('tag.small-list'),
-		
-		events: {
-		},
-		
-		initialize: function (args) {
-			_.bindAll(this, 'changeName');
-			
-			this.model.bind('destroy', _.bind(function(){ $(this.el).remove(); }, this));
-			this.model.bind('change:name', this.changeName);
-			
-			core._coll.T2ps.bind('tag_' + this.model.cid + ':remove', _(function(payment){
-				if(payment === this.options.payment) {
-					$(this.el).remove();
-				}
-			}).bind(this));
-		},
-		
-		changeName: function() {
-			$(this.el).text(this.model.get('name'));
-		},
-		
-		render: function() {
-			var data = this.model.toJSON();
-			$(this.el).html(this.tmpl(data));
-			return this;
-		}
-	});
-	
-	Tag.Views.Form = Rib.Views.Form.extend({
-		className: "tag",
-		tmpl: _t('tag.form'),
-		
-		save: function(){
-			this.model.set({
-				'name': this.$('.name').val()
-			});
-			
-			this.model.save();
-		}
-	});
-	
+
 	return Tag;
 })(window.$, window._, window.Backbone, window.Rib, window._t, window.core);

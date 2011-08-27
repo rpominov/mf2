@@ -6,7 +6,9 @@
 </script>
 
 <script type="text/html" class="template" data-bind="tag.small-list">
-	<%! it.name %>
+	<li class="cid_<%= it.cid %> tag">
+		<%! it.name %>
+	</li>
 </script>
 
 <script type="text/html" class="template" data-bind="tag.form">

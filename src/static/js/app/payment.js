@@ -1,8 +1,11 @@
-window.Payment = (function(_, __, Backbone, Rib, _t, core){
+window.Payment = (function($, _, __, Backbone, Rib, _t, core){
 	"use strict";
 	
 	/*global Tag*/
 
+	/**
+	 * Model
+	 */
 	var Payment = Backbone.Model.extend({
 		
 		defaults: {
@@ -15,6 +18,9 @@ window.Payment = (function(_, __, Backbone, Rib, _t, core){
 		}
 	});
 	
+	/**
+	 * Collection
+	 */
 	Payment.Collection = Backbone.Collection.extend({
 		model: Payment,
 		url: '/api/payment'
@@ -22,6 +28,9 @@ window.Payment = (function(_, __, Backbone, Rib, _t, core){
 	
 	Payment.Views = {};
 	
+	/**
+	 * Form view
+	 */
 	Payment.Views.Form = Rib.Views.Form.extend({
 		className: "payment",
 		tmpl: _t('payment.form'),
@@ -53,58 +62,70 @@ window.Payment = (function(_, __, Backbone, Rib, _t, core){
 		}
 	});
 	
-	Payment.Views.InList = Rib.Views.DefaultModel.extend({
+	/**
+	 * List view
+	 */
+	Payment.Views.List = Rib.Views.EditableCollection.extend({
 		
-		tagName: "li",
-		className: "payment",
 		tmpl: _t('payment.in_list'),
 		
+		FormView: Payment.Views.Form,
+		
 		events: {
-			'click .edit': 'onClickEdit',
-			'click .delete': 'onClickDelete'
 		},
 		
 		initialize: function (args) {
-			Rib.Views.DefaultModel.prototype.initialize.call(this);
+			Rib.Views.EditableCollection.prototype.initialize.call(this);
 			
-			_.bindAll(this, 'changeName', 'changeValue', 'resetTags', 'addTag');
-			this.model.bind('change:name', this.changeName);
-			this.model.bind('change:value', this.changeValue);
-			core._coll.T2ps.bind('payment_' + this.model.cid + ':add', this.addTag);
+			$('#add-payment').click(_(function(){
+				this.collection.add({});
+			}).bind(this));
+			
+			_.bindAll(this, 'changeName', 'changeValue', 'changeTags', 'changeTagName');
+			
+			this.collection.bind('change:name', this.changeName);
+			this.collection.bind('change:value', this.changeValue);
+			
+			core._coll.T2ps.bind('payment', this.changeTags);
+			core._coll.Tags.bind('change:name', this.changeTagName);
 		},
 		
-		onClickEdit: function() {
-			this.trigger('edit_clicked', this.model);
+		addOne: function(model) {
+			Rib.Views.EditableCollection.prototype.addOne.call(this, model);
+			
+			if(model.isNew()){
+				this.edit(model);
+			}
+			
+			this.changeTags(model);
 		},
 		
-		onClickDelete: function() {
-			this.model.destroy();
-		},
+		changeName: Rib.U.model2ElProxy(function(el, model) {
+			$('.name', el).text(model.get('name'));
+		}),
 		
-		changeName: function() {
-			this.$('.name').text(this.model.get('name'));
-		},
+		changeValue: Rib.U.model2ElProxy(function(el, model) {
+			$('.value', el).text(model.get('value'));
+		}),
 		
-		changeValue: function() {
-			this.$('.value').text(this.model.get('value'));
-		},
+		changeTags: Rib.U.model2ElProxy(function(el, model) {
+			
+			$('.tag-list .tag', el).remove();
+			
+			var tags = core._coll.T2ps.getByPayment(model),
+				list = $('.tag-list', el);
+			
+			_(tags).each(function(tag){
+				var data = tag.toJSON();
+				data.cid = tag.cid;
+				list.append(_t('tag.small-list', data));
+			});
+		}),
 		
-		addTag: function(tag) {
-			var view = new Tag.Views.InSmallList({model: tag, payment: this.model});
-			this.$('.tag-list').append(view.render().el);
-		},
-		
-		resetTags: function() {
-			var tags = core._coll.T2ps.getByPayment(this.model);
-			_(tags).each(this.addTag);
-		},
-		
-		render: function() {
-			var result = Rib.Views.DefaultModel.prototype.render.call(this);
-			this.resetTags();
-			return result;
+		changeTagName: function(tag) {
+			this.$('.cid_' + tag.cid).text(tag.get('name'));
 		}
 	});
 	
 	return Payment;
-})(window._, window.__, window.Backbone, window.Rib, window._t, window.core);
+})(window.jQuery, window._, window.__, window.Backbone, window.Rib, window._t, window.core);
