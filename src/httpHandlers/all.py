@@ -54,9 +54,13 @@ class Tag(db.Model):
 			'name':  self.name
 		}		
 
-class VaultRESTfulHandler(webapp.RequestHandler):
+class AllRESTfulHandler(webapp.RequestHandler):
 	
 	def get(self):
+		result = self.getJSON()
+		self.response.out.write(result)
+		
+	def getJSON(self):
 		result = {
 			'Vaults': Vault,
 			'Filters': Filter,
@@ -71,10 +75,9 @@ class VaultRESTfulHandler(webapp.RequestHandler):
 			for entry in query:
 				result[i].append(entry.toDict())
 			
-		result = simplejson.dumps(result)
-		self.response.out.write(result)
+		return simplejson.dumps(result)
 			
-application = webapp.WSGIApplication([('/api/all', VaultRESTfulHandler)], debug=True)
+application = webapp.WSGIApplication([('/api/all', AllRESTfulHandler)], debug=True)
 
 def main():
 	run_wsgi_app(application)

@@ -3,6 +3,8 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
 from google.appengine.ext.webapp import template
 
+from httpHandlers.all import AllRESTfulHandler
+
 t_dir = '../templates/'
 
 def p(path):
@@ -17,10 +19,14 @@ class MainPage(webapp.RequestHandler):
         js_templates = os.listdir(p(t_dir + '/js'))
         js_templates = map(add_js, js_templates)
         
+        initial_data = AllRESTfulHandler()
+        initial_data = initial_data.getJSON()
+        
         self.response.out.write(
             template.render(
                 p(t_dir + 'index.html'), 
-                {'js_templates': js_templates}
+                {'js_templates': js_templates,
+				 'initial_data': initial_data}
             )
         )
 

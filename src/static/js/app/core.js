@@ -7,19 +7,22 @@
 	win.core = {
 		
 		// Deferred Objects
-		colletions_creating: $.Deferred(),
-		data_loading: $.Deferred(),
+		def: {
+			colletions_creating: $.Deferred(),
+			data_loading: $.Deferred()
+		},
+		
+		// Deferred helpers
+		coll: function(c){ this.def.colletions_creating.done(c); },
+		data: function(c){ this.def.data_loading.done(c); },
 		
 		// Collections
 		_coll: {},
-		coll: function(callback){
-			this.colletions_creating.done(callback);
-		},
 		
 		// Views
 		_views: {},
 		
-		init: function(Vault, Filter, Payment, Tag, T2p, AppView){
+		init: function(initial_data, Vault, Filter, Payment, Tag, T2p, AppView){
 			
 			var cc = this._coll = {
 				Vaults   : new Vault.Collection(),
@@ -29,34 +32,28 @@
 				Filters  : new Filter.Collection()
 			};
 			
-			this.colletions_creating.resolve(this._coll);
+			this.def.colletions_creating.resolve(this._coll);
 			
-			/**
-			 * Fetch dependences:
-			 * T2ps → Payments, Tags
-			 * Payments → Vaults
-			 * Filters → Payments, T2ps
-			 */
+			this._views.App = new AppView({el: $('body')[0]});
 			
-			$.ajax({
-				url: '/api/all',
-				success: function(data){
-					
-					_("Vaults Payments Tags T2ps Filters".split(" ")).each(function(type){
-						cc[type].reset(cc[type].parse(data[type]));
-					});
-					
-					/*global core */
-					core.data_loading.resolve();
-				},
-				error: function(){
-					throw "initial data loading failed";
-				},
-				contentType: 'application/json',
-				dataType: 'json'
-			});
+			function process_initial(data){
+				/**
+				 * Dependences:
+				 * T2ps → Payments, Tags
+				 * Payments → Vaults
+				 * Filters → Payments, T2ps ?
+				 */
+				_("Vaults Payments Tags T2ps Filters".split(" ")).each(function(type){
+					cc[type].reset(cc[type].parse(data[type]));
+				});
+				
+				/*global core */
+				core.def.data_loading.resolve();
+			}
 			
-			this.data_loading.done(function() {
+			process_initial(initial_data);
+			
+			this.data(function() {
 				
 				// set lazy removing not used tags
 				/* causes memory leak 
@@ -71,8 +68,6 @@
 				}, 5000);*/
 				
 			});
-			
-			this._views.App = new AppView({el: $('body')[0]});
 		}
 	};
 	

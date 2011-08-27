@@ -42,8 +42,12 @@
 		<script type="text/javascript" src="/static/js/app/router.js"></script>
 		
 		<script type="text/javascript">
+			var initial_data = {{initial_data}};
+		</script>
+		
+		<script type="text/javascript">
 			$(function(){
-				core.init(Vault, Filter, Payment, Tag, T2p, AppView);
+				core.init(initial_data, Vault, Filter, Payment, Tag, T2p, AppView);
 			});
 		</script>
 	</head>
