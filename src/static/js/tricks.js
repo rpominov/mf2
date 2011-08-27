@@ -12,4 +12,19 @@ $(function(){
 		// todo save status in cookies
 		$(this).parent().parent().toggleClass('folded');
 	});
+	
+	var shown = false;
+	$('#sys-settings').click(function(){
+		
+		if (shown) {
+			$('#settings').hide('blind', {}, 500, function(){
+				$('.settings-wrap').hide();
+			});
+		} else {
+			$('.settings-wrap').show();
+			$('#settings').show('blind');
+		}
+		
+		shown = !shown;
+	});
 });

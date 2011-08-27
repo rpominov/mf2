@@ -11,6 +11,8 @@
 		
 		<!-- libraries -->
 		
+		{% comment %} todo: use local versions of libs in https mode {% endcomment %}
+		
 		<!-- script type="text/javascript" src="/static/js/lib/json2.js"></script>
 		<script type="text/javascript" src="/static/js/lib/underscore.js"></script>
 		<script type="text/javascript" src="/static/js/lib/underscore.string.js"></script>
@@ -20,8 +22,9 @@
 		<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/json2/20110223/json2.js"></script>
 		<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.1.7/underscore-min.js"></script>
 		<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.string/1.1.4/underscore.string.min.js"></script>
-		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 		<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/backbone.js/0.5.3/backbone-min.js"></script>
+		<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js"></script>
 		
 		<script type="text/javascript" src="/static/js/lib/rib.js"></script>
 		<script type="text/javascript" src="/static/js/lib/doT.js"></script>
@@ -67,6 +70,24 @@
 		</div></div></div><!-- / .top -->
 		
 		<div class="middle">
+			
+			<div class="settings-wrap">
+				<div id="settings"><div class="padding">
+					<h2>Настройки</h2>
+					<form>
+						<ul class="menu">
+							<li class="views">Вид</li>
+							<li class="curencies current">Валюты</li>
+							<li class="import">Импорт / экспорт</li>
+						</ul>
+						<div class="content">
+							
+						</div>
+						<div class="clear delimiter"></div>
+						<input type="submit" value="Сохранить" /> <span class="clickable cancel">отмена</span>
+					</form>
+				</div></div><!-- #settings -->
+			</div>
 			
 			<div class="sidebar"><div class="padding">
 				<div class="logo"></div>
