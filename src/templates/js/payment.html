@@ -28,21 +28,22 @@
 		<tr>
 			<td><label for="value_<%! it.cid %>">Сумма:</label></td>
 			<td class="value-wrap">
-				<label><input type="radio" name="type" checked> -</label>
-				<label><input type="radio" name="type"> +</label>
-				<label><input type="radio" name="type"> ⇋</label>
+				<label><input type="radio" name="type" class="type" value="0" <% if (it.type === 0) { %>checked<% } %>> -</label>
+				<label><input type="radio" name="type" class="type" value="1" <% if (it.type === 1) { %>checked<% } %>> +</label>
+				<label><input type="radio" name="type" class="type" value="2" <% if (it.type === 2) { %>checked<% } %>> ⇋</label>
 				<input type="text" id="value_<%! it.cid %>" class="value" value="<%! it.value %>"/>
 			</td>
 		</tr>
 		
 		<tr>
 			<td><label for="time_<%! it.cid %>">Время:</label></td>
-			<td><input type="text" id="time_<%! it.cid %>" class="time" value=""/></td>
+			<td><input type="text" id="time_<%! it.cid %>" class="time" value="<%! it.time %>"/></td>
 		</tr>
 		
 		<tr>
 			<td><label for="vault_<%! it.cid %>">Хранилище:</label></td>
-			<td>
+			<td><input type="text" id="vault_<%! it.cid %>" class="vault" value="<%! it.vault %>"/></td>
+			<!--td>
 				<select id="vault_<%! it.cid %>" class="vault">
 					<option>Наличные</option>
 					<option>Втб 24</option>
@@ -52,7 +53,7 @@
 					<option>Наличные</option>
 					<option selected>Втб 24</option>
 				</select>
-			</td>
+			</td-->
 		</tr>
 		
 		<tr>

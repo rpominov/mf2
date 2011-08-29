@@ -5,16 +5,45 @@ window.Payment = (function($, _, __, Backbone, Rib, _t, core){
 
 	/**
 	 * Model
-	 */
+	 */	
 	var Payment = Backbone.Model.extend({
 		
 		defaults: {
            name: '',
-           value: 0
+           value: 0,
+           value1: 0,
+           type: 0,
+           time: new Date(),
+           cr_time: new Date(),
+           vault: null,
+           vault1: 0
 		},
 		
 		validate: function(attrs) {
 			// todo
+		},
+		
+		toJSON: function() {
+			var result = Backbone.Model.prototype.toJSON.call(this);
+			
+			result.vault = result.vault.get('id');
+			
+			result.time = result.time.getTime() / 1000;
+			result.cr_time = result.cr_time.getTime() / 1000;
+			
+			return result;
+		},
+		
+		parse: function (resp, xhr) {
+			resp.vault = core._coll.Vaults.get(resp.vault);
+			//resp.vault1 = core._coll.Vaults.get(resp.vault1);
+			resp.time = new Date(resp.time * 1000);
+			
+			if (!_.isUndefined(resp.cr_time)) {
+				resp.cr_time = new Date(resp.cr_time * 1000);
+			}
+			
+			return resp;
 		}
 	});
 	
@@ -23,7 +52,12 @@ window.Payment = (function($, _, __, Backbone, Rib, _t, core){
 	 */
 	Payment.Collection = Backbone.Collection.extend({
 		model: Payment,
-		url: '/api/payment'
+		url: '/api/payment',
+		
+		parse: function (resp, xhr) {
+			_(resp).map(Payment.prototype.parse);
+			return resp;
+		}
 	});
 	
 	Payment.Views = {};
@@ -36,10 +70,13 @@ window.Payment = (function($, _, __, Backbone, Rib, _t, core){
 		tmpl: _t('payment.form'),
 		
 		save: function() {
-			this.model.set({
+			this.model.set(Payment.prototype.parse({
 				'name': this.$('.name').val(),
-				'value': this.$('.value').val()
-			});
+				'value': this.$('.value').val(),
+				'type': this.$('.type:checked').val(),
+				'time': this.$('.time').val(),
+				'vault': this.$('.vault').val()
+			}));
 			
 			var tags = this.$('.tags').val().split(',');
 				tags = _(tags)
@@ -49,9 +86,16 @@ window.Payment = (function($, _, __, Backbone, Rib, _t, core){
 					.uniq()
 					.value();
 			
-			this.model.save().done(_(function(){
+			var set_tags = _(function(){
 				core._coll.T2ps.setForPayment(this.model, tags);
-			}).bind(this));
+			}).bind(this);
+			
+			if (this.model.isNew()) {
+				this.model.save().done(set_tags);
+			} else {
+				this.model.save();
+				set_tags();
+			}
 		},
 		
 		prepareDataForRender: function(data) {
@@ -77,17 +121,28 @@ window.Payment = (function($, _, __, Backbone, Rib, _t, core){
 		initialize: function (args) {
 			Rib.Views.EditableCollection.prototype.initialize.call(this);
 			
-			$('#add-payment').click(_(function(){
-				this.collection.add({});
-			}).bind(this));
+			_.bindAll(this, 'changeName', 'changeValue', 'changeTags', 'changeTagName', 'create');
 			
-			_.bindAll(this, 'changeName', 'changeValue', 'changeTags', 'changeTagName');
+			$('#add-payment').click(this.create);
 			
 			this.collection.bind('change:name', this.changeName);
 			this.collection.bind('change:value', this.changeValue);
 			
 			core._coll.T2ps.bind('payment', this.changeTags);
 			core._coll.Tags.bind('change:name', this.changeTagName);
+		},
+		
+		create: function() {
+			if (core._coll.Vaults.length === 0) {
+				// todo
+				return;
+			}
+			
+			this.collection.add({
+				time: new Date(),
+		        cr_time: new Date(),
+		        vault: core._coll.Vaults.getDefault()
+           });
 		},
 		
 		addOne: function(model) {

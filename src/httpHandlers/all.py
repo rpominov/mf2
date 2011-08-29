@@ -24,14 +24,26 @@ class Filter(db.Model):
 		}
 		
 class Payment(db.Model):
-	name = db.StringProperty()
-	value = db.IntegerProperty()
+	name     = db.StringProperty()
+	value    = db.FloatProperty()
+	value1   = db.FloatProperty()
+	type     = db.IntegerProperty() # 0: 1, 1: +, 2: t
+	time     = db.IntegerProperty() # timestamp
+	cr_time  = db.IntegerProperty()
+	vault  = db.IntegerProperty() # id
+	vault1 = db.IntegerProperty()
 	
 	def toDict(self):
 		return {
-			'id':	self.key().id(),
-			'name':  self.name,
-			'value': self.value
+			'id':	    self.key().id(),
+			'name':     self.name,
+			'value':    self.value,
+			'value1':   self.value1,
+			'type':     self.type,
+			'time':     self.time,
+			'cr_time':  self.cr_time,
+			'vault':    self.vault,
+			'vault1':   self.vault1,
 		}
 		
 class T2p(db.Model):
@@ -70,7 +82,7 @@ class AllRESTfulHandler(webapp.RequestHandler):
 		}
 		
 		for i in result.keys():
-			query = result[i].all()
+			query = result[i].all().fetch(10000)
 			result[i] = []
 			for entry in query:
 				result[i].append(entry.toDict())

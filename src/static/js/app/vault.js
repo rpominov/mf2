@@ -29,6 +29,11 @@ window.Vault = (function($, _, Backbone, Rib, _t){
 		url: '/api/vault',
 		
 		initialize: function() {
+		},
+		
+		getDefault: function() {
+			// todo
+			return this.at(0);
 		}
 	});
 	

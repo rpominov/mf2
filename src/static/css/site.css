@@ -258,6 +258,7 @@ html, body {
 		}
 			#settings h2 {
 				border-bottom: none;
+				margin-left: 200px;
 			}
 			#settings .menu {
 				/*background: #fee;*/
