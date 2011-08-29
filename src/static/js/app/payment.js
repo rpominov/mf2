@@ -47,6 +47,7 @@ window.Payment = (function(){
 			
 			return resp;
 		}
+		
 	});
 	
 	/**
@@ -57,7 +58,7 @@ window.Payment = (function(){
 		url: '/api/payment',
 		
 		parse: function (resp, xhr) {
-			_(resp).map(Payment.prototype.parse);
+			_(resp).map(this.model.prototype.parse);
 			return resp;
 		},
 		
@@ -104,10 +105,12 @@ window.Payment = (function(){
 			}
 		},
 		
-		forTmpl: function() {
-			var data = Rib.Model.prototype.forTmpl.call(this);
+		forTmpl: function(options) {
+			var data = Rib.Views.Form.prototype.forTmpl.call(this);
+			
 			data.tags = core._coll.T2ps.getByPayment(this.model);
 			data.tags = __(data.tags).pluck('name').join(', ');
+			
 			return data;
 		}
 	});

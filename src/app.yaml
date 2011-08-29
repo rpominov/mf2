@@ -10,23 +10,8 @@ handlers:
 - url: /static
   static_dir: static
 
-- url: /api/all
-  script: httpHandlers/all.py
-
-- url: /api/payment/?[0-9]*
-  script: httpHandlers/payment.py
-
-- url: /api/tag/?[0-9]*
-  script: httpHandlers/tag.py
-  
-- url: /api/t2p/?[0-9]*
-  script: httpHandlers/t2p.py
-  
-- url: /api/vault/?[0-9]*
-  script: httpHandlers/vault.py
-  
-- url: /api/filter/?[0-9]*
-  script: httpHandlers/filter.py
+- url: /api/(all|payment|tag|vault|t2p|filter)/?([0-9]*)
+  script: httpHandlers/REST.py
 
 - url: /.*
   script: httpHandlers/index.py

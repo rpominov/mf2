@@ -80,12 +80,6 @@ window.Rib = (function(){
 	 */
 	Rib.Model = Backbone.Model.extend({
 		
-		forTmpl: function() {
-			var data = this.toJSON();
-			data.cid = this.cid;
-			return data;
-		}
-		
 	});
 	
 	
@@ -118,8 +112,15 @@ window.Rib = (function(){
 		},
 		
 		render: function() {
-			$(this.el).html(this.tmpl(this.model.forTmpl()));
+			var data = this.forTmpl();
+			$(this.el).html(this.tmpl(data));
 			return this;
+		},
+		
+		forTmpl: function() {
+			var data = this.model.toJSON();
+			data.cid = this.model.cid;
+			return data;
 		}
 	});
 	
@@ -146,12 +147,19 @@ window.Rib = (function(){
 		}),
 		
 		addOne: function(model) {
-			var el = this.list_selector ? this.$(this.list_selector) : $(this.el);
-			el.append(this.tmpl(model.forTmpl()));
+			var el = this.list_selector ? this.$(this.list_selector) : $(this.el),
+				data = this.forTmpl(model);
+			el.append(this.tmpl(data));
 		},
 		
 		addAll: function() {
 			this.collection.each(this.addOne);
+		},
+		
+		forTmpl: function(model) {
+			var data = model.toJSON();
+			data.cid = model.cid;
+			return data;
 		}
 	});
 	
