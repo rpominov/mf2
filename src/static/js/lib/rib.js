@@ -20,7 +20,7 @@ window.Rib = (function(){
 	/**
 	 * Utils
 	 */
-	Rib.U = {
+	Rib.U = _.extend({
 		el2ModelProxy: function(callback){
 			return function(event){
 				var el = $(event.target);
@@ -56,21 +56,24 @@ window.Rib = (function(){
 			};
 		},
 		
-		events: _.extend({}, Backbone.Events), // system event generator
-		
 		alert: function(message) {
 			var view = new window.Rib.Views.MessageBox({message: message});
-			this.events.trigger('need_dialog', view);
+			this.modalDialog(view);
 			return view;
 		},
 		
 		confirm: function(message, onOk, onCancel) {
 			var view = new window.Rib.Views.MessageBox({message: message, cancel: true});
-			this.events.trigger('need_dialog', view);
-			view.on(onOk, onCancel);
+			view.def.then(onOk, onCancel);
+			this.modalDialog(view);
 			return view;
+		},
+		
+		modalDialog: function(view) {
+			this.trigger('need_dialog', view);
 		}
-	};
+		
+	}, Backbone.Events);
 	
 	/**
 	 * Default view for model
@@ -111,6 +114,8 @@ window.Rib = (function(){
 			this.collection.bind('add', this.addOne);
 			this.collection.bind('remove', this.removeOne);
 			this.collection.bind('reset', this.addAll);
+			
+			this.addAll();
 		},
 		
 		removeOne: Rib.U.model2ElProxy(function(el, model) {
@@ -133,8 +138,7 @@ window.Rib = (function(){
 	 * View for editable collection
 	 */
 	var edit = function(model){
-		var view = new this.FormView({model: model});
-		this.trigger('need_dialog', view);
+		Rib.U.modalDialog(new this.FormView({model: model}));
 	};
 	
 	Rib.Views.EditableCollection = Rib.Views.DefaultCollection.extend({
@@ -243,18 +247,6 @@ window.Rib = (function(){
 		onClickOk: function() {
 			this.def.resolve();
 			this.trigger('close');
-		},
-		
-		onOk: function(fn) {
-			this.def.done(fn);
-		},
-		
-		onCancel: function(fn) {
-			this.def.fail(fn);
-		},
-		
-		on: function(ok, cancel) {
-			this.def.then(ok, cancel);
 		},
 		
 		render: function() {

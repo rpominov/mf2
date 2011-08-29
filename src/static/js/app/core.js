@@ -1,12 +1,29 @@
 /*global $ _ Backbone Rib _t __ core Tag Payment Vault Filter*/
 
-(function(){
+// shortcut for Backbone.Collection
+window.__ = function(models) { return new Backbone.Collection(models); };
+
+window.core = (function(){
 	"use strict";
 	
-	// shortcut for Backbone.Collection
-	window.__ = function(models) { return new Backbone.Collection(models); };
+	function process_initial(data){
+		/**
+		 * Dependences:
+		 * T2ps → Payments, Tags
+		 * Payments → Vaults
+		 * Filters → Payments, T2ps ?
+		 */
+		
+		/*global core */
+		
+		_("Vaults Payments Tags T2ps Filters".split(" ")).each(function(type){
+			core._coll[type].reset(core._coll[type].parse(data[type]));
+		});
+		
+		core.def.data_loading.resolve();
+	}
 	
-	window.core = {
+	var core = {
 		
 		// Deferred Objects
 		def: {
@@ -36,41 +53,28 @@
 			
 			this.def.colletions_creating.resolve(this._coll);
 			
-			this._views.App = new AppView({el: $('body')[0]});
-			
-			function process_initial(data){
-				/**
-				 * Dependences:
-				 * T2ps → Payments, Tags
-				 * Payments → Vaults
-				 * Filters → Payments, T2ps ?
-				 */
-				_("Vaults Payments Tags T2ps Filters".split(" ")).each(function(type){
-					cc[type].reset(cc[type].parse(data[type]));
-				});
-				
-				/*global core */
-				core.def.data_loading.resolve();
-			}
-			
 			process_initial(initial_data);
 			
-			this.data(function() {
-				
-				// set lazy removing not used tags
-				/* causes memory leak 
-				 * dangerous thing in any way 
-				window.setInterval(function(){
-					var not_used = Tags.filter(function(tag){
-						return !tag.isNew() && T2ps.getByTag(tag).length === 0; 
-					});
-					if (not_used.length > 0) {
-						not_used[0].destroy();
-					}
-				}, 5000);*/
-				
-			});
+			this._views.App = new AppView({el: $('body')[0]});
 		}
 	};
+	
+	core.data(function() {
+		
+		// set lazy removing not used tags
+		/* causes memory leak 
+		 * dangerous thing in any way 
+		window.setInterval(function(){
+			var not_used = Tags.filter(function(tag){
+				return !tag.isNew() && T2ps.getByTag(tag).length === 0; 
+			});
+			if (not_used.length > 0) {
+				not_used[0].destroy();
+			}
+		}, 5000);*/
+		
+	});
+	
+	return core;
 	
 })();
