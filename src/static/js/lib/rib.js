@@ -1,12 +1,12 @@
 /**
- * Rib.js - Backbone.js extension 
+ * Rib.js - Backbone.js extension (utils for https://github.com/pozadi/mf2)
  * Author: https://github.com/pozadi
  * License: MIT
  */
 
-/*global window*/
+/*global $ _ Backbone Rib _t __ core Tag Payment Vault Filter*/
 
-window.Rib = (function(Backbone, $, _){
+window.Rib = (function(){
 	"use strict";
 	
 	var 
@@ -54,6 +54,21 @@ window.Rib = (function(Backbone, $, _){
 					callback.apply(this, params);
 				}
 			};
+		},
+		
+		events: _.extend({}, Backbone.Events), // system event generator
+		
+		alert: function(message) {
+			var view = new window.Rib.Views.MessageBox({message: message});
+			this.events.trigger('need_dialog', view);
+			return view;
+		},
+		
+		confirm: function(message, onOk, onCancel) {
+			var view = new window.Rib.Views.MessageBox({message: message, cancel: true});
+			this.events.trigger('need_dialog', view);
+			view.on(onOk, onCancel);
+			return view;
 		}
 	};
 	
@@ -138,8 +153,15 @@ window.Rib = (function(Backbone, $, _){
 		edit: edit,
 		onClickEdit: Rib.U.el2ModelProxy(edit),
 		
+		beforeDelete: function(){ return true; },
+		
 		onClickDelete: Rib.U.el2ModelProxy(function(model){
-			model.destroy();
+			if (!this.beforeDelete(model)) {
+				return;
+			}
+			Rib.U.confirm(_t('messages.shure-want-delete', {/*name: model.toStr()*/}), function(){
+				model.destroy();
+			});
 		})
 	});
 	
@@ -194,6 +216,53 @@ window.Rib = (function(Backbone, $, _){
 		}
 	});
 	
+	/**
+	 * MessageBox view
+	 */
+	Rib.Views.MessageBox = Backbone.View.extend({
+		
+		className: 'message-box',
+		
+		tmpl: _t('message-box'),
+		def: null,
+		
+		events: {
+			'click .ok'    : 'onClickOk',
+			'click .cancel': 'onClickCancel'
+		},
+		
+		initialize: function () {
+			this.def = $.Deferred();
+		},
+		
+		onClickCancel: function() {
+			this.def.reject();
+			this.trigger('close');
+		},
+		
+		onClickOk: function() {
+			this.def.resolve();
+			this.trigger('close');
+		},
+		
+		onOk: function(fn) {
+			this.def.done(fn);
+		},
+		
+		onCancel: function(fn) {
+			this.def.fail(fn);
+		},
+		
+		on: function(ok, cancel) {
+			this.def.then(ok, cancel);
+		},
+		
+		render: function() {
+			$(this.el).html(this.tmpl(this.options));
+			return this;
+		}
+	});
+	
 	return Rib;
 	
-})(window.Backbone, window.jQuery, window._);
+})();

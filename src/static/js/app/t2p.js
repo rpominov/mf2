@@ -1,4 +1,6 @@
-window.T2p = (function(_, __, Backbone, core){
+/*global $ _ Backbone Rib _t __ core Tag Payment Vault Filter*/
+
+window.T2p = (function(){
 	"use strict";
 	
 	var SearchResult = function(t2ps) {
@@ -158,4 +160,4 @@ window.T2p = (function(_, __, Backbone, core){
 	});
 
 	return T2p;
-})(window._, window.__, window.Backbone, window.core);
+})();

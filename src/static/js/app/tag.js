@@ -1,4 +1,6 @@
-window.Tag = (function($, _, Backbone, Rib, _t, core){
+/*global $ _ Backbone Rib _t __ core Tag Payment Vault Filter*/
+
+window.Tag = (function(){
 	"use strict";
 
 	var Tag = Backbone.Model.extend({
@@ -108,4 +110,4 @@ window.Tag = (function($, _, Backbone, Rib, _t, core){
 	});
 
 	return Tag;
-})(window.$, window._, window.Backbone, window.Rib, window._t, window.core);
+})();

@@ -20,3 +20,14 @@
 	<div class="icon edit" title="править"></div>
 	<div class="icon delete" title="удалить"></div>
 </script>
+
+
+<script type="text/html" class="template" data-bind="message-box">
+	<span class="message"><%! it.message %></span>
+	<button class="ok">ok</button>
+	<% if (it.cancel) { %><button class="cancel">отмена</button><% } %>
+</script>
+
+<script type="text/html" class="template" data-bind="messages.shure-want-delete">
+	Уверены что хотите удалить <%! it.name || 'объект' %>?
+</script>

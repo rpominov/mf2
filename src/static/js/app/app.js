@@ -1,4 +1,6 @@
-window.AppView = (function(Backbone, $, _, core, Tag, Payment, Vault, Filter){
+/*global $ _ Backbone Rib _t __ core Tag Payment Vault Filter*/
+
+window.AppView = (function(){
 	"use strict";
 	
 	var AppView = Backbone.View.extend({
@@ -24,6 +26,8 @@ window.AppView = (function(Backbone, $, _, core, Tag, Payment, Vault, Filter){
 					view.bind('need_dialog', appView.openDialog);
 				});
 				
+				Rib.U.events.bind('need_dialog', appView.openDialog);
+				
 			});
 		},
 		
@@ -43,6 +47,4 @@ window.AppView = (function(Backbone, $, _, core, Tag, Payment, Vault, Filter){
 	
 	return AppView;
 	
-})(window.Backbone, window.jQuery, window._, 
-   window.core,
-   window.Tag, window.Payment, window.Vault, window.Filter);
+})();

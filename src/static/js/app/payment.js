@@ -1,4 +1,6 @@
-window.Payment = (function($, _, __, Backbone, Rib, _t, core){
+/*global $ _ Backbone Rib _t __ core Tag Payment Vault Filter*/
+
+window.Payment = (function(){
 	"use strict";
 	
 	/*global Tag*/
@@ -57,6 +59,10 @@ window.Payment = (function($, _, __, Backbone, Rib, _t, core){
 		parse: function (resp, xhr) {
 			_(resp).map(Payment.prototype.parse);
 			return resp;
+		},
+		
+		getByVault: function(vault){
+			return this.filter(function(payment){return payment.get('vault') === vault;});
 		}
 	});
 	
@@ -134,7 +140,7 @@ window.Payment = (function($, _, __, Backbone, Rib, _t, core){
 		
 		create: function() {
 			if (core._coll.Vaults.length === 0) {
-				// todo
+				Rib.U.alert(_t('messages.no-vaults', null));
 				return;
 			}
 			
@@ -183,4 +189,4 @@ window.Payment = (function($, _, __, Backbone, Rib, _t, core){
 	});
 	
 	return Payment;
-})(window.jQuery, window._, window.__, window.Backbone, window.Rib, window._t, window.core);
+})();

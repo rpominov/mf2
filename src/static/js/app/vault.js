@@ -1,4 +1,6 @@
-window.Vault = (function($, _, Backbone, Rib, _t){
+/*global $ _ Backbone Rib _t __ core Tag Payment Vault Filter*/
+
+window.Vault = (function(){
 	"use strict";
 
 	/**
@@ -97,8 +99,16 @@ window.Vault = (function($, _, Backbone, Rib, _t){
 		
 		addClicked: function(){
 			this.collection.add({});
+		},
+		
+		beforeDelete: function(model){
+			if (core._coll.Payments.getByVault(model).length > 0) {
+				Rib.U.alert(_t('messages.cant-remove-using-vault', null));
+				return false;
+			}
+			return true;
 		}
 	});
 	
 	return Vault;
-})(window.jQuery, window._, window.Backbone, window.Rib, window._t);
+})();

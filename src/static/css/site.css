@@ -10,6 +10,15 @@
 	cursor: pointer;
 }
 
+.message-box {
+	text-align: right;
+}
+	.message-box .message {
+		display: block;
+		margin-bottom: 1em;
+		text-align: left;
+	}
+
 /* --- Icons */
 
 .icon {

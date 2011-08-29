@@ -1,10 +1,12 @@
-(function(win, $, Backbone, _){
+/*global $ _ Backbone Rib _t __ core Tag Payment Vault Filter*/
+
+(function(){
 	"use strict";
 	
 	// shortcut for Backbone.Collection
-	win.__ = function(models) { return new Backbone.Collection(models); };
+	window.__ = function(models) { return new Backbone.Collection(models); };
 	
-	win.core = {
+	window.core = {
 		
 		// Deferred Objects
 		def: {
@@ -71,4 +73,4 @@
 		}
 	};
 	
-})(window, window.jQuery, window.Backbone, window._);
+})();

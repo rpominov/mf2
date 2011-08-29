@@ -1,4 +1,6 @@
-window.Filter = (function($, _, Backbone, Rib, _t){
+/*global $ _ Backbone Rib _t __ core Tag Payment Vault Filter*/
+
+window.Filter = (function(){
 	"use strict";
 
 	/**
@@ -95,4 +97,4 @@ window.Filter = (function($, _, Backbone, Rib, _t){
 	});
 	
 	return Filter;
-})(window.jQuery, window._, window.Backbone, window.Rib, window._t);
+})();
