@@ -14,8 +14,6 @@ window.core = (function(){
 		 * Filters → Payments, T2ps ?
 		 */
 		
-		/*global core */
-		
 		_("Vaults Payments Tags T2ps Filters".split(" ")).each(function(type){
 			core._coll[type].reset(core._coll[type].parse(data[type]));
 		});

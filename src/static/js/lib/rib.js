@@ -13,9 +13,8 @@ window.Rib = (function(){
 	
 	Rib = {
 		Views: {}
-	},
+	};
 	
-	empty_template = function(){return '';};
 	
 	/**
 	 * Utils
@@ -75,37 +74,61 @@ window.Rib = (function(){
 		
 	}, Backbone.Events);
 	
+	
 	/**
-	 * Default view for model
+	 * Model
 	 */
-	Rib.Views.DefaultModel = Backbone.View.extend({
+	Rib.Model = Backbone.Model.extend({
+		
+		forTmpl: function() {
+			var data = this.toJSON();
+			data.cid = this.cid;
+			return data;
+		}
+		
+	});
+	
+	
+	/**
+	 * Collection
+	 */
+	Rib.Collection = Backbone.Collection.extend({
+		
+	});
+	
+	
+	/**
+	 * View
+	 */
+	Rib.View = Backbone.View.extend({
+		tmpl: function(){return '';}
+	});
+	
+	
+	/**
+	 * Default model view
+	 */
+	Rib.Views.DefaultModel = Rib.View.extend({
 		
 		tagName: "div",
-		tmpl: empty_template,
 		
 		initialize: function () {
 			_.bindAll(this, 'remove');
 			this.model.bind('destroy', this.remove);
 		},
 		
-		prepareDataForRender: function(data) {
-			return data;
-		},
-		
 		render: function() {
-			var data = this.model.toJSON();
-			data = this.prepareDataForRender(data);
-			$(this.el).html(this.tmpl(data));
+			$(this.el).html(this.tmpl(this.model.forTmpl()));
 			return this;
 		}
 	});
 	
+	
 	/**
 	 * Default view for collection
 	 */
-	Rib.Views.DefaultCollection = Backbone.View.extend({
+	Rib.Views.DefaultCollection = Rib.View.extend({
 		
-		tmpl: empty_template,
 		list_selector: null,
 		
 		initialize: function () {
@@ -123,9 +146,8 @@ window.Rib = (function(){
 		}),
 		
 		addOne: function(model) {
-			var data = model.toJSON();
-			data.cid = model.cid;
-			(this.list_selector ? this.$(this.list_selector) : $(this.el)).append(this.tmpl(data));
+			var el = this.list_selector ? this.$(this.list_selector) : $(this.el);
+			el.append(this.tmpl(model.forTmpl()));
 		},
 		
 		addAll: function() {
@@ -188,17 +210,12 @@ window.Rib = (function(){
 		},
 		
 		save: function() {
-			// 'save' is empty by default
-			
-			/* Here should be something like this:
-			 *
-			 * this.model.set({
+			/* this.model.set({
 			 *    'name': this.$('.name').val()
 			 * });
 			 *
 			 * this.model.save();
-			 *
-			 */ 
+			*/ 
 		},
 		
 		onSubmit: function() {
@@ -212,13 +229,9 @@ window.Rib = (function(){
 				this.model.destroy();
 			}
 			this.trigger('close');
-		},
-		
-		prepareDataForRender: function(data) {
-			data.cid = this.model.cid; // need cid for labels in form
-			return data;
 		}
 	});
+	
 	
 	/**
 	 * MessageBox view

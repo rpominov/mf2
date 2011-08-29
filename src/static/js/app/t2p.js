@@ -1,4 +1,4 @@
-/*global $ _ Backbone Rib _t __ core Tag Payment Vault Filter*/
+/*global $ _ Rib _t __ core Tag Payment Vault Filter*/
 
 window.T2p = (function(){
 	"use strict";
@@ -25,7 +25,7 @@ window.T2p = (function(){
 		obj.payment = core._coll.Payments.get(obj.payment);
 	}
 	
-	var T2p = Backbone.Model.extend({
+	var T2p = Rib.Model.extend({
 		
 		defaults: {
 			tag: null,
@@ -36,13 +36,13 @@ window.T2p = (function(){
 		},
 		
 		validate: function(attrs) {
-			if (!(attrs.payment instanceof Backbone.Model) || !(attrs.tag instanceof Backbone.Model)) {
-				return 'payment and tag attributes should both be an instances of Backbone.Model';
+			if (!(attrs.payment instanceof Rib.Model) || !(attrs.tag instanceof Rib.Model)) {
+				return 'payment and tag attributes should both be an instances of Rib.Model';
 			}
 		},
 		
 		toJSON: function() {
-			var result = Backbone.Model.prototype.toJSON.call(this);
+			var result = Rib.Model.prototype.toJSON.call(this);
 			
 			result.tag = result.tag.get('id');
 			result.payment = result.payment.get('id');
@@ -50,14 +50,14 @@ window.T2p = (function(){
 		},
 		
 		parse: function (resp, xhr) {
-			var result = Backbone.Model.prototype.parse(resp, xhr);
+			var result = Rib.Model.prototype.parse(resp, xhr);
 
 			id2model(result);
 			return result;
 		}
 	});
 	
-	T2p.Collection = Backbone.Collection.extend({
+	T2p.Collection = Rib.Collection.extend({
 		model: T2p,
 		url: '/api/t2p',
 		
@@ -109,7 +109,7 @@ window.T2p = (function(){
 		},
 		
 		parse: function (resp, xhr) {
-			var result = Backbone.Collection.prototype.parse(resp, xhr);
+			var result = Rib.Collection.prototype.parse(resp, xhr);
 
 			_(result).map(id2model);
 			return result;

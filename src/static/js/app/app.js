@@ -1,9 +1,9 @@
-/*global $ _ Backbone Rib _t __ core Tag Payment Vault Filter*/
+/*global $ _ Rib _t __ core Tag Payment Vault Filter*/
 
 window.AppView = (function(){
 	"use strict";
 	
-	var AppView = Backbone.View.extend({
+	var AppView = Rib.View.extend({
 		
 		events: {
 		},

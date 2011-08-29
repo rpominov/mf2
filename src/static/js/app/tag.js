@@ -1,9 +1,9 @@
-/*global $ _ Backbone Rib _t __ core Tag Payment Vault Filter*/
+/*global $ _ Rib _t __ core Tag Payment Vault Filter*/
 
 window.Tag = (function(){
 	"use strict";
 
-	var Tag = Backbone.Model.extend({
+	var Tag = Rib.Model.extend({
 		
 		defaults: {
 			name: ''
@@ -19,7 +19,7 @@ window.Tag = (function(){
 		}
 	});
 	
-	Tag.Collection = Backbone.Collection.extend({
+	Tag.Collection = Rib.Collection.extend({
 		model: Tag,
 		url: '/api/tag',
 		

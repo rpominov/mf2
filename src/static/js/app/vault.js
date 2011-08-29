@@ -1,4 +1,4 @@
-/*global $ _ Backbone Rib _t __ core Tag Payment Vault Filter*/
+/*global $ _ Rib _t __ core Tag Payment Vault Filter*/
 
 window.Vault = (function(){
 	"use strict";
@@ -6,7 +6,7 @@ window.Vault = (function(){
 	/**
 	 * Model
 	 */
-	var Vault = Backbone.Model.extend({
+	var Vault = Rib.Model.extend({
 		
 		defaults: {
 			name: ''
@@ -26,7 +26,7 @@ window.Vault = (function(){
 	/**
 	 * Collection
 	 */
-	Vault.Collection = Backbone.Collection.extend({
+	Vault.Collection = Rib.Collection.extend({
 		model: Vault,
 		url: '/api/vault',
 		

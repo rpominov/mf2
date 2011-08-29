@@ -1,4 +1,4 @@
-/*global $ _ Backbone Rib _t __ core Tag Payment Vault Filter*/
+/*global $ _ Rib _t __ core Tag Payment Vault Filter*/
 
 window.Filter = (function(){
 	"use strict";
@@ -6,7 +6,7 @@ window.Filter = (function(){
 	/**
 	 * Model
 	 */
-	var Filter = Backbone.Model.extend({
+	var Filter = Rib.Model.extend({
 		
 		defaults: {
 			name: ''
@@ -26,7 +26,7 @@ window.Filter = (function(){
 	/**
 	 * Collection
 	 */
-	Filter.Collection = Backbone.Collection.extend({
+	Filter.Collection = Rib.Collection.extend({
 		model: Filter,
 		url: '/api/filter',
 		

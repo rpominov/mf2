@@ -1,4 +1,4 @@
-/*global $ _ Backbone Rib _t __ core Tag Payment Vault Filter*/
+/*global $ _ Rib _t __ core Tag Payment Vault Filter*/
 
 window.Payment = (function(){
 	"use strict";
@@ -8,7 +8,7 @@ window.Payment = (function(){
 	/**
 	 * Model
 	 */	
-	var Payment = Backbone.Model.extend({
+	var Payment = Rib.Model.extend({
 		
 		defaults: {
            name: '',
@@ -26,7 +26,7 @@ window.Payment = (function(){
 		},
 		
 		toJSON: function() {
-			var result = Backbone.Model.prototype.toJSON.call(this);
+			var result = Rib.Model.prototype.toJSON.call(this);
 			
 			result.vault = result.vault.get('id');
 			
@@ -52,7 +52,7 @@ window.Payment = (function(){
 	/**
 	 * Collection
 	 */
-	Payment.Collection = Backbone.Collection.extend({
+	Payment.Collection = Rib.Collection.extend({
 		model: Payment,
 		url: '/api/payment',
 		
@@ -104,8 +104,8 @@ window.Payment = (function(){
 			}
 		},
 		
-		prepareDataForRender: function(data) {
-			data = Rib.Views.Form.prototype.prepareDataForRender.call(this, data);
+		forTmpl: function() {
+			var data = Rib.Model.prototype.forTmpl.call(this);
 			data.tags = core._coll.T2ps.getByPayment(this.model);
 			data.tags = __(data.tags).pluck('name').join(', ');
 			return data;
