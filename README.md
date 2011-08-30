@@ -1,4 +1,4 @@
-!Work in progress!
+Work in progress!
 
 **Finance managment system for home use**
 
