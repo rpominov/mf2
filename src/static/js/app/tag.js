@@ -92,7 +92,7 @@ window.Tag = (function(){
 		
 		onClickText: Rib.U.el2ModelProxy(function(model){
 			// todo
-			alert(1);
+			Rib.U.alert(1);
 		}),
 		
 		changeName: Rib.U.model2ElProxy(function(el, model) {

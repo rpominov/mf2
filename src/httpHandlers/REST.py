@@ -57,12 +57,20 @@ class Payment(db.Model):
 	def fromDict(self, data):
 		self.name     = data['name']
 		self.value    = float(data['value'])
-		self.value1   = float(data['value1'])
 		self.type     = int(data['type'])
 		self.time     = int(data['time'])
 		self.cr_time  = int(data['cr_time'])
 		self.vault    = int(data['vault'])
-		self.vault1   = int(data['vault1'])
+		
+		if data['value1'] == None:
+			self.value1 = None 
+		else:
+			self.value1 = int(data['value1'])
+		
+		if data['vault1'] == None:
+			self.vault1 = None 
+		else:
+			self.vault1 = int(data['vault1'])
 
 		
 class T2p(db.Model):
@@ -96,10 +104,10 @@ class Tag(db.Model):
 
 kind2model = {
 	'payment': Payment,
-	'tag': Tag,
-	'vault': Vault,
-	't2p': T2p,
-	'filter': Filter,
+	'tag':     Tag,
+	'vault':   Vault,
+	't2p':     T2p,
+	'filter':  Filter,
 }
 
 class RESTfulHandler(webapp.RequestHandler):

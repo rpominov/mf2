@@ -178,10 +178,12 @@ window.Rib = (function(){
 		initialize: function (args) {
 			Rib.Views.DefaultCollection.prototype.initialize.call(this);
 			
-			this.delegateEvents(_(this.events).extend({
+			this.events = _.extend({
 				'click .edit': 'onClickEdit',
 				'click .delete': 'onClickDelete'
-			}));
+			}, this.events);
+			
+			this.delegateEvents();
 		},
 		
 		edit: edit,
@@ -207,14 +209,16 @@ window.Rib = (function(){
 		
 		tagName: "form",
 		
-		events: {
-			'submit'       : 'onSubmit',
-			'click .cancel': 'onClickCancel'
-		},
-		
 		initialize: function () {
 			Rib.Views.DefaultModel.prototype.initialize.call(this);
 			this.bind('close', this.remove);
+			
+			this.events = _.extend({
+				'submit'       : 'onSubmit',
+				'click .cancel': 'onClickCancel'
+			}, this.events);
+			
+			this.delegateEvents();
 		},
 		
 		save: function() {

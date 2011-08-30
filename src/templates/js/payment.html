@@ -2,7 +2,10 @@
 	<li id="cid_<%= it.cid %>" class="payment">
 		<%#def['tooltip.standart-settings']%>
 		<span class="text">
-			<span class="value"><%! it.value %></span>
+			<span class="right-text">
+				<span class="minus-sign"></span>
+				<span class="value"><%! it.value %></span>
+			</span>
 			<span class="name"><%! it.name %></span>
 			<ul class="tag-list">
 				<!--li class="filter">фильтр</li>
@@ -21,39 +24,44 @@
 		
 		{% comment %} todo: replace 'name' with 'description' {% endcomment %}
 		<tr>
-			<td><label for="name_<%! it.cid %>">Описание:</label></td>
-			<td><input type="text" id="name_<%! it.cid %>" class="name" value="<%! it.name %>"/></td>
+			<td><label for="name_<%= it.cid %>">Описание:</label></td>
+			<td><input type="text" id="name_<%= it.cid %>" class="name" value="<%! it.name %>"/></td>
 		</tr>
 		
 		<tr>
-			<td><label for="value_<%! it.cid %>">Сумма:</label></td>
+			<td><label for="value_<%= it.cid %>">Сумма:</label></td>
 			<td class="value-wrap">
 				<label><input type="radio" name="type" class="type" value="0" <% if (it.type === 0) { %>checked<% } %>> -</label>
 				<label><input type="radio" name="type" class="type" value="1" <% if (it.type === 1) { %>checked<% } %>> +</label>
-				<label><input type="radio" name="type" class="type" value="2" <% if (it.type === 2) { %>checked<% } %>> ⇋</label>
-				<input type="text" id="value_<%! it.cid %>" class="value" value="<%! it.value %>"/>
+				<label><input type="radio" name="type" class="type transfer-radio" value="2" <% if (it.type === 2) { %>checked<% } %>> ⇋</label>
+				<input type="text" id="value_<%= it.cid %>" class="value" value="<%! it.value %>"/><span class="currency"></span>
+				<span class="on-transfer value1-wrap">(<span class="value1"><%! it.value1 || 0 %></span><span class="currency1"></span>)</span>
 			</td>
 		</tr>
 		
 		<tr>
-			<td><label for="time_<%! it.cid %>">Время:</label></td>
-			<td><input type="text" id="time_<%! it.cid %>" class="time" value="<%! it.time %>"/></td>
+			<td><label for="time_<%= it.cid %>">Время:</label></td>
+			<td><input type="text" id="time_<%= it.cid %>" class="time" value="<%! it.time %>"/></td>
 		</tr>
 		
 		<tr>
-			<td><label for="vault_<%! it.cid %>">Хранилище:</label></td>
-			<td><input type="text" id="vault_<%! it.cid %>" class="vault" value="<%! it.vault %>"/></td>
-			<!--td>
-				<select id="vault_<%! it.cid %>" class="vault">
-					<option>Наличные</option>
-					<option>Втб 24</option>
+			<td><label for="vault_<%= it.cid %>">Хранилище:</label></td>
+			<!--td><input type="text" id="vault_<%= it.cid %>" class="vault" value="<%! it.vault %>"/></td-->
+			<td>
+				<select id="vault_<%= it.cid %>" class="vault">
+					<% _(it.vaults).each(function(v){ %>
+					<option value="<%= v.id %>" <%= v.id == it.vault ? 'selected' : '' %>><%! v.name %></option>
+					<% }); %>
 				</select>
-				&nbsp;→&nbsp;
-				<select id="vault1_<%! it.cid %>" class="vault1">
-					<option>Наличные</option>
-					<option selected>Втб 24</option>
-				</select>
-			</td-->
+				<span class="on-transfer">
+					&nbsp;→&nbsp;
+					<select id="vault1_<%= it.cid %>" class="vault1">
+						<% _(it.vaults).each(function(v){ %>
+						<option value="<%= v.id %>" <%= v.id == it.vault1 ? 'selected' : '' %>><%! v.name %></option>
+						<% }); %>
+					</select>
+				</span>
+			</td>
 		</tr>
 		
 		<tr>

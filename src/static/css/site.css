@@ -463,10 +463,13 @@ html, body {
 			border-bottom: 1px solid #eee;
 			margin-right: 24px;
 		}
-			li.payment .value {
+			li.payment .right-text {
 				float: right;
 				text-align: right;
 			}
+				li.payment .minus-sign {
+					margin-right: .5em; 
+				}
 			li.payment .name {
 				margin-right: .5em;
 			}
@@ -527,4 +530,10 @@ form.payment .value {
 
 .value-wrap label {
 	margin-right: 10px;
+}
+
+.value1-wrap {
+	margin-left: .5em;
+	color: #555;
+	font-style: italic; 
 }
