@@ -51,7 +51,19 @@ window.core = (function(){
 			
 			this.def.colletions_creating.resolve(this._coll);
 			
-			process_initial(initial_data);
+			if (initial_data) {
+				process_initial(initial_data);
+			} else {
+				$.ajax({
+					url: '/api/all',
+					success: process_initial,
+					error: function(){
+						throw "initial data loading failed";
+					},
+					contentType: 'application/json',
+					dataType: 'json'
+				});
+			}
 			
 			this._views.App = new AppView({el: $('body')[0]});
 		}
