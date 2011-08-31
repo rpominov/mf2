@@ -159,6 +159,7 @@ html, body {
 	font-family: arial, sans-serif;
 	font-size: 13px;
 	line-height: 1.4;
+	/*background: #fbfbfb;*/
 }
 
 .padding {
@@ -205,6 +206,7 @@ html, body {
 				width: 100px;
 				height: 100px;
 				margin: 0 auto;
+				display: block;
 			}
 	
 	.center {
@@ -218,8 +220,9 @@ html, body {
 			margin-top: 40px; /* depends on .top(height) */
 			margin-bottom: 30px; /* depends on .footer(height) */
 			border: 1px solid #EBEBEB;
-			min-height: 75%;
+			/* min-height: 75%; */
 			position: relative;
+			/*background: #fff;*/
 		}
 			.footer {
 				height: 20px;
@@ -489,7 +492,7 @@ html, body {
 				li.payment li {
 					display: inline;
 					margin-right: 3px;
-					background: no-repeat 2px 2px #e7e7e7;
+					background: no-repeat 2px 2px #efefef;
 					padding: 0 3px 1px 15px;
 					/*padding-left: 12px;*/
 
