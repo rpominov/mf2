@@ -17,10 +17,10 @@ window.AppView = (function(){
 			
 			core.coll(function(cc){
 				appView.childViews = {
-					vaults: new Vault.Views.List({collection: cc.Vaults, el: appView.$('#vaults-block')}),
-					filters: new Filter.Views.List({collection: cc.Filters, el: appView.$('#filters-block')}),
-					payments: new Payment.Views.List({collection: cc.Payments, el: appView.$('#payments-list')}),
-					tags: new Tag.Views.List({collection: cc.Tags, el: appView.$('#tags-block')})
+					vaults:   new Vault   .Views.List({collection: cc.Vaults,   el: appView.$('#vaults-block')}),
+					filters:  new Filter  .Views.List({collection: cc.Filters,  el: appView.$('#filters-block')}),
+					payments: new Payment .Views.List({collection: cc.Payments, el: appView.$('#payments-list')}),
+					tags:     new Tag     .Views.List({collection: cc.Tags,     el: appView.$('#tags-block')})
 				};
 			});
 		},

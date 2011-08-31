@@ -3,6 +3,9 @@
 window.Tag = (function(){
 	"use strict";
 
+	/**
+	 * Model
+	 */
 	var Tag = Rib.Model.extend({
 		
 		defaults: {
@@ -19,6 +22,10 @@ window.Tag = (function(){
 		}
 	});
 	
+	
+	/**
+	 * Collection
+	 */
 	Tag.Collection = Rib.Collection.extend({
 		model: Tag,
 		url: '/api/tag',
@@ -52,6 +59,10 @@ window.Tag = (function(){
 	
 	Tag.Views = {};
 	
+	
+	/**
+	 * Form view
+	 */
 	Tag.Views.Form = Rib.Views.Form.extend({
 		className: "tag",
 		tmpl: _t('tag.form'),
@@ -65,6 +76,10 @@ window.Tag = (function(){
 		}
 	});
 	
+	
+	/**
+	 * List view
+	 */
 	Tag.Views.List = Rib.Views.EditableCollection.extend({
 		
 		tmpl: _t('tag.big-list'),

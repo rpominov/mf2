@@ -21,3 +21,17 @@
 <script type="text/html" class="template" data-bind="messages.cant-remove-using-vault">
 	Хранилище используется. Нельзя удалить.
 </script>
+
+<script type="text/html" class="template" data-bind="vault.small-list">
+	<li class="cid_<%= it.cid %> vault">
+		<%! it.name %>
+	</li>
+</script>
+
+<script type="text/html" class="template" data-bind="vault1.small-list">
+	<% if(it !== null) { %>
+	<li class="cid_<%= it.cid %> vault1 on-transfer">
+		<%! it.name %>
+	</li>
+	<% } %>
+</script>

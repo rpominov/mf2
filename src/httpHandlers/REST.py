@@ -1,106 +1,9 @@
 from google.appengine.ext import webapp
-from google.appengine.ext import db
 from google.appengine.ext.webapp.util import run_wsgi_app
 
 from django.utils import simplejson
 
-	
-class Vault(db.Model):
-	name = db.StringProperty()
-	
-	def toDict(self):
-		return {
-			'id':	self.key().id(),
-			'name':  self.name
-		}
-		
-	def fromDict(self, data):
-		self.name = data['name']
-
-		
-class Filter(db.Model):
-	name = db.StringProperty()
-	
-	def toDict(self):
-		return {
-			'id':	self.key().id(),
-			'name':  self.name
-		}
-	
-	def fromDict(self, data):
-		self.name = data['name']
-
-		
-class Payment(db.Model):
-	name     = db.StringProperty()
-	value    = db.FloatProperty()
-	value1   = db.FloatProperty()
-	type     = db.IntegerProperty() # 0: 1, 1: +, 2: t
-	time     = db.IntegerProperty() # timestamp
-	cr_time  = db.IntegerProperty()
-	vault  = db.IntegerProperty() # id
-	vault1 = db.IntegerProperty()
-	
-	def toDict(self):
-		return {
-			'id':	    self.key().id(),
-			'name':     self.name,
-			'value':    self.value,
-			'value1':   self.value1,
-			'type':     self.type,
-			'time':     self.time,
-			'cr_time':  self.cr_time,
-			'vault':    self.vault,
-			'vault1':   self.vault1,
-		}
-		
-	def fromDict(self, data):
-		self.name     = data['name']
-		self.value    = float(data['value'])
-		self.type     = int(data['type'])
-		self.time     = int(data['time'])
-		self.cr_time  = int(data['cr_time'])
-		self.vault    = int(data['vault'])
-		
-		if data['value1'] == None:
-			self.value1 = None 
-		else:
-			self.value1 = int(data['value1'])
-		
-		if data['vault1'] == None:
-			self.vault1 = None 
-		else:
-			self.vault1 = int(data['vault1'])
-
-		
-class T2p(db.Model):
-	tag = db.IntegerProperty()
-	payment = db.IntegerProperty()
-	
-	def toDict(self):
-		return {
-			'id': self.key().id(),
-			'tag': self.tag,
-			'payment': self.payment
-		}
-		
-	def fromDict(self, data):
-		self.tag     = data['tag']
-		self.payment = data['payment']
-
-		
-class Tag(db.Model):
-	name = db.StringProperty()
-	
-	def toDict(self):
-		return {
-			'id':	self.key().id(),
-			'name':  self.name
-		}
-		
-	def fromDict(self, data):
-		self.name = data['name']	
-
+from httpHandlers.models import Payment, Tag, Filter, T2p, Vault, User
 
 kind2model = {
 	'payment': Payment,
@@ -124,7 +27,7 @@ class RESTfulHandler(webapp.RequestHandler):
 				return
 		
 			result = []
-			query = kind2model[kind].all()
+			query = kind2model[kind].all().ancestor(User.current())
 			for item in query:
 				result.append(item.toDict())
 			result = simplejson.dumps(result)
@@ -137,7 +40,7 @@ class RESTfulHandler(webapp.RequestHandler):
 			return
 		
 		data = simplejson.loads(self.request.body)
-		model = kind2model[kind]()
+		model = kind2model[kind](parent=User.current())
 		model.fromDict(data)
 		model.put()
 		data = simplejson.dumps(model.toDict())
@@ -150,7 +53,7 @@ class RESTfulHandler(webapp.RequestHandler):
 			return
 		
 		data = simplejson.loads(self.request.body)
-		model = kind2model[kind].get_by_id(int(id))
+		model = kind2model[kind].get_by_id(int(id), parent=User.current())
 		model.fromDict(data)
 		model.put()
 		data = simplejson.dumps(model.toDict())
@@ -162,7 +65,7 @@ class RESTfulHandler(webapp.RequestHandler):
 			self.error(500)
 			return
 		
-		model = kind2model[kind].get_by_id(int(id))
+		model = kind2model[kind].get_by_id(int(id), parent=User.current())
 		model.delete()
 		
 	def getAllData(self):
@@ -175,7 +78,7 @@ class RESTfulHandler(webapp.RequestHandler):
 		}
 		
 		for i in result.keys():
-			query = result[i].all().fetch(10000)
+			query = result[i].all().ancestor(User.current())
 			result[i] = []
 			for entry in query:
 				result[i].append(entry.toDict())

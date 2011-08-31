@@ -70,6 +70,17 @@ window.Rib = (function(){
 		
 		modalDialog: function(view) {
 			this.trigger('need_dialog', view);
+		},
+		
+		bindAll: function(obj, triggerable, events) {
+			
+			_(events).chain().values().uniq().each(function(method){
+				obj[method] = _(obj[method]).bind(obj);
+			});
+			
+			_(events).each(function(method, event){
+				triggerable.bind(event, obj[method]);
+			});
 		}
 		
 	}, Backbone.Events);

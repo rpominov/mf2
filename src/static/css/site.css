@@ -450,6 +450,8 @@ html, body {
 }
 	li.payment {}
 	li.payment:first-child {}
+		li.payment.plus .on-transfer,
+		li.payment.minus .on-transfer { display: none }
 		li.payment .settings { 
 			float: right;
 			visibility: hidden;
@@ -469,6 +471,10 @@ html, body {
 			}
 				li.payment .minus-sign {
 					margin-right: .5em; 
+				}
+				li.payment .time {
+					margin-left: .5em;
+					color: #555555; 
 				}
 			li.payment .name {
 				margin-right: .5em;
@@ -494,7 +500,8 @@ html, body {
 				}
 				li.payment li.filter  { background-image: url('/static/images/icons/filter_s.png')      }
 				li.payment li.tag     { background-image: url('/static/images/icons/tag_s.png')         }
-				li.payment li.vault   { background-image: url('/static/images/icons/credit_card_s.png') }
+				li.payment li.vault,
+				li.payment li.vault1  { background-image: url('/static/images/icons/credit_card_s.png') }
 		
 .total {
 	text-align: right;
