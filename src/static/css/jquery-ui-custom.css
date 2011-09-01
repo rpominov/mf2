@@ -4,9 +4,7 @@
 .ui-corner-all, .ui-corner-bottom, .ui-corner-left, .ui-corner-bl { -moz-border-radius-bottomleft: 2px; -webkit-border-bottom-left-radius: 2px; -khtml-border-bottom-left-radius: 2px; border-bottom-left-radius: 2px; }
 .ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br { -moz-border-radius-bottomright: 2px; -webkit-border-bottom-right-radius: 2px; -khtml-border-bottom-right-radius: 2px; border-bottom-right-radius: 2px; }
 
-.ui-state-hover,
-.ui-state-focus,
-.ui-state-default {
+.ui-state-hover, .ui-state-focus, .ui-state-default {
 	background-image: none !important;
 }
 
@@ -21,7 +19,6 @@
 	border-radius: 0;
 	border: 1px solid #ccc;
 	padding: 0 2px 1px 2px;
-	/*height: 23px;*/
 }
 	.tagit li {
 		display: inline-block !important;
