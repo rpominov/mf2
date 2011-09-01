@@ -17,6 +17,16 @@
 			'change .vault1': 'onVault1Change'
 		},
 		
+		validate: function() {
+			// todo
+			
+			// date format
+			// no transfers between same vaults
+			// value type: float
+			
+			return true;
+		},
+		
 		save: function() {
 			var type = this.$('.type:checked').val(),
 				t = (type == 2); // type: transfer 
@@ -37,8 +47,7 @@
 			var tags = this.$('.tags').val().split(',');
 				tags = _(tags).chain()
 					.map(function(tag) { return _(tag).trim(); })
-					.filter(function(tag) { return tag.length > 0; })
-					.uniq().value();
+					.compact().uniq().value();
 			
 			var set_tags = _(function(){
 				core._coll.T2ps.setForPayment(this.model, tags);
@@ -73,8 +82,35 @@
 		render: function(){
 			Rib.Views.Form.prototype.render.call(this);
 			
-			var $time = this.$('.time');
-			$time.datepicker();
+			this.$('.time').datepicker({ autoSize: true });
+			
+			this.$('.tags').tagit({
+			    availableTags: core._coll.Tags.pluck('name')
+			});
+			
+			//this.$('.tags-td').attr('valign', 'top');
+			
+			/*this.$('.tags').autocomplete({
+			    source: core._coll.Tags.pluck('name')
+			});*/
+			
+			/*var el = this.$('.tags').data('autocomplete').element,
+				orig_val = _(el.val).bind(el);
+				
+			el.val = function(value) {
+				if (typeof value === 'undefined') {
+					value = orig_val();
+					value = value.split(',');
+					value = _(value).chain().last().trim().value();
+					return value;
+				} else {
+					var _value = orig_val().split(',');
+					_value = _(_value).first(_value.length - 1);
+					_value.push(value);
+					_value = _(_value).uniq().join(', ');
+					return orig_val(_value);
+				}
+			};*/
 			
 			this.toggleTransferControl({init: true});
 			this.recalcValue1();

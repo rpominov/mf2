@@ -232,6 +232,10 @@ window.Rib = (function(){
 			this.delegateEvents();
 		},
 		
+		validate: function() {
+			return true;
+		},
+		
 		save: function() {
 			/* this.model.set({
 			 *    'name': this.$('.name').val()
@@ -242,8 +246,10 @@ window.Rib = (function(){
 		},
 		
 		onSubmit: function() {
-			this.save();
-			this.trigger('close');
+			if (this.validate()) {
+				this.save();
+				this.trigger('close');
+			}
 			return false; // prevent submit
 		},
 		

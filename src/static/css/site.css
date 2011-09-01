@@ -20,8 +20,16 @@
 	}
 
 /* --- jQuery UI */
-.ui-datepicker {
+.ui-widget {
 	font-size: 11px;
+}
+
+.tagit {
+	-moz-border-radius: 0;
+	-webkit-border-radius: 0;
+	-khtml-border-radius: 0;
+	border-radius: 0;
+	border: 1px solid #ccc;
 }
 
 
@@ -553,3 +561,18 @@ form.payment .value {
 	color: #555;
 	font-style: italic; 
 }
+
+/* something strange going on with table contains tag-it.js stuff
+ * so this hacks is necessary
+ */
+.tags-tr td {
+	height: 33px;
+	padding-top: 3px;
+	position: relative;
+}
+	.tags-input-wrap {
+		position: absolute;
+		width: 100%;
+		top: 0;
+		left: 0;
+	}

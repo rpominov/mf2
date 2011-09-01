@@ -119,7 +119,8 @@ window.Tag = (function(){
 			
 			payments = payments.length;
 			
-			$(el)[ payments === 0 ? 'hide' : 'show' ]();
+			//$(el)[ payments === 0 ? 'hide' : 'show' ]();
+			
 			$('.payments', el).text(payments);
 		})
 	});
