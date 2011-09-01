@@ -39,15 +39,21 @@ window.Payment = (function(){
 		},
 		
 		parse: function (resp, xhr) {
-			resp.vault = core._coll.Vaults.get(resp.vault);
+			var undef; // undefined
 			
-			if (resp.vault1) {
+			if (resp.vault !== undef) {
+				resp.vault = core._coll.Vaults.get(resp.vault);
+			}
+			
+			if (resp.vault1) { // undefined or null
 				resp.vault1 = core._coll.Vaults.get(resp.vault1);
 			}			
 			
-			resp.time = new Date(resp.time * 1000);
+			if (resp.time !== undef) {
+				resp.time = new Date(resp.time * 1000);
+			}
 			
-			if (!_.isUndefined(resp.cr_time)) {
+			if (resp.cr_time !== undef) {
 				resp.cr_time = new Date(resp.cr_time * 1000);
 			}
 			

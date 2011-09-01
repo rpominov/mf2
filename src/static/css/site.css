@@ -19,6 +19,12 @@
 		text-align: left;
 	}
 
+/* --- jQuery UI */
+.ui-datepicker {
+	font-size: 11px;
+}
+
+
 /* --- Icons */
 
 .icon {

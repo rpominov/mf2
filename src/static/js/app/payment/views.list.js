@@ -75,7 +75,7 @@
 		}),
 		
 		changeTime: Rib.U.model2ElProxy(function(el, model) {
-			$('.time', el).text(model.get('time').toDateString());
+			$('.time', el).text($.datepicker.formatDate('mm/dd/yy', model.get('time')));
 		}),
 		
 		changeVaults: Rib.U.model2ElProxy(function(el, model) {

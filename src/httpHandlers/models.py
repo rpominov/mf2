@@ -1,5 +1,8 @@
 from google.appengine.ext import db
 
+#
+# User
+#
 class User(db.Model):
 	name = db.StringProperty()
 	
@@ -10,7 +13,79 @@ class User(db.Model):
 			user = User(name="Smith")
 			user.put()
 		return user
+
+
+#
+# Settings
+#
+class Settings(db.Model):
+	show_tags = db.BooleanProperty()
 	
+	@staticmethod
+	def current():
+		settings = Settings.all().ancestor(User.current()).get()
+		if settings == None:
+			settings = Settings(
+				parent    = User.current(),
+				show_tags = True
+			)
+			settings.put()
+		return settings
+	
+	def toDict(self):
+		return {
+			'id':	     self.key().id(),
+			'show_tags': self.show_tags
+		}
+		
+	def fromDict(self, data):
+		self.show_tags = data['show_tags']
+			
+			
+#
+# Currency
+#
+class Currency(db.Model):
+	name       = db.StringProperty()
+	short_name = db.StringProperty()
+	
+	def toDict(self):
+		return {
+			'id':	      self.key().id(),
+			'name':       self.name,
+			'short_name': self.short_name,
+		}
+		
+	def fromDict(self, data):
+		self.name       = data['name']
+		self.short_name = data['short_name']
+
+
+#
+# C2c
+#
+class C2c(db.Model):
+	currency1 = db.IntegerProperty() # key
+	currency2 = db.IntegerProperty() # key
+	divide    = db.FloatProperty()
+	
+	def toDict(self):
+		return {
+			'id':	     self.key().id(),
+			'currency1': self.currency1,
+			'currency2': self.currency2,
+			'divide':    self.divide,
+		}
+		
+	def fromDict(self, data):
+		self.currency1 = int(data['currency1'])
+		self.currency2 = int(data['currency2'])
+		self.divide    = float(data['divide'])
+					
+					
+#
+# Vault
+#
 class Vault(db.Model):
 	name = db.StringProperty()
 	
@@ -22,8 +97,12 @@ class Vault(db.Model):
 		
 	def fromDict(self, data):
 		self.name = data['name']
-
 		
+		
+
+#
+# Filter
+#		
 class Filter(db.Model):
 	name = db.StringProperty()
 	
@@ -36,7 +115,9 @@ class Filter(db.Model):
 	def fromDict(self, data):
 		self.name = data['name']
 
-		
+#
+# Payment
+#
 class Payment(db.Model):
 	name     = db.StringProperty()
 	value    = db.FloatProperty()
@@ -44,7 +125,7 @@ class Payment(db.Model):
 	type     = db.IntegerProperty() # 0: -, 1: +, 2: t
 	time     = db.IntegerProperty() # timestamp
 	cr_time  = db.IntegerProperty()
-	vault    = db.IntegerProperty() # id
+	vault    = db.IntegerProperty() # key
 	vault1   = db.IntegerProperty()
 	
 	def toDict(self):
@@ -78,7 +159,9 @@ class Payment(db.Model):
 		else:
 			self.vault1 = int(data['vault1'])
 
-		
+#
+# T2p
+#		
 class T2p(db.Model):
 	tag = db.IntegerProperty()
 	payment = db.IntegerProperty()
@@ -95,6 +178,9 @@ class T2p(db.Model):
 		self.payment = data['payment']
 
 		
+#
+# Tag
+#
 class Tag(db.Model):
 	name = db.StringProperty()
 	

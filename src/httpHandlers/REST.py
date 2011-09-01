@@ -3,14 +3,17 @@ from google.appengine.ext.webapp.util import run_wsgi_app
 
 from django.utils import simplejson
 
-from httpHandlers.models import Payment, Tag, Filter, T2p, Vault, User
+from httpHandlers.models import Payment, Tag, Filter, T2p, Vault, Currency, C2c, Settings, User
 
 kind2model = {
-	'payment': Payment,
-	'tag':     Tag,
-	'vault':   Vault,
-	't2p':     T2p,
-	'filter':  Filter,
+	'payment':  Payment,
+	'tag':      Tag,
+	'vault':    Vault,
+	't2p':      T2p,
+	'filter':   Filter,
+	'currency': Currency,
+	'c2c':      C2c,
+	'settings': Settings,
 }
 
 class RESTfulHandler(webapp.RequestHandler):
@@ -18,8 +21,15 @@ class RESTfulHandler(webapp.RequestHandler):
 	def get(self, kind, id):
 		
 		if kind == 'all':
+			
 			result = self.getAllData()
 			self.response.out.write(result)
+			
+		elif kind == 'settings':
+			
+			result = simplejson.dumps(Settings.current().toDict())
+			self.response.out.write(result)
+			
 		else:
 			
 			if not kind in kind2model:
@@ -39,6 +49,10 @@ class RESTfulHandler(webapp.RequestHandler):
 			self.error(500)
 			return
 		
+		if kind == 'settings':
+			self.get('settings', id)
+			return
+		
 		data = simplejson.loads(self.request.body)
 		model = kind2model[kind](parent=User.current())
 		model.fromDict(data)
@@ -53,7 +67,12 @@ class RESTfulHandler(webapp.RequestHandler):
 			return
 		
 		data = simplejson.loads(self.request.body)
-		model = kind2model[kind].get_by_id(int(id), parent=User.current())
+		
+		if kind == 'settings':
+			model = Settings.current()
+		else:
+			model = kind2model[kind].get_by_id(int(id), parent=User.current())
+			
 		model.fromDict(data)
 		model.put()
 		data = simplejson.dumps(model.toDict())
@@ -63,6 +82,9 @@ class RESTfulHandler(webapp.RequestHandler):
 
 		if not kind in kind2model:
 			self.error(500)
+			return
+		
+		if kind == 'settings':
 			return
 		
 		model = kind2model[kind].get_by_id(int(id), parent=User.current())
@@ -86,7 +108,7 @@ class RESTfulHandler(webapp.RequestHandler):
 		return simplejson.dumps(result)
 
 			
-application = webapp.WSGIApplication([('/api/(all|payment|tag|vault|t2p|filter)/?([0-9]*)', RESTfulHandler)], debug=True)
+application = webapp.WSGIApplication([('/api/(all|payment|tag|vault|t2p|filter|currency|c2c|settings)/?([0-9]*)', RESTfulHandler)], debug=True)
 
 def main():
 	run_wsgi_app(application)

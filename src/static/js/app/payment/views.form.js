@@ -21,12 +21,15 @@
 			var type = this.$('.type:checked').val(),
 				t = (type == 2); // type: transfer 
 			
-			this.model.set(Payment.prototype.parse({
+			this.model.set({
 				'name':   this.$('.name').val(),
 				'value':  this.$('.value').val(),
 				'value1': t ? this.$('.value').val() : null, // todo calc!
 				'type':   type,
-				'time':   this.$('.time').val(),
+				'time':   $.datepicker.parseDate('mm/dd/yy', this.$('.time').val())
+			});
+			
+			this.model.set(Payment.prototype.parse({
 				'vault':  this.$('.vault').val(),
 				'vault1': t ? this.$('.vault1').val() : null
 			}));
@@ -62,11 +65,16 @@
 				};
 			});
 			
+			data.time = $.datepicker.formatDate('mm/dd/yy', this.model.get('time'));
+			
 			return data;
 		},
 		
 		render: function(){
 			Rib.Views.Form.prototype.render.call(this);
+			
+			var $time = this.$('.time');
+			$time.datepicker();
 			
 			this.toggleTransferControl({init: true});
 			this.recalcValue1();

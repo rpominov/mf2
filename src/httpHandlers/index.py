@@ -23,11 +23,10 @@ class MainPage(webapp.RequestHandler):
         initial_data = initial_data.getAllData()
         
         self.response.out.write(
-            template.render(
-                p(t_dir + 'index.html'), 
-                {'js_templates': js_templates,
-				 'initial_data': initial_data}
-            )
+            template.render(p(t_dir + 'index.html'), {
+				'js_templates': js_templates,
+				'initial_data': initial_data
+			})
         )
 
 application = webapp.WSGIApplication([('/', MainPage)], debug=True)

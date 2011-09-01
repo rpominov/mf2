@@ -10,8 +10,8 @@ handlers:
 - url: /static
   static_dir: static
 
-- url: /api/(all|payment|tag|vault|t2p|filter)/?([0-9]*)
+- url: /api/(all|payment|tag|vault|t2p|filter|currency|c2c|settings)/?([0-9]*)
   script: httpHandlers/REST.py
 
-- url: /.*
+- url: /
   script: httpHandlers/index.py
