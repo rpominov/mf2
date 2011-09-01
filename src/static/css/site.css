@@ -19,20 +19,6 @@
 		text-align: left;
 	}
 
-/* --- jQuery UI */
-.ui-widget {
-	font-size: 11px;
-}
-
-.tagit {
-	-moz-border-radius: 0;
-	-webkit-border-radius: 0;
-	-khtml-border-radius: 0;
-	border-radius: 0;
-	border: 1px solid #ccc;
-}
-
-
 /* --- Icons */
 
 .icon {
@@ -139,20 +125,27 @@ form {
 	.form-table {
 		width: 100%;
 	}
-		.form-table td {
-			height: 30px;
-			text-align: left;
+		.form-table tr {
+			height: 36px;
 		}
-		.form-table td:first-child { /* label */
-			width: 100px;
-			text-align: right;
-			padding-right: 5px;
-		}
+			.form-table td {
+				height: 30px;
+				text-align: left;
+			}
+			.form-table td:first-child { /* label */
+				width: 100px;
+				text-align: right;
+				padding-right: 5px;
+			}
 		
 input[type="text"],
 textarea {
 	padding: 4px;
 	border: 1px solid #ccc;
+	margin: 2px;
+}
+input[type="text"] {
+	height: 16px;
 }
 input[type="text"]:focus,
 textarea:focus {
@@ -163,6 +156,18 @@ input[type="radio"] {
 	vertical-align: middle;
 	margin: 0 0 3px 0;
 }
+
+input[type="button"], input[type="submit"], input[type="reset"], button {
+	text-align: center;
+	padding: 2px 6px;
+	margin: 2px;
+}
+
+select {
+	margin: 2px;
+	padding: 2px;
+}
+
 
 /* ----------------- Layout */
 
@@ -540,10 +545,6 @@ html, body {
 
 /* --- Payment */
 
-form.payment .tags {
-	width: 385px;
-}
-
 form.payment .name {
 	width: 385px;
 }
@@ -562,17 +563,12 @@ form.payment .value {
 	font-style: italic; 
 }
 
-/* something strange going on with table contains tag-it.js stuff
- * so this hacks is necessary
- */
-.tags-tr td {
-	height: 33px;
-	padding-top: 3px;
-	position: relative;
+.type-radios {
+	display: inline-block;
+	margin-right: 3px;
+	margin-left: 2px;
 }
-	.tags-input-wrap {
-		position: absolute;
-		width: 100%;
-		top: 0;
-		left: 0;
-	}
+
+.value {
+	text-align: right;
+}

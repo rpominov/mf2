@@ -34,8 +34,13 @@ window.AppView = (function(){
 		},
 		
 		openDialog: function(view) {
+			
 			view.bind('close', this.hideDialog);
 			this.showDialog(view.render().el);
+			
+			/*$(view.render().el).dialog({
+				modal: true
+			});*/
 		}
 	});
 	

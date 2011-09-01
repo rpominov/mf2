@@ -33,8 +33,8 @@
 			
 			this.model.set({
 				'name':   this.$('.name').val(),
-				'value':  this.$('.value').val(),
-				'value1': t ? this.$('.value').val() : null, // todo calc!
+				'value':  +this.$('.value').val(),
+				'value1': t ? +this.$('.value').val() : null, // todo calc!
 				'type':   type,
 				'time':   $.datepicker.parseDate('mm/dd/yy', this.$('.time').val())
 			});
@@ -74,6 +74,10 @@
 				};
 			});
 			
+			if (data.value === 0) {
+				data.value = '';
+			}
+			
 			data.time = $.datepicker.formatDate('mm/dd/yy', this.model.get('time'));
 			
 			return data;
@@ -85,32 +89,13 @@
 			this.$('.time').datepicker({ autoSize: true });
 			
 			this.$('.tags').tagit({
-			    availableTags: core._coll.Tags.pluck('name')
+			    availableTags: core._coll.Tags.pluck('name'),
+			    allowSpaces: true,
+			    singleField: true,
+			    animate: false
 			});
 			
-			//this.$('.tags-td').attr('valign', 'top');
-			
-			/*this.$('.tags').autocomplete({
-			    source: core._coll.Tags.pluck('name')
-			});*/
-			
-			/*var el = this.$('.tags').data('autocomplete').element,
-				orig_val = _(el.val).bind(el);
-				
-			el.val = function(value) {
-				if (typeof value === 'undefined') {
-					value = orig_val();
-					value = value.split(',');
-					value = _(value).chain().last().trim().value();
-					return value;
-				} else {
-					var _value = orig_val().split(',');
-					_value = _(_value).first(_value.length - 1);
-					_value.push(value);
-					_value = _(_value).uniq().join(', ');
-					return orig_val(_value);
-				}
-			};*/
+			_.defer(_(function(){ this.$('.type-radios').buttonset(); }).bind(this));
 			
 			this.toggleTransferControl({init: true});
 			this.recalcValue1();
