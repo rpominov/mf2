@@ -28,33 +28,14 @@
 				'change:vault1': 'changeVaults'
 			});
 			
-			_.bindAll(this, 'create', 'changeTags', 'changeTagName');
-			
-			$('#add-payment').click(this.create);
+			_.bindAll(this, 'changeTags', 'changeTagName');
 			
 			core._coll.T2ps.bind('payment', this.changeTags);
 			core._coll.Tags.bind('change:name', this.changeTagName);
 		},
 		
-		create: function() {
-			if (core._coll.Vaults.length === 0) {
-				Rib.U.alert(_t('messages.no-vaults', null));
-				return;
-			}
-			
-			this.collection.add({
-				time: new Date(),
-		        cr_time: new Date(),
-		        vault: core._coll.Vaults.getDefault()
-           });
-		},
-		
 		addOne: function(model) {
 			Rib.Views.EditableCollection.prototype.addOne.call(this, model);
-			
-			if(model.isNew()){
-				this.edit(model);
-			}
 			
 			this.changeTags(model);
 			this.changeType(model);

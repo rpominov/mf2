@@ -179,6 +179,8 @@ html, body {
 		.sidebar li.current { background: #e0e0e0; }
 			.sidebar li .text {
 				cursor: pointer;
+				text-decoration: none;
+				color: black;
 			}
 			.sidebar li .settings {
 				margin-right: 3px;

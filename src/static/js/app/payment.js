@@ -76,6 +76,19 @@ window.Payment = (function(){
 		
 		getByVault: function(vault){
 			return this.filter(function(payment){return payment.get('vault') === vault;});
+		},
+		
+		create: function() {
+			if (core._coll.Vaults.length === 0) {
+				Rib.U.alert(_t('messages.no-vaults', null));
+				return;
+			}
+			
+			this.add({
+				time: new Date(),
+		        cr_time: new Date(),
+		        vault: core._coll.Vaults.getDefault()
+           });
 		}
 	});
 	

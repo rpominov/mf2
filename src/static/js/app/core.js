@@ -1,4 +1,4 @@
-/*global $ _ Backbone Rib _t __ core Tag Payment Vault Filter*/
+/*global $ _ Backbone Rib _t __ core Tag Payment Vault Filter Router*/
 
 // shortcut for Backbone.Collection
 window.__ = function(models) { return new Backbone.Collection(models); };
@@ -39,7 +39,10 @@ window.core = (function(){
 		// Views
 		_views: {},
 		
-		init: function(initial_data, Vault, Filter, Payment, Tag, T2p, AppView){
+		// Router
+		_router: null,
+		
+		init: function(initial_data){
 			
 			var cc = this._coll = {
 				Vaults   : new Vault.Collection(),
@@ -63,9 +66,7 @@ window.core = (function(){
 					contentType: 'application/json',
 					dataType: 'json'
 				});
-			}
-			
-			this._views.App = new AppView({el: $('body')[0]});
+			}			
 		}
 	};
 	
@@ -83,6 +84,10 @@ window.core = (function(){
 			}
 		}, 5000);*/
 		
+		core._views.App = new AppView({el: $('body')[0]});
+				
+		core._router = new Router();
+		Backbone.history.start();
 	});
 	
 	return core;

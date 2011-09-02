@@ -87,16 +87,18 @@ window.Tag = (function(){
 		list_selector: '.list',
 		FormView: Tag.Views.Form,
 		
+		editOnNew: false,
+		
 		events: {
-			'click .text': 'onClickText'
 		},
 		
 		initialize: function (args) {
 			Rib.Views.EditableCollection.prototype.initialize.call(this);
 			
-			_.bindAll(this, 'changeName', 'changePayments');
+			_.bindAll(this, 'changeName', 'changePayments', 'chageId');
 			
 			this.collection.bind('change:name', this.changeName);
+			this.collection.bind('change:id', this.chageId);
 			core._coll.T2ps.bind('tag', this.changePayments);
 		},
 		
@@ -105,13 +107,12 @@ window.Tag = (function(){
 			this.changePayments(model);
 		},
 		
-		onClickText: Rib.U.el2ModelProxy(function(model){
-			// todo
-			Rib.U.alert(1);
-		}),
-		
 		changeName: Rib.U.model2ElProxy(function(el, model) {
 			$('.name', el).text(model.get('name'));
+		}),
+		
+		chageId: Rib.U.model2ElProxy(function(el, model) {
+			$('.text', el).attr('href', '#!by/tag/' + model.get('id'));
 		}),
 		
 		changePayments: Rib.U.model2ElProxy(function(el, model) {

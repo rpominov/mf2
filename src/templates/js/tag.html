@@ -1,6 +1,6 @@
 <script type="text/html" class="template" data-bind="tag.big-list">
 	<li id="cid_<%= it.cid %>">
-		<span class="text"><span class="name"><%! it.name %></span> (<span class="payments"></span>)</span>
+		<a href="#!by/tag/<%= it.id || it.cid %>" class="text"><span class="name"><%! it.name %></span> (<span class="payments"></span>)</a>
 		<%#def['tooltip.standart-settings']%>
 	</li>
 </script>

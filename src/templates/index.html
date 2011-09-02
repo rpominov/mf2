@@ -8,9 +8,7 @@
 		
 		<link href="/static/css/reset.css" type="text/css" rel="stylesheet" />
 		<link href="/static/css/smoothness/jquery-ui-1.8.16.custom.css" type="text/css" rel="stylesheet" />
-		<!--
-		<link class="jsbin" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/smoothness/jquery-ui.css" type="text/css" rel="stylesheet" />
-		-->
+		<!-- <link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/smoothness/jquery-ui.css" type="text/css" rel="stylesheet" /> -->
 		<link href="/static/css/jquery.tagit.css" type="text/css" rel="stylesheet" />
 		<link href="/static/css/jquery-ui-custom.css" type="text/css" rel="stylesheet" />
 		<link href="/static/css/common.css" type="text/css" rel="stylesheet" />
@@ -18,7 +16,8 @@
 		<link href="/static/css/payment.css" type="text/css" rel="stylesheet" />
 		<link href="/static/css/settings.css" type="text/css" rel="stylesheet" />
 		
-		<!-- libraries -->
+		<!-- libraries 
+			-->
 		
 		{% comment %} todo: use local versions of libs in https mode {% endcomment %}
 		
@@ -32,12 +31,12 @@
 		
 		<!-- CDN -->
 		<!--
-		<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/json2/20110223/json2.js"></script>
-		<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.1.7/underscore-min.js"></script>
-		<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.string/1.1.4/underscore.string.min.js"></script>
-		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/json2/20110223/json2.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.1.7/underscore-min.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.string/1.1.4/underscore.string.min.js"></script>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
-		<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/backbone.js/0.5.3/backbone-min.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/0.5.3/backbone-min.js"></script>
 		-->
 		
 		<!-- local only -->
@@ -47,10 +46,14 @@
 		<script type="text/javascript" src="/static/js/lib/templatesCollector.js"></script>
 		<script type="text/javascript" src="/static/js/lib/rib.js"></script>
 		
-		<!-- some tricks -->
+		<!-- some tricks 
+			-->
+		
 		<script type="text/javascript" src="/static/js/tricks.js"></script>
 		
-		<!-- application -->
+		<!-- application 
+			-->
+		
 		<script type="text/javascript" src="/static/js/app/core.js"></script>
 		<script type="text/javascript" src="/static/js/app/payment.js"></script>
 		<script type="text/javascript" src="/static/js/app/payment/views.form.js"></script>
@@ -64,12 +67,8 @@
 		<script type="text/javascript" src="/static/js/app/router.js"></script>
 		
 		<script type="text/javascript">
-			var initial_data = {{initial_data}};
-		</script>
-		
-		<script type="text/javascript">
 			$(function(){
-				core.init(initial_data, Vault, Filter, Payment, Tag, T2p, AppView);
+				core.init( {{initial_data}} );
 			});
 		</script>
 	</head>
@@ -83,7 +82,7 @@
 			<div class="settings-wrap">
 				<div id="sys-settings" class="icon settings" title="Настройки"></div>
 			</div>
-			<div id="add-payment" class="icon add" title="Добавить платеж"></div>
+			<a href="#!new/payment" id="add-payment" class="icon add" title="Добавить платеж"></a>
 			<div class="user-info">
 				<span class="balance plus">2356 $</span> 
 				<span class="user-name">pozadi</span> 
@@ -113,14 +112,14 @@
 			
 			
 			<div class="sidebar"><div class="padding">
-				<a href="/" class="logo"></a>
+				<a href="#!" class="logo"></a>
 				
 				<div class="block filters" id="filters-block">
 					<h3>
 						<span class="text">
 							Фильтры<div class="expand"></div>
 						</span>
-						<div class="icon add" title="Добавить"></div>
+						<a href="#!new/filter" class="icon add" title="Добавить"></a>
 					</h3>
 					<ul class="list">
 					</ul>
@@ -131,7 +130,7 @@
 						<span class="text">
 							Хранилища<div class="expand"></div>
 						</span>
-						<div class="icon add" title="Добавить"></div>
+						<a href="#!new/vault" class="icon add" title="Добавить"></a>
 					</h3>
 					<ul class="list">
 					</ul>
@@ -147,6 +146,8 @@
 					</ul>
 				</div>
 			</div></div><!-- / .sidebar -->
+			
+			
 			
 			<div class="center"><div class="padding">
 				
@@ -164,7 +165,10 @@
 				
 			</div></div><!-- / .center -->
 			
+			
+			
 			<div class="clear"></div>
+			
 			
 		</div><!-- / .middle -->
 		

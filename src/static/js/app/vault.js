@@ -69,37 +69,24 @@ window.Vault = (function(){
 		FormView: Vault.Views.Form,
 		
 		events: {
-			'click .text': 'onClickText',
-			'click .add': 'addClicked'
 		},
 		
 		initialize: function (args) {
 			Rib.Views.EditableCollection.prototype.initialize.call(this);
 			
-			_.bindAll(this, 'changeName');
+			_.bindAll(this, 'changeName', 'chageId');
 			
 			this.collection.bind('change:name', this.changeName);
+			this.collection.bind('change:id', this.chageId);
 		},
-		
-		addOne: function(model) {
-			Rib.Views.EditableCollection.prototype.addOne.call(this, model);
-			
-			if(model.isNew()){
-				this.edit(model);
-			}
-		},
-		
-		onClickText: Rib.U.el2ModelProxy(function(model){
-			// todo
-		}),
 		
 		changeName: Rib.U.model2ElProxy(function(el, model) {
 			$('.name', el).text(model.get('name'));
 		}),
 		
-		addClicked: function(){
-			this.collection.add({});
-		},
+		chageId: Rib.U.model2ElProxy(function(el, model) {
+			$('.text', el).attr('href', '#!by/vault/' + model.get('id'));
+		}),
 		
 		beforeDelete: function(model){
 			if (core._coll.Payments.getByVault(model).length > 0) {

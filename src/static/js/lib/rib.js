@@ -157,7 +157,7 @@ window.Rib = (function(){
 			$(el).remove();
 		}),
 		
-		addOne: function(model) {
+		addOne: function(model) {			
 			var el = this.list_selector ? this.$(this.list_selector) : $(this.el),
 				data = this.forTmpl(model);
 			el.append(this.tmpl(data));
@@ -179,12 +179,16 @@ window.Rib = (function(){
 	 * View for editable collection
 	 */
 	var edit = function(model){
-		Rib.U.modalDialog(new this.FormView({model: model}));
+		var formView = new this.FormView({model: model});
+		Rib.U.modalDialog(formView);
+		return formView;
 	};
 	
 	Rib.Views.EditableCollection = Rib.Views.DefaultCollection.extend({
 		
 		FormView: Rib.Views.DefaultModel,
+		
+		editOnNew: true,
 		
 		initialize: function (args) {
 			Rib.Views.DefaultCollection.prototype.initialize.call(this);
@@ -199,6 +203,19 @@ window.Rib = (function(){
 		
 		edit: edit,
 		onClickEdit: Rib.U.el2ModelProxy(edit),
+		
+		addOne: function(model) {
+			Rib.Views.DefaultCollection.prototype.addOne.call(this, model);
+			
+			if(this.editOnNew && model.isNew()){
+				// console.log('add fire', model);
+				
+				var formView = this.edit(model);
+				formView.bind('close', function(){
+					core._router.back();
+				});
+			}
+		},
 		
 		beforeDelete: function(){ return true; },
 		
@@ -226,7 +243,7 @@ window.Rib = (function(){
 			
 			this.events = _.extend({
 				'submit'       : 'onSubmit',
-				'click .cancel': 'onClickCancel'
+				'click .cancel': 'cancel'
 			}, this.events);
 			
 			this.delegateEvents();
@@ -253,7 +270,7 @@ window.Rib = (function(){
 			return false; // prevent submit
 		},
 		
-		onClickCancel: function() {
+		cancel: function() {
 			if(this.model.isNew()) {
 				this.model.destroy();
 			}
@@ -274,14 +291,14 @@ window.Rib = (function(){
 		
 		events: {
 			'click .ok'    : 'onClickOk',
-			'click .cancel': 'onClickCancel'
+			'click .cancel': 'cancel'
 		},
 		
 		initialize: function () {
 			this.def = $.Deferred();
 		},
 		
-		onClickCancel: function() {
+		cancel: function() {
 			this.def.reject();
 			this.trigger('close');
 		},

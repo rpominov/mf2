@@ -1,6 +1,6 @@
 <script type="text/html" class="template" data-bind="vault.in-list">
 	<li id="cid_<%= it.cid %>">
-		<span class="text"><span class="name"><%! it.name %></span></span>
+		<a href="#!by/vault/<%= it.id || it.cid %>" class="text"><span class="name"><%! it.name %></span></a>
 		<%#def['tooltip.standart-settings']%>
 	</li>
 </script>
