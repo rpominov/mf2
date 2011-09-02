@@ -1,0 +1,169 @@
+/* ----------------- Common */
+
+.clear { clear: both }
+
+.plus { color: green }
+.minus { color: red }
+
+.clickable {
+	border-bottom: 1px dashed;
+	cursor: pointer;
+}
+
+.message-box {
+	text-align: right;
+}
+	.message-box .message {
+		display: block;
+		margin-bottom: 1em;
+		text-align: left;
+	}
+
+/* --- Icons */
+
+.icon {
+	width: 16px;
+	height: 16px;
+	background-position: center center;
+	background-repeat: no-repeat;
+	display: inline-block;
+	cursor: pointer;
+}
+
+.icon.edit     { background-image: url('/static/images/icons/edit.png')     }
+.icon.delete   { background-image: url('/static/images/icons/delete.png')   }
+.icon.settings { background-image: url('/static/images/icons/settings.png') }
+.icon.add      { background-image: url('/static/images/icons/plus.png')     }
+.icon.home     { background-image: url('/static/images/icons/home.png')     }
+
+/* --- Tooltip */
+
+.tooltip-contener {
+	position: relative;
+	cursor: default;	
+}
+.tooltip-contener.on-click {
+	cursor: pointer;
+}
+	.tooltip {
+		display: block;
+		position: relative;
+		top: 0;
+		right: -16px; /* depends on .icon(width) */
+		cursor: default;
+	}
+	.tooltip,
+	.tooltip-contener.on-click:hover > .tooltip { visibility: hidden }
+	.tooltip-contener:hover > .tooltip,
+	.tooltip-contener.on-click.hover > .tooltip,
+	.tooltip-contener.on-click > .tooltip:hover { visibility: visible }
+		.tooltip .content {
+			position: absolute;
+			border: 1px solid #b2b2b2;
+			background: white;
+			padding: 5px;
+			left: 6px;
+			top: -3px;
+			z-index: 5;
+		}
+		.tooltip .arrow {
+			width: 7px;
+			height: 13px;
+			top: 2px;
+			left: 0;
+			position: absolute;
+			z-index: 10;
+			background: url('/static/images/tooltip-left.png');
+		}
+	
+.settings .tooltip .content {
+	white-space: nowrap;
+	height: 16px; /* no idea why it 20 by default*/
+	top: -5px;
+}
+	.settings .tooltip .icon:first-child {
+		margin-right: 5px;
+	}
+
+/* --- Dialog */
+
+#modal-dialog {
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background-color: rgba(221, 221, 221, 0.6);
+	display: none;
+	z-index: 100;
+}
+	#modal-dialog > * {
+		width: 500px;
+		padding: 10px;
+		margin: 100px auto 0 auto;
+		background-color: white;
+		border: 1px solid #ccc;
+		padding: 10px;
+		-moz-box-shadow: 0 1px 5px #ccc;
+		-ms-filter: "progid: DXImageTransform.Microsoft.Shadow(Strength=3, Direction=180, Color='#ccc')";
+		-o-box-shadow: 0 1px 5px #ccc;
+		-webkit-box-shadow: 0 1px 5px #ccc;
+	}
+
+/* --- Forms */
+
+form {
+	text-align: right; /* for submit elements */
+}
+	h2 {
+		font-weight: bold;
+		font-size: 17px;
+		border-bottom: 1px solid #eee;
+		text-align: left;
+		margin-bottom: 10px;
+	}
+	.form-table {
+		width: 100%;
+	}
+		.form-table tr {
+			height: 36px;
+		}
+			.form-table td {
+				height: 30px;
+				text-align: left;
+			}
+			.form-table td:first-child { /* label */
+				width: 100px;
+				text-align: right;
+				padding-right: 5px;
+			}
+		
+input[type="text"],
+textarea {
+	padding: 4px;
+	border: 1px solid #ccc;
+	margin: 2px;
+}
+input[type="text"] {
+	height: 16px;
+}
+input[type="text"]:focus,
+textarea:focus {
+	background-color: #FFFFE0;
+}
+
+input[type="radio"] {
+	vertical-align: middle;
+	margin: 0 0 3px 0;
+}
+
+input[type="button"], input[type="submit"], input[type="reset"], button {
+	text-align: center;
+	padding: 2px 6px;
+	margin: 2px;
+}
+
+select {
+	margin: 2px;
+	padding: 2px;
+}

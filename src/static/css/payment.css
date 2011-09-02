@@ -1,0 +1,104 @@
+/* ----------------- Payments List */
+
+#payments-list {
+}
+	li.payment {}
+	li.payment:first-child {}
+		li.payment.plus .on-transfer,
+		li.payment.minus .on-transfer { display: none }
+		li.payment .settings { 
+			float: right;
+			visibility: hidden;
+			margin-top: 8px;
+		}
+		li.payment:hover .settings { visibility: visible }
+		li.payment .text {
+			display: block;
+			padding: 8px 0 2px 0;
+			line-height: 16px;
+			border-bottom: 1px solid #eee;
+			margin-right: 24px;
+		}
+			li.payment .right-text {
+				float: right;
+				text-align: right;
+			}
+				li.payment .minus-sign {
+					margin-right: .5em; 
+				}
+				li.payment .time {
+					margin-left: .5em;
+					color: #555555; 
+				}
+			li.payment .name {
+				margin-right: .5em;
+			}
+			li.payment .tag-list {
+				display: inline-block;
+				font-size: 11px;
+				color: #555;
+				position: relative;
+				bottom: 1px;
+			}
+				li.payment li {
+					display: inline;
+					margin-right: 3px;
+					background: no-repeat 2px 2px #efefef;
+					padding: 0 3px 1px 15px;
+					/*padding-left: 12px;*/
+
+					-webkit-border-radius: 2px;
+					-moz-border-radius: 2px;
+					border-radius: 2px;
+					text-shadow: 1px 1px 0 rgba(255,255,255,0.5);
+				}
+				li.payment li.filter  { background-image: url('/static/images/icons/filter_s.png')      }
+				li.payment li.tag     { background-image: url('/static/images/icons/tag_s.png')         }
+				li.payment li.vault,
+				li.payment li.vault1  { background-image: url('/static/images/icons/credit_card_s.png') }
+		
+.total {
+	text-align: right;
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	height: 35px;
+}
+	.total > .padding {
+		margin: 0 30px 0 15px;
+		padding: 5px 0;
+	}
+		.total .title {
+			float: left;
+		}
+
+/* ----------------- Payment Form */
+
+form.payment .name {
+	width: 385px;
+}
+
+form.payment .value {
+	width: 50px;
+}
+
+.value-wrap label {
+	margin-right: 10px;
+}
+
+.value1-wrap {
+	margin-left: .5em;
+	color: #555;
+	font-style: italic; 
+}
+
+.type-radios {
+	display: inline-block;
+	margin-right: 3px;
+	margin-left: 2px;
+}
+
+.value {
+	text-align: right;
+}
