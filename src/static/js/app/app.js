@@ -31,6 +31,7 @@ window.AppView = (function(){
 		
 		hideDialog: function() {
 			this.$("#modal-dialog").hide();
+			this.dialogView = null;
 		},
 		
 		openDialog: function(view) {
@@ -39,16 +40,11 @@ window.AppView = (function(){
 			
 			view.bind('close', this.hideDialog);
 			this.showDialog(view.render().el);
-			
-			/*$(view.render().el).dialog({
-				modal: true
-			});*/
 		},
 		
 		closeDialog: function() {
 			if (this.dialogView) {
 				this.dialogView.cancel();
-				this.dialogView = null;
 			}
 		}
 	});

@@ -6,62 +6,48 @@ window.Router = (function(){
 	var Router = Backbone.Router.extend({
 	
 		routes: {
-			"":              "correct",
 			"!":             "index",
 			"!by/:what/:id": "by",
 			"!new/:what":    "create",
 			"!settings":     "settings"
 		},
 		
+		backUrl: '!',
+		
 		by: function(what, id) {
-			/*var tag = core._coll.Tags.get(id) || core._coll.Tags.getByCid(id);
-			
-			if (tag) {
-				alert(tag.get('name'));
-			} else {
-				Rib.U.alert(_t('messages.tag-not-found', null));
-			}*/
-			
-			console.log('go to by/' + what + '/' + id);
-			
-			core._views.App.closeDialog();
+			core._views.App.closeDialog();			
+			this.backUrl = '!by/' + what + '/' + id;
 		},
 		
 		create: function(what) {
 			
-			console.log((+new Date()) + ' go to new/' + what);
-			
 			switch (what) {
 				case 'filter':
-					core._coll.Filters.add({});
+					core._coll.Filters.newEntry();
 					break;
 				case 'vault':
-					core._coll.Vaults.add({});
+					core._coll.Vaults.newEntry();
 					break;
 				case 'payment':
-					core._coll.Payments.create();
+					core._coll.Payments.newEntry();
 					break;
 				default:
-					this.clear('ggg');
+					this.back();
+					break;
 			}
 		},
 		
 		settings: function() {
-			console.log((+new Date()) + ' go to settings');
+			// todo
 		},
 		
 		index: function() {
-			console.log((+new Date()) + ' go to index');
-			
 			core._views.App.closeDialog();
-		},
-		
-		correct: function() {
-			this.navigate('#!');
+			this.backUrl = '!';
 		},
 		
 		back: function() {
-			window.history.back();
+			this.navigate(this.backUrl);
 		}
 	
 	});

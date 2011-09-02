@@ -1,4 +1,4 @@
-/*global $ _ Backbone Rib _t __ core Tag Payment Vault Filter Router*/
+/*global $ _ Backbone Rib _t __ core Tag Payment Vault Filter T2p AppView Router*/
 
 // shortcut for Backbone.Collection
 window.__ = function(models) { return new Backbone.Collection(models); };
@@ -26,12 +26,14 @@ window.core = (function(){
 		// Deferred Objects
 		def: {
 			colletions_creating: $.Deferred(),
-			data_loading: $.Deferred()
+			data_loading: $.Deferred(),
+			router_ready: $.Deferred()
 		},
 		
 		// Deferred helpers
 		coll: function(c){ this.def.colletions_creating.done(c); },
 		data: function(c){ this.def.data_loading.done(c); },
+		router: function(c){ this.def.router_ready.done(c); },
 		
 		// Collections
 		_coll: {},
@@ -74,7 +76,7 @@ window.core = (function(){
 		
 		// set lazy removing not used tags
 		/* causes memory leak 
-		 * dangerous thing in any way 
+		 * dangerous thing any way
 		window.setInterval(function(){
 			var not_used = Tags.filter(function(tag){
 				return !tag.isNew() && T2ps.getByTag(tag).length === 0; 
@@ -87,6 +89,7 @@ window.core = (function(){
 		core._views.App = new AppView({el: $('body')[0]});
 				
 		core._router = new Router();
+		core.def.router_ready.resolve(core._router);
 		Backbone.history.start();
 	});
 	

@@ -95,11 +95,16 @@ window.Tag = (function(){
 		initialize: function (args) {
 			Rib.Views.EditableCollection.prototype.initialize.call(this);
 			
-			_.bindAll(this, 'changeName', 'changePayments', 'chageId');
+			_.bindAll(this, 'changeName', 'changePayments', 'chageId', 'changeCurrent');
 			
 			this.collection.bind('change:name', this.changeName);
 			this.collection.bind('change:id', this.chageId);
 			core._coll.T2ps.bind('tag', this.changePayments);
+			
+			core.router(_(function(router){
+				router.bind('route:by', this.changeCurrent);
+				router.bind('route:index', this.changeCurrent);
+			}).bind(this));
 		},
 		
 		addOne: function(model) {
@@ -123,7 +128,19 @@ window.Tag = (function(){
 			//$(el)[ payments === 0 ? 'hide' : 'show' ]();
 			
 			$('.payments', el).text(payments);
-		})
+		}),
+		
+		changeCurrent: function(what, id) {
+			
+			this.$('.current').removeClass('current');
+			
+			if (what === 'tag') {
+				var model = this.collection.get(id) || this.collection.getByCid(id);
+				if (model) {
+					this.$('#cid_' + model.cid).addClass('current');
+				}
+			}
+		}
 	});
 
 	return Tag;

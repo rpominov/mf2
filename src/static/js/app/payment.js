@@ -78,7 +78,7 @@ window.Payment = (function(){
 			return this.filter(function(payment){return payment.get('vault') === vault;});
 		},
 		
-		create: function() {
+		newEntry: function() {
 			if (core._coll.Vaults.length === 0) {
 				Rib.U.alert(_t('messages.no-vaults', null));
 				return;
