@@ -125,11 +125,20 @@
 			$('.minus-sign', el).text( type === 0 ? '-' : '' );
 		}),
 		
+		setStyle: function(text) {
+			var style_el = $('#filter-style')[0];
+			
+			if (typeof style_el.styleSheet !== 'undefined' && typeof style_el.styleSheet.cssText !== 'undefined') { // ie
+				style_el.styleSheet.cssText = text;
+			} else {
+				$(style_el).html(text);
+			}
+		},
+		
 		showBy: function(what, id) {
 			
 			var showAll = _(function() {
-				//this.$('.payment').show();
-				$('#filter-style').text('');
+				this.setStyle('');
 			}).bind(this);
 			
 			var options = {
@@ -141,9 +150,7 @@
 			if (what in options) {
 				var model = core._coll[options[what]].get(id) || core._coll[options[what]].getByCid(id);
 				if (model) {
-					/*this.$('.payment').hide();
-					this.$('.payment.' + what + '_' + model.cid).show();*/
-					$('#filter-style').text('li.payment{display:none} li.payment.' + what + '_' + model.cid + '{display:list-item}');
+					this.setStyle('li.payment{display:none} li.payment.' + what + '_' + model.cid + '{display:list-item}');
 				} else {
 					showAll();
 				}
