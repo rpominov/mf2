@@ -55,6 +55,10 @@ html, body {
 				height: 100px;
 				margin: 0 auto;
 				display: block;
+				color: #555;
+				font-size: 16px;
+				text-align: right;
+				text-decoration: none;
 			}
 	
 	.center {

@@ -6,10 +6,11 @@ window.Router = (function(){
 	var Router = Backbone.Router.extend({
 	
 		routes: {
-			"!":             "index",
-			"!by/:what/:id": "by",
-			"!new/:what":    "create",
-			"!settings":     "settings"
+			"!":                "index",
+			"!by/:what/:id":    "by",
+			"!new/:what":       "create",
+			"!settings":        "settings",
+			"!settings/:where": "settings_go"
 		},
 		
 		backUrl: '!',
@@ -23,13 +24,13 @@ window.Router = (function(){
 			
 			switch (what) {
 				case 'filter':
-					core._coll.Filters.newEntry();
+					core._coll.Filters.newEntity();
 					break;
 				case 'vault':
-					core._coll.Vaults.newEntry();
+					core._coll.Vaults.newEntity();
 					break;
 				case 'payment':
-					core._coll.Payments.newEntry();
+					core._coll.Payments.newEntity();
 					break;
 				default:
 					this.back();
@@ -37,9 +38,8 @@ window.Router = (function(){
 			}
 		},
 		
-		settings: function() {
-			// todo
-		},
+		settings: function() {},
+		settings_go: function() {},
 		
 		index: function() {
 			core._views.App.closeDialog();

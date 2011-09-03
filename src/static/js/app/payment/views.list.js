@@ -128,7 +128,8 @@
 		showBy: function(what, id) {
 			
 			var showAll = _(function() {
-				this.$('.payment').show();
+				//this.$('.payment').show();
+				$('#filter-style').text('');
 			}).bind(this);
 			
 			var options = {
@@ -140,8 +141,9 @@
 			if (what in options) {
 				var model = core._coll[options[what]].get(id) || core._coll[options[what]].getByCid(id);
 				if (model) {
-					this.$('.payment').hide();
-					this.$('.payment.' + what + '_' + model.cid).show();
+					/*this.$('.payment').hide();
+					this.$('.payment.' + what + '_' + model.cid).show();*/
+					$('#filter-style').text('li.payment{display:none} li.payment.' + what + '_' + model.cid + '{display:list-item}');
 				} else {
 					showAll();
 				}

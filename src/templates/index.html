@@ -71,6 +71,8 @@
 				core.init( {{initial_data}} );
 			});
 		</script>
+		
+		<style id="filter-style"></style>
 	</head>
 	<body>
 		
@@ -94,16 +96,22 @@
 			
 			<div id="settings"><div class="panel"><div class="padding">
 				<h2>Настройки</h2>
-				<form>
+				<form class="settings-form">
 					<ul class="menu">
-						<li class="views current">Вид</li>
-						<li class="curencies">Валюты</li>
+						<li class="view current">Вид</li>
+						<li class="currencies">Валюты</li>
 						<li class="import">Импорт / экспорт</li>
 					</ul>
 					<div class="content">
-						<div class="views"> ... </div>
-						<div class="curencies"> ... </div>
-						<div class="import"> ... </div>
+						<div class="view current"> 
+							вид 
+						</div>
+						<div class="currencies"> 
+							валюты 
+						</div>
+						<div class="import"> 
+							импорт / экспорт
+						</div>
 					</div>
 					<div class="clear delimiter"></div>
 					<input type="submit" value="Сохранить" /> <span class="clickable cancel">отмена</span>
@@ -112,7 +120,7 @@
 			
 			
 			<div class="sidebar"><div class="padding">
-				<a href="#!" class="logo"></a>
+				<a href="#!" class="logo">β</a>
 				
 				<div class="block filters" id="filters-block">
 					<h3>

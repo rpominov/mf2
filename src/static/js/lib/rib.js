@@ -98,7 +98,7 @@ window.Rib = (function(){
 	 * Collection
 	 */
 	Rib.Collection = Backbone.Collection.extend({
-		newEntry: function() {
+		newEntity: function() {
 			this.add({});
 		}
 	});

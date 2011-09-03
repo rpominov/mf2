@@ -71,6 +71,10 @@
 				#settings .content > div {
 					padding: 10px;
 					text-align: left;
+					display: none;
+				}
+				#settings .content > div.current {
+					display: block;
 				}
 			.delimiter {
 				height: 15px;
