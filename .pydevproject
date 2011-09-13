@@ -21,6 +21,7 @@
 <path>${GOOGLE_APP_ENGINE}/lib/protorpc</path>
 <path>${GOOGLE_APP_ENGINE}/lib/simplejson</path>
 <path>${GOOGLE_APP_ENGINE}/lib/webob</path>
+<path>${GOOGLE_APP_ENGINE}/lib/whoosh</path>
 <path>${GOOGLE_APP_ENGINE}/lib/yaml/lib</path>
 </pydev_pathproperty>
 </pydev_project>

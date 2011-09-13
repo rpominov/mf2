@@ -7,17 +7,17 @@ window.Router = (function(){
 	
 		routes: {
 			"!":                "index",
-			"!by/:what/:id":    "by",
-			"!new/:what":       "create",
-			"!settings":        "settings",
-			"!settings/:where": "settings_go"
+			"!/by/:what/:id":    "by",
+			"!/new/:what":       "create",
+			"!/settings":        "settings",
+			"!/settings/:where": "settings_go"
 		},
 		
 		backUrl: '!',
 		
 		by: function(what, id) {
 			core._views.App.closeDialog();			
-			this.backUrl = '!by/' + what + '/' + id;
+			this.backUrl = '!/by/' + what + '/' + id;
 		},
 		
 		create: function(what) {

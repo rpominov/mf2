@@ -47,7 +47,7 @@ window.Settings = (function(){
 			$(this.el).show();
 			this.$('.panel').show('blind', {}, 200);
 			
-			core._router.navigate('#!settings');
+			core._router.navigate('#!/settings');
 			
 			this.visible = true;
 		},
@@ -89,7 +89,7 @@ window.Settings = (function(){
 			this.$('.current').removeClass('current');
 			this.$('.' + where).addClass('current');
 			
-			core._router.navigate('#!settings/' + where);
+			core._router.navigate('#!/settings/' + where);
 		},
 		
 		saveSettings: function() {
