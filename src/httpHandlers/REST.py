@@ -90,7 +90,8 @@ class RESTfulHandler(webapp.RequestHandler):
 		model = kind2model[kind].get_by_id(int(id), parent=User.current())
 		model.delete()
 		
-	def getAllData(self):
+	@staticmethod	
+	def getAllData():
 		result = {
 			'Vaults': Vault,
 			'Filters': Filter,

@@ -28,7 +28,7 @@
 		},
 		
 		save: function() {
-			var type = this.$('.type:checked').val(),
+			var type = this.$('.type').val(),
 				t = (type == 2); // type: transfer 
 			
 			this.model.set({
@@ -95,8 +95,6 @@
 			    animate: false
 			});
 			
-			_.defer(_(function(){ this.$('.type-radios').buttonset(); }).bind(this));
-			
 			this.toggleTransferControl({init: true});
 			this.recalcValue1();
 			this.onVaultChange();
@@ -106,7 +104,7 @@
 		},
 		
 		toggleTransferControl: function(opt) {
-			if (this.$('.transfer-radio:checked').length) {
+			if (this.$('.type').val() === '2') {
 				this.$('.on-transfer').fadeIn();
 			} else {
 				this.$('.on-transfer')[opt.init ? 'hide' : 'fadeOut']();

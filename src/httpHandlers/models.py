@@ -1,16 +1,22 @@
 from google.appengine.ext import db
+from google.appengine.api import users
 
 #
 # User
 #
 class User(db.Model):
-	name = db.StringProperty()
+	gae_user = db.UserProperty()
 	
 	@staticmethod
 	def current():
-		user = User.all().filter("name =", "Smith").get()
+		gae_user = users.get_current_user()
+		
+		if not gae_user:
+			return None
+		
+		user = User.all().filter("gae_user =", gae_user).get()
 		if user == None:
-			user = User(name="Smith")
+			user = User(gae_user=gae_user)
 			user.put()
 		return user
 
@@ -23,7 +29,12 @@ class Settings(db.Model):
 	
 	@staticmethod
 	def current():
-		settings = Settings.all().ancestor(User.current()).get()
+		user = User.current()
+		
+		if not user:
+			return None
+		
+		settings = Settings.all().ancestor(user).get()
 		if settings == None:
 			settings = Settings(
 				parent    = User.current(),

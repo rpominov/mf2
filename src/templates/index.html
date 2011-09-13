@@ -87,8 +87,8 @@
 			<a href="#!/new/payment" id="add-payment" class="icon add" title="Добавить платеж"></a>
 			<div class="user-info">
 				<span class="balance plus">2356 $</span> 
-				<span class="user-name">pozadi</span> 
-				(<span class="clickable">выйти</span>)
+				<span class="user-name">{{ user.nickname }}</span> 
+				(<a href="{{ logout_url }}">выйти</a>)
 			</div>
 		</div></div></div><!-- / .top -->
 		
@@ -127,7 +127,7 @@
 						<span class="text">
 							Фильтры<div class="expand"></div>
 						</span>
-						<a href="#!new/filter" class="icon add" title="Добавить"></a>
+						<a href="#!/new/filter" class="icon add" title="Добавить"></a>
 					</h3>
 					<ul class="list">
 					</ul>
@@ -138,7 +138,7 @@
 						<span class="text">
 							Хранилища<div class="expand"></div>
 						</span>
-						<a href="#!new/vault" class="icon add" title="Добавить"></a>
+						<a href="#!/new/vault" class="icon add" title="Добавить"></a>
 					</h3>
 					<ul class="list">
 					</ul>
